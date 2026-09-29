@@ -56,3 +56,17 @@ test('unknown current fields do not masquerade as measured zero and model wordin
  assert.equal(core.weatherDescription(95),'มีพายุฝนฟ้าคะนองตามแบบจำลอง');
  assert.match(core.buildUrl(13.3,100.9),/current=/);
 });
+
+test('seven-day model parsing respects Asia/Bangkok local calendar and missing values',()=>{
+ const now=Date.UTC(2026,8,29,8,12);
+ const beginning=Date.UTC(2026,8,28,17)/1000; // 2026-09-29 midnight Bangkok
+ const days=Array.from({length:7},(_,i)=>beginning+i*86400);
+ const data={timezone:'Asia/Bangkok',utc_offset_seconds:25200,daily_units:{temperature_2m_max:'°C',temperature_2m_min:'°C',precipitation_probability_max:'%',uv_index_max:''},daily:{
+ time:days,weather_code:[2,3,61,2,0,2,3],temperature_2m_max:[33,34,32,33,32,31,32],temperature_2m_min:[26,27,26,25,25,24,25],
+ precipitation_probability_max:[55,60,75,null,30,20,40],sunrise:days.map(x=>x+6*3600),sunset:days.map(x=>x+18*3600),uv_index_max:[null,null,null,null,null,null,null]
+ }};
+ const out=core.parseDaily(data,now);
+ assert.equal(out.length,7);assert.equal(out[0].date,'2026-09-29');assert.equal(out[2].probability,75);
+ assert.equal(out[3].probability,null);
+ data.daily_units.temperature_2m_max='°F';assert.equal(core.parseDaily(data,now).length,0);
+});
