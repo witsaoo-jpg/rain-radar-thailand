@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.1
+# Rain Radar Thailand · Phase 1.3
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -79,3 +79,14 @@ The public TMD radar disclaimer describes its imagery as near-real-time and subj
 ## Footer attribution and optional visitor counter
 
 The footer credits **witsaoya** and loads the visitor-counter image from a third-party provider, FreeCounterStat / optistats.ovh. This is not an in-house measurement. Visiting the website can contact that provider when the image is loaded, potentially exposing browser connection information (such as IP address and user agent) according to the provider's policies. The image uses `loading="lazy"` and `referrerpolicy="no-referrer"`. Counter availability and accuracy are outside this project's control.
+
+## Phase 1.3 — Snapshot replay, public safety links and PWA
+
+- The scheduled Pages job uses only validated public TMD radar images and tries to retrieve **its own previous public Pages snapshot** to preserve up to six unique frames within the last two hours. Each frame is SHA-256 validated, image-format validated, and limited to 12 MB; bad, expired or inaccessible history is discarded. Frames are collected only while the workflow succeeds, and schedules may be delayed. The animation may therefore be unavailable or shorter than two hours.
+- Replay is manual Play/Pause or timeline slider, labeled by **capture/snapshot time**, not by TMD radar observation time. Images may have different source framing. No automated motion vectors, heading, speed, or rain-arrival predictions are asserted; users can visually compare captures only.
+- Official source links for [TMD weather warnings](https://www.tmd.go.th/warning-and-events/warning-storm) and [Chonburi weather including 7-day forecast](https://tmd.go.th/weather/province/chonburi) avoid republishing potentially stale alerts or claiming the absence of a displayed alert means no threat. This static site does not send notifications.
+- Mobile PWA includes a manifest and generated 192/512px icons; the service worker caches only its UI shell. **Radar images, radar.json and warnings are never intentionally cached as current data.** Installation support varies by browser; internet is required for up-to-date weather. On iPhone use Safari → Share → Add to Home Screen.
+- FreeCounterStat footer and Credit: witsaoya are retained. Third-party counter privacy applies.
+- Tests: `python -m pytest -q tests/test_app.py tests/test_publish.py tests/test_history.py` and `node --test tests/test_near_me.cjs`; GitHub Actions gates public deployment on these tests and JavaScript syntax checks.
+
+The weather source can be unavailable without this application being able to fix it. Never use this project as a substitute for official emergency alerts.
