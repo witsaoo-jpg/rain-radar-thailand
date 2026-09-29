@@ -116,3 +116,10 @@
 .intel-radar-box small{display:block;color:#94b1c0;font-size:10px;line-height:1.6;margin-top:4px}
 @media(max-width:900px){.intel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:500px){.weather-intel{padding:13px}.weather-intel h2{font-size:15px}.intel-grid{grid-template-columns:1fr}}
+
+/* Phase 1.9: make first-step action accessible without hunting lower down. */
+.weather-banner-controls{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex-shrink:0}
+.weather-banner .weather-banner-action:disabled{opacity:.7;cursor:wait}
+.weather-hourly-link{font-size:10px;color:#9eead6;text-decoration:underline;text-underline-offset:3px}
+.weather-intel #intel-grid[hidden],.weather-banner-controls [hidden]{display:none!important}
+@media(max-width:740px){.weather-banner-controls{align-items:flex-start;margin:13px 0 0 47px}.weather-banner-controls .weather-banner-action{margin:0;white-space:normal;text-align:left}}

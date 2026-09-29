@@ -4,6 +4,7 @@
  const $=id=>document.getElementById(id);
  const core=window.RainForecastCore;
  const banner=$('weather-banner'),headline=$('weather-headline'),summary=$('weather-summary'),detail=$('weather-detail'),action=$('weather-banner-action');
+ const hourlyLink=$('weather-hourly-link');
  const request=$('forecast-request'),cancel=$('forecast-clear'),notice=$('forecast-consent'),status=$('forecast-status'),content=$('forecast-result'),hourly=$('forecast-hours');
  if(!core||!request)return;
  let location=null,seq=0,controller=null,selectedPlace='ตำแหน่งของคุณ';
@@ -19,7 +20,9 @@
    status.textContent=message||'กดอนุญาต GPS ด้านบนก่อน จากนั้นเลือกส่งพิกัดโดยประมาณเพื่อขอพยากรณ์';
    bannerMessage('สภาพอากาศใกล้คุณ','เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่','ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ');
    window.dispatchEvent(new CustomEvent('rainradar:forecast-cleared'));
-   action.textContent='ไปที่ฝนใกล้ฉัน';
+   action.textContent='เลือกพื้นที่ / เปิด GPS';
+   action.disabled=false;
+   hourlyLink.hidden=true;
  }
  function setLocation(coords,placeName){
    if(!coords||!core.roundedLocation){reset();return;}
@@ -31,7 +34,10 @@
    window.dispatchEvent(new CustomEvent('rainradar:forecast-cleared'));
    request.disabled=false;cancel.hidden=false;notice.hidden=false;
    status.textContent='พื้นที่: '+selectedPlace+' • กดปุ่มด้านล่างก่อนส่งพิกัดโดยประมาณไป Open-Meteo';
-   bannerMessage('เลือกพื้นที่: '+selectedPlace,'กดดึงพยากรณ์ด้านล่างเพื่อรับรายงานสภาพอากาศตามพื้นที่','ต้องยินยอมส่งพิกัดโดยประมาณไปยัง Open-Meteo ก่อน');
+   bannerMessage('เลือกพื้นที่: '+selectedPlace,'กดปุ่มขอรายงานด้านบนได้เลย','เมื่อกดขอรายงาน จะส่งพิกัดโดยประมาณ (ปัดเศษ 2 ตำแหน่ง) ไป Open-Meteo');
+   action.textContent='ขอรายงานอากาศ (ส่งพิกัดโดยประมาณ)';
+   action.disabled=false;
+   hourlyLink.hidden=true;
  }
  const onGPS=event=>{if(event.detail?.coords)setLocation(event.detail.coords,event.detail?.name);else reset('ล้างข้อมูลพยากรณ์แล้ว กรุณาเลือก GPS หรือสถานที่โปรดอีกครั้ง');};
  window.addEventListener('rainradar:location',onGPS);
@@ -42,6 +48,7 @@
    controller=new AbortController();
    const signal=controller.signal;
    request.disabled=true;request.textContent='กำลังโหลด…';content.hidden=true;
+   action.disabled=true;action.textContent='กำลังดึงรายงาน…';hourlyLink.hidden=true;
    status.textContent='กำลังติดต่อ Open-Meteo โดยใช้พิกัดปัดเศษสองตำแหน่ง';
    bannerMessage('กำลังตรวจสอบสภาพอากาศ','กำลังอ่านข้อมูลแบบจำลองตามตำแหน่งที่คุณยินยอม','ไม่ใช่เรดาร์ตรวจวัดฝน ณ จุด GPS');
    try{
@@ -72,18 +79,22 @@
      bannerMessage('สภาพอากาศ: '+selectedPlace+' · '+condition, temp+' | โอกาสเกิดฝนสูงสุดใน 3 ชั่วโมงที่แสดง '+max,
        (currentWeather ? 'แบบจำลองเวลา '+fmtTime(currentWeather.timestamp)+' • ' : 'ข้อมูลสภาพอากาศปัจจุบันไม่พร้อม • ') +
        'ดึงข้อมูลเมื่อ '+fmtTime(Date.now())+' • Open-Meteo • ไม่ใช่ประกาศเตือนภัย');
-     action.textContent='ดูรายละเอียดรายชั่วโมง';
+     action.textContent='อัปเดตรายงานอากาศ';action.disabled=false;hourlyLink.hidden=false;
      window.dispatchEvent(new CustomEvent('rainradar:forecast',{detail:{result,currentWeather,selectedPlace,retrievedAt:Date.now(),coordinates:{...location}}}));
    }catch(error){
      if(current!==seq||signal.aborted)return;
      status.textContent='ไม่สามารถดึงข้อมูลพยากรณ์ได้ โปรดลองใหม่ภายหลัง และดูข้อมูลจากกรมอุตุนิยมวิทยาโดยตรง';
      bannerMessage('ยังไม่สามารถรายงานสภาพอากาศได้','ข้อมูลตามพิกัดยังไม่พร้อม กรุณาลองอีกครั้ง','ตรวจสอบเรดาร์และประกาศจากกรมอุตุนิยมวิทยาโดยตรง');
+     hourlyLink.hidden=true;
      window.dispatchEvent(new CustomEvent('rainradar:forecast-cleared'));
    }finally{
-     if(current===seq){request.disabled=false;request.textContent='อัปเดตพยากรณ์';}
+     if(current===seq){request.disabled=false;request.textContent='อัปเดตพยากรณ์';action.disabled=false;if(hourlyLink.hidden)action.textContent='ลองขอรายงานใหม่ (ส่งพิกัดโดยประมาณ)';}
    }
  });
  cancel.addEventListener('click',()=>reset('ล้างพิกัดจากโมดูลพยากรณ์แล้ว (หากต้องการล้าง GPS ด้วย ให้กดล้างพิกัดด้านบน)'));
- action.addEventListener('click',()=>document.getElementById('near-me-title')?.scrollIntoView({behavior:'smooth',block:'start'}));
+ action.addEventListener('click',()=>{
+   if(location && !request.disabled){request.click();return;}
+   document.getElementById('near-me-title')?.scrollIntoView({behavior:'smooth',block:'start'});
+ });
  reset();
 })();

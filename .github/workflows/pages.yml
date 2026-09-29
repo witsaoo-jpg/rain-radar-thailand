@@ -52,6 +52,7 @@ jobs:
           node --test tests/test_near_me.cjs
           node --test tests/test_forecast.cjs
           node --test tests/test_weather_intel.cjs
+          node --test tests/test_one_tap.cjs
           node --test tests/test_places_history.cjs
           node --test tests/test_advisory.cjs
       - name: Run backend and snapshot tests

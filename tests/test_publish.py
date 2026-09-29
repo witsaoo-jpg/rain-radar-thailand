@@ -99,12 +99,12 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'forecast-consent' in text and 'forecast-request' in text
     assert 'ระยะห่างจากกลุ่มฝน' in text and 'ยังไม่เปิดการคำนวณ' in text
     assert 'Credit: <strong>witsaoya</strong>' in text
-    assert 'rain-radar-shell-v18' in Path('docs/sw.js').read_text()
+    assert 'rain-radar-shell-v19' in Path('docs/sw.js').read_text()
     assert 'forecast-core.js' in Path('docs/sw.js').read_text()
     assert 'id="weather-banner"' in text
     assert 'id="weather-headline"' in text
     assert 'id="weather-banner-action"' in text
-    assert "rain-radar-shell-v18" in Path('docs/sw.js').read_text()
+    assert "rain-radar-shell-v19" in Path('docs/sw.js').read_text()
     assert './assets/radar-utils.js' in text and './assets/places-core.js' in text and './assets/places.js' in text
     assert 'places-form' in text and 'places-list' in text
     assert 'RainPlacesCore' in Path('docs/assets/places.js').read_text()
@@ -113,4 +113,6 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert './assets/advisory.js' in text and './assets/selected-map.js' in text
     assert 'id="weather-intel"' in text and 'id="intel-radar"' in text
     assert './assets/weather-intel-core.js' in text and './assets/weather-intel.js' in text
+    assert 'id="weather-hourly-link"' in text and 'id="intel-grid" hidden' in text
+    assert 'ขอรายงานอากาศ (ส่งพิกัดโดยประมาณ)' in Path('docs/assets/forecast.js').read_text()
     assert '© original data providers' not in text

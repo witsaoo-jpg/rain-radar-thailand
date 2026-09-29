@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.8 Weather Intelligence
+# Rain Radar Thailand · Phase 1.9 One-tap Weather
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -131,3 +131,11 @@ The weather source can be unavailable without this application being able to fix
 The consolidated report appears above the radar after the user explicitly selects a place and requests its forecast. Open-Meteo model fields supply weather code, temperature, forecast-model rain amount, cloud cover, wind and visibility; display labels always state that these are model estimates rather than observations at the user's precise GPS coordinate. Missing or stale current values do not become zero or "clear". Rain probability is summarized separately for the next three displayed hourly model intervals.
 A separate TMD box reports selected radar station availability and snapshot capture time. It does **not** extract pixel measurements, assume georeferencing, imply precipitation at the selected coordinate, identify ground fog, measure temperature, or claim a storm arrival time. The actual radar observation time remains unknown unless separately validated. Raw TMD imagery remains viewable in the original dashboard, and official warning links remain available.
 The opt-in GPS/forecast flow, local-only favorite places, PWA, third-party visitor counter and Credit: witsaoya are unchanged. Tests: `node --test tests/test_weather_intel.cjs` and the existing CI suites.
+
+## Phase 1.9 — One-tap report after selecting an area
+
+- Previously, selecting a saved place updated the top banner but required finding a separate forecast button down the page. Now the **top banner itself** becomes the explicit consent action: its label states that approximate rounded coordinates will be sent to Open-Meteo. No forecast call occurs when merely selecting a favorite or GPS.
+- Before any selection the same button scrolls to GPS/area selection. After a selection, one deliberate click calls the existing validated forecast flow. Loading, retry, and hourly details are visible from the top.
+- Hide the six empty model-data cards until a successful response; leave the independent TMD radar availability notice visible. Clearing/changing location clears the previous report rather than presenting data for the wrong place. The PWA cache version is advanced to refresh the old interface.
+- This remains a **model forecast** and radar snapshot display, not location-specific radar nowcasting or a live severe-weather alert. GPS is never automatically transmitted or stored on our server.
+- New regression tests: `node --test tests/test_one_tap.cjs` plus all previous checks.
