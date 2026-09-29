@@ -15,7 +15,7 @@ test('opening webpage does not refresh or send location',()=>{
 });
 test('with no location refreshes only radar, not forecast',()=>{
  const h=harness();h.button.click();
- assert.deepEqual(h.events,['rainradar:refresh-radar']);assert.equal(h.button.disabled,true);
+ assert.deepEqual(h.events,['rainradar:refresh-public-overview','rainradar:refresh-radar']);assert.equal(h.button.disabled,true);
  h.emit('rainradar:radar-refresh-finished');
  assert.equal(h.button.disabled,false);assert.match(h.status.textContent,/เลือกพื้นที่/);
 });
