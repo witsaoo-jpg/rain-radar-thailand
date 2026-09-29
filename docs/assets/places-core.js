@@ -4,6 +4,7 @@
  const MAX=5,KEY='rainradar:favorite-places:v1';
  function validate(name,lat,lon){
   const title=typeof name==='string'?name.trim():'';
+  if(lat===null||lon===null||lat===undefined||lon===undefined||typeof lat==='boolean'||typeof lon==='boolean')throw Error('Missing coordinates');
   const a=typeof lat==='number'?lat:Number(String(lat).trim()),b=typeof lon==='number'?lon:Number(String(lon).trim());
   if(!title||title.length>30||/[<>\x00-\x1f]/.test(title)||!Number.isFinite(a)||!Number.isFinite(b)||a < -90||a>90||b < -180||b>180)throw Error('Invalid place');
   if(String(lat).trim()===''||String(lon).trim()==='')throw Error('Missing coordinates');
