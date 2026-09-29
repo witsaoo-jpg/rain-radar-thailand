@@ -83,5 +83,7 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert './assets/styles.css' in text and './assets/app.js' in text
     assert "fetch('./data/radar.json'" in js
     assert '/api/radar/' not in js
-    assert 'navigator.geolocation.getCurrentPosition' in js
+    assert 'navigator.geolocation.getCurrentPosition' in Path('docs/assets/near-me.js').read_text()
+    assert './assets/near-me.js' in text and './assets/near-me.css' in text
+    assert 'gps-map-wrap' in text and 'gps-clear-button' in text
     assert '© original data providers' not in text
