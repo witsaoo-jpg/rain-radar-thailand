@@ -64,3 +64,19 @@
 .weather-banner-action{flex-shrink:0;background:#1d6253;border:1px solid #439780;border-radius:8px;color:#e2fff5;padding:11px 14px;font-size:11px;font-weight:700;cursor:pointer}
 .weather-banner-action:hover{background:#28735f}
 @media(max-width:740px){.weather-banner{display:block;padding:14px;margin-bottom:13px}.weather-banner-main{align-items:flex-start;gap:11px}.weather-banner-symbol{width:36px;height:36px;font-size:22px}.weather-banner h2{font-size:15px}.weather-banner p{font-size:11px}.weather-banner-action{margin:12px 0 0 47px;padding:9px 12px}}
+
+/* Phase 1.6 favorite places, scoped to preserve existing dashboard. */
+.places-card{background:#102b37}
+.places-note,.places-list>p{font-size:10px;line-height:1.7;color:#96b4c1;margin:10px 0}
+.places-list-head{display:flex;justify-content:space-between;font-size:11px;color:#d3ebe5;font-weight:650}
+.places-list{display:grid;gap:8px;margin:10px 0}
+.place-item{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px;border:1px solid #345767;border-radius:7px;background:#0b2638}
+.place-item span{flex:1;min-width:100px;overflow-wrap:anywhere;color:#b4d0dc;font-size:10px}
+.place-item button,.places-card .places-form button,.places-card #places-clear-all{cursor:pointer;border-radius:6px;padding:7px 9px;font-size:10px;color:#bff0e3;background:#165148;border:1px solid #347b6a}
+.place-item .place-delete{background:transparent;color:#ebc1bc;border-color:#7d5558}
+.places-form{display:grid;gap:8px;margin-top:13px}
+.places-form label{display:grid;gap:5px;color:#a9cbd5;font-size:10px}
+.places-form input{min-width:0;width:100%;box-sizing:border-box;padding:9px;border-radius:7px;border:1px solid #395b6c;color:#e2f8f2;background:#0b2638;font:inherit}
+.places-form input::placeholder{color:#6c8998}
+.places-coords{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.places-card #places-clear-all{background:transparent;color:#e4c7b9;border-color:#7a6663}
