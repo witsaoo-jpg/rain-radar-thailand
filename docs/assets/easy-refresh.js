@@ -42,6 +42,7 @@
    status.textContent=pendingForecast
      ?'กำลังตรวจสอบเรดาร์และดึงรายงานตามพิกัดที่คุณเลือก…'
      :'กำลังตรวจสอบภาพเรดาร์… หากต้องการรายงานตามพื้นที่ กรุณาเลือก GPS หรือสถานที่โปรด';
+   window.dispatchEvent(new CustomEvent('rainradar:refresh-public-overview'));
    window.dispatchEvent(new CustomEvent('rainradar:refresh-radar'));
    if(pendingForecast)window.dispatchEvent(new CustomEvent('rainradar:refresh-forecast'));
  });
