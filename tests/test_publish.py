@@ -95,4 +95,10 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert './manifest.webmanifest' in text and './assets/pwa.js' in text
     assert 'Credit: <strong>witsaoya</strong>' in text
     assert Path('docs/sw.js').is_file() and Path('scripts/build_history.py').is_file()
+    assert './assets/forecast-core.js' in text and './assets/forecast.js' in text
+    assert 'forecast-consent' in text and 'forecast-request' in text
+    assert 'ระยะห่างจากกลุ่มฝน' in text and 'ยังไม่เปิดการคำนวณ' in text
+    assert 'Credit: <strong>witsaoya</strong>' in text
+    assert 'rain-radar-shell-v14' in Path('docs/sw.js').read_text()
+    assert 'forecast-core.js' in Path('docs/sw.js').read_text()
     assert '© original data providers' not in text
