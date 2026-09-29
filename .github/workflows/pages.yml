@@ -1,0 +1,43 @@
+name: Build and publish radar viewer
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Best effort: GitHub schedules can be delayed; this is not a live API.
+  schedule:
+    - cron: '7,37 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install snapshot dependencies
+        run: python -m pip install -r requirements-publish.txt
+      - name: Read public TMD pages (best effort, never fake radar data)
+        run: python scripts/update_radar.py --output docs/data
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
