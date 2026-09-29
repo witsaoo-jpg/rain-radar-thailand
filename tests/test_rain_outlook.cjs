@@ -54,3 +54,16 @@ test('ensemble needs at least ten complete validated members',()=>{
  delete f.hourly_units.precipitation_member10;
  assert.equal(core.parseEnsemble(f,now),null);
 });
+
+test('public explanation reports only validated forecast windows and never declares flooding',()=>{
+ const a=core.parseModel(fixture(.1),now),b=core.parseModel(fixture(.2),now),c=core.parseModel(fixture(.3),now);
+ const report=core.publicSummary({ecmwf_ifs025:a,ncep_gfs_global:b,icon_global:c});
+ assert.equal(report.available,true);assert.equal(report.windows[120].count,3);
+ assert.match(report.labels[120],/12\.0–36\.0 มม/);
+ assert.match(report.agreement,/24\.0 มม/);
+ assert.doesNotMatch(report.lead,/จะเกิดน้ำท่วม|ปลอดภัยแน่นอน/);
+ const missing=core.publicSummary({});assert.equal(missing.available,false);
+ const partial=core.parseModel(fixture(.2),now);partial.totals[72]=null;partial.totals[120]=null;
+ const one=core.publicSummary({ecmwf_ifs025:a,ncep_gfs_global:partial});
+ assert.equal(one.windows[120].count,1);assert.match(one.agreement,/เพียงแบบจำลองเดียว/);
+});

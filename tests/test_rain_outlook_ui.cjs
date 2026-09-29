@@ -5,7 +5,7 @@ const source=fs.readFileSync('docs/assets/rain-outlook.js','utf8');
 const now=Date.UTC(2026,8,29,8,12);
 const start=Math.ceil(now/3600000)*3600;
 function harness({error=false}={}){
- const ids=['outlook-request','outlook-status','outlook-summary','outlook-models','outlook-compare','outlook-ensemble','outlook-ensemble-result','outlook-source'];
+ const ids=['outlook-request','outlook-status','outlook-summary','outlook-models','outlook-compare','outlook-ensemble','outlook-ensemble-result','outlook-source','outlook-public','outlook-public-title','outlook-public-lead','outlook-public-periods','outlook-public-agreement','outlook-public-advice'];
  const nodes=Object.fromEntries(ids.map(id=>[id,{textContent:'',disabled:id==='outlook-request'||id==='outlook-ensemble',hidden:true,children:[],listeners:{},replaceChildren(...a){this.children=a;},append(...a){this.children.push(...a);},addEventListener(k,fn){this.listeners[k]=fn;},click(){return this.listeners.click?.();}}]));
  const listeners={},calls=[];
  const window={RainOutlookCore:core,addEventListener(k,fn){(listeners[k]??=[]).push(fn);},dispatchEvent(e){for(const fn of listeners[e.type]||[])fn(e);}};
@@ -51,4 +51,15 @@ test('official warning and water links remain independent of forecast model repo
  assert.match(html,/tmd\.go\.th\/warning-and-events\/warning-storm/);
  assert.match(html,/thaiwater\.net/);
  assert.doesNotMatch(source,/มหาอุทกภัย/);
+});
+
+test('summarized public card appears from real model results and resets on location change',async()=>{
+ const h=harness();h.emit('rainradar:location',{coords:{latitude:13.33,longitude:100.96},name:'บ้าน'});
+ h.nodes['outlook-request'].click();await tick();await tick();
+ assert.equal(h.nodes['outlook-public'].hidden,false);
+ assert.match(h.nodes['outlook-public-lead'].textContent,/ฝนสะสม 5 วัน/);
+ assert.equal(h.nodes['outlook-public-periods'].children.length,3);
+ h.emit('rainradar:location',{coords:null});
+ assert.equal(h.nodes['outlook-public'].hidden,true);
+ assert.equal(h.nodes['outlook-public-periods'].children.length,0);
 });

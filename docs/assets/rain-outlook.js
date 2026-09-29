@@ -16,6 +16,7 @@
    $('outlook-request').disabled=!coords;
    $('outlook-request').textContent='วิเคราะห์ฝนสะสม 5 วัน';
    summary.textContent='ยังไม่ได้ขอข้อมูลแบบจำลอง';
+   $('outlook-public').hidden=true;$('outlook-public-periods').replaceChildren();
  }
  function reset(message){coords=null;name='';abort();status.textContent=message||'เลือก GPS หรือสถานที่โปรดก่อน แล้วกดวิเคราะห์เพื่อขอข้อมูล';}
  window.addEventListener('rainradar:location',event=>{
@@ -43,6 +44,19 @@
      grid.append(item);
    }
    summary.textContent=core.interpretation(results);
+   const publicReport=core.publicSummary(results),publicBox=$('outlook-public');
+   publicBox.hidden=false;
+   $('outlook-public-title').textContent=publicReport.title;
+   $('outlook-public-lead').textContent=publicReport.lead;
+   const periods=$('outlook-public-periods');periods.replaceChildren();
+   for(const hours of core.WINDOWS){
+     const item=document.createElement('div');item.className='outlook-period';
+     item.append(cell(hours===24?'24 ชั่วโมง':hours===72?'3 วัน':'5 วัน','outlook-period-label'),
+       cell(publicReport.labels?.[hours]||'ข้อมูลไม่พร้อม','outlook-period-value'));
+     periods.append(item);
+   }
+   $('outlook-public-agreement').textContent=publicReport.agreement;
+   $('outlook-public-advice').textContent=publicReport.advice;
    for(const m of available){
      const row=document.createElement('div');row.className='outlook-compare-row';
      row.append(cell(m.label),cell(value(results[m.id].totals[24])),cell(value(results[m.id].totals[72])),cell(value(results[m.id].totals[120])));

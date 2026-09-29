@@ -267,3 +267,17 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
 .home-locality small{display:block;color:#98b8c4;font-size:11px;line-height:1.6}
 .home-locality a{color:#96e6d4}
 @media(max-width:740px){.home-locality button{width:100%;min-height:49px;font-size:14px}.home-locality .home-place-detail{font-size:15px}}
+
+/* Large-print public rainfall explanation before optional technical data. */
+.outlook-public{padding:17px;margin:15px 0;border:1px solid #4a9e88;border-radius:12px;background:linear-gradient(125deg,#184a4c,#173a4a)}
+.outlook-public-kicker{font-size:12px;color:#9af0d7;font-weight:800;letter-spacing:.5px}
+.outlook-public h3{font-size:clamp(22px,3vw,29px);color:#edfff7;margin:11px 0}
+.outlook-public p{font-size:16px;line-height:1.7;color:#d8f1ea;margin:11px 0}
+.outlook-public small{display:block;color:#accccd;font-size:12px;line-height:1.6}
+.outlook-public-periods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.outlook-period{border:1px solid #48777c;border-radius:9px;background:#123348;padding:13px;display:flex;flex-direction:column;gap:8px}
+.outlook-period-label{font-size:15px;color:#bde9da}.outlook-period-value{font-size:19px;font-weight:800;color:#f2fff9}
+.outlook-technical{border:1px solid #42636d;border-radius:10px;padding:10px 13px;margin:13px 0}
+.outlook-technical summary{cursor:pointer;min-height:42px;padding:9px 0;font-size:15px;font-weight:700;color:#a9e9d7}
+.outlook-public[hidden]{display:none!important}
+@media(max-width:740px){.outlook-public{padding:12px}.outlook-public p{font-size:15px}.outlook-public-periods{grid-template-columns:1fr}.outlook-period{padding:10px;gap:4px}.outlook-period-value{font-size:19px}}

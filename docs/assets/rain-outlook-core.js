@@ -75,5 +75,23 @@
   const min=Math.min(...values),max=Math.max(...values);
   return 'แบบจำลอง '+available.length+' ชุดให้ฝนสะสม 120 ชั่วโมงระหว่าง '+min.toFixed(1)+'–'+max.toFixed(1)+' มม. ค่าต่างกัน '+(max-min).toFixed(1)+' มม. เป็นข้อมูลพยากรณ์ ไม่ใช่ระดับน้ำหรือการยืนยันน้ำท่วม';
  }
- return {MODELS,WINDOWS,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation};
+ function publicSummary(models){
+   const byWindow={};const n=MODELS.length;
+   for(const hours of WINDOWS){
+     const values=MODELS.map(m=>models[m.id]?.totals?.[hours]).filter(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0);
+     byWindow[hours]={count:values.length,min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null};
+   }
+   const five=byWindow[120],one=byWindow[24],three=byWindow[72];
+   if(five.count===0)return {available:false,title:'ยังสรุปแนวโน้มฝน 5 วันไม่ได้',lead:'ข้อมูลฝนสะสม 120 ชั่วโมงยังไม่พร้อม กรุณาลองอัปเดตอีกครั้ง',windows:byWindow,agreement:'ยังเปรียบเทียบแบบจำลองไม่ได้',advice:'ตรวจสอบประกาศกรมอุตุนิยมวิทยาและข้อมูลสถานการณ์น้ำจากแหล่งทางการ'};
+   const range=x=>x.count===0?'ไม่มีข้อมูลครบช่วง':x.min.toFixed(1)+(x.min===x.max?'':'–'+x.max.toFixed(1))+' มม. ('+x.count+'/'+n+' แบบจำลอง)';
+   let title='แนวโน้มฝนสะสมในพื้นที่ที่เลือก';
+   let lead='แบบจำลองที่มีข้อมูลครบ '+five.count+' จาก '+n+' ชุด คาดฝนสะสม 5 วัน '+range(five)+' โดยยังไม่ใช่ฝนตรวจวัดจริง';
+   let agreement='มีเพียงแบบจำลองเดียวที่มีข้อมูลครบ จึงยังเปรียบเทียบความแตกต่างไม่ได้';
+   if(five.count>=2){
+     const spread=five.max-five.min;
+     agreement='ผลพยากรณ์ 5 วันแตกต่างกัน '+spread.toFixed(1)+' มม. ควรตรวจดูข้อมูลรอบใหม่ เพราะแนวโน้มยังมีความไม่แน่นอน';
+   }
+   return {available:true,title,lead,windows:byWindow,labels:{24:range(one),72:range(three),120:range(five)},agreement,advice:'ตรวจพยากรณ์รายวันและภาพเรดาร์ก่อนเดินทาง หากพื้นที่มีประกาศเตือนภัยให้ปฏิบัติตามหน่วยงานทางการ'};
+ }
+ return {MODELS,WINDOWS,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation,publicSummary};
 });
