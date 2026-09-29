@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.7–2.0 beta
+# Rain Radar Thailand · Phase 1.8 Weather Intelligence
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -126,3 +126,8 @@ The weather source can be unavailable without this application being able to fix
 - Phase 2.0 **foreground beta only**: Users may opt into in-page advisories when requesting a forecast, with an optional browser Notification permission requested only by user gesture. No background subscription, persistent monitoring, remote push, server, automatic weather checking or official emergency alert claim is implemented. For reliable notifications while the site is closed, a backend/push provider, VAPID, consent/opt-out storage and quotas must be designed and deployed separately.
 - Model data source: Open-Meteo; observed radar source: TMD; official severe weather warnings remain linked to TMD. No automatic sharing of GPS with forecast or OpenStreetMap providers.
 - CI now tests favorite-panel initialization, advisory thresholds, in-session opt-in, and all earlier frontend/backend/snapshot tests.
+
+## Phase 1.8: Local Weather Intelligence, source-separated
+The consolidated report appears above the radar after the user explicitly selects a place and requests its forecast. Open-Meteo model fields supply weather code, temperature, forecast-model rain amount, cloud cover, wind and visibility; display labels always state that these are model estimates rather than observations at the user's precise GPS coordinate. Missing or stale current values do not become zero or "clear". Rain probability is summarized separately for the next three displayed hourly model intervals.
+A separate TMD box reports selected radar station availability and snapshot capture time. It does **not** extract pixel measurements, assume georeferencing, imply precipitation at the selected coordinate, identify ground fog, measure temperature, or claim a storm arrival time. The actual radar observation time remains unknown unless separately validated. Raw TMD imagery remains viewable in the original dashboard, and official warning links remain available.
+The opt-in GPS/forecast flow, local-only favorite places, PWA, third-party visitor counter and Credit: witsaoya are unchanged. Tests: `node --test tests/test_weather_intel.cjs` and the existing CI suites.
