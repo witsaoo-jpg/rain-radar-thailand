@@ -83,24 +83,51 @@ def parse_batch(raw, now):
         raise ValueError('Not enough valid representative cities')
     return found
 
-def fetch_batch(*, session=None, now=None):
-    now = now or datetime.now(timezone.utc)
+def single_url(city):
+    return API + '?' + urlencode({
+        'latitude': str(city[3]), 'longitude': str(city[4]),
+        'current': 'temperature_2m,weather_code',
+        'hourly': 'precipitation_probability', 'timezone': 'Asia/Bangkok',
+        'timeformat': 'unixtime', 'forecast_days': '2'
+    })
+
+def fetch_payload(url, *, session=None, timeout=(5, 22)):
     requester = session or requests
-    url = forecast_url()
-    with requester.get(url, timeout=(6, 20), allow_redirects=False,
+    with requester.get(url, timeout=timeout, allow_redirects=False,
                        headers={'User-Agent': 'RainRadarThailand-public-overview/1.10', 'Accept':'application/json'},
                        stream=True) as response:
         if response.status_code != 200 or response.url != url:
             raise ValueError('Public forecast unavailable or redirected')
-        if not response.headers.get('content-type','').split(';')[0].lower().strip() == 'application/json':
+        if response.headers.get('content-type','').split(';')[0].lower().strip() != 'application/json':
             raise ValueError('Expected JSON data')
         buf = bytearray()
         for chunk in response.iter_content(chunk_size=32_768):
             buf.extend(chunk)
             if len(buf) > MAX_BYTES:
                 raise ValueError('Unexpectedly large response')
-        raw = json.loads(buf)
-    return parse_batch(raw, now)
+        return json.loads(buf)
+
+def fetch_batch(*, session=None, now=None):
+    now = now or datetime.now(timezone.utc)
+    # Single round trip is cheapest, but batch endpoints can be slower than small city queries.
+    try:
+        return parse_batch(fetch_payload(forecast_url(), session=session), now)
+    except (requests.RequestException, ValueError, TypeError, OverflowError, OSError) as exc:
+        print('Batch overview unavailable: '+type(exc).__name__+'; trying fixed cities', flush=True)
+    found = []
+    for city in CITIES:
+        try:
+            data = fetch_payload(single_url(city), session=session, timeout=(5, 12))
+            if isinstance(data, list):
+                raise ValueError('Expected a single city forecast')
+            parsed = parse_city(data, city, now)
+            if parsed:
+                found.append(parsed)
+        except (requests.RequestException, ValueError, TypeError, OverflowError, OSError):
+            continue
+    if len(found) < 3:
+        raise ValueError('Not enough available city forecasts')
+    return found
 
 def build(output: Path, *, session=None, now=None):
     now = now or datetime.now(timezone.utc)
