@@ -15,6 +15,8 @@
   <script src="./assets/near-me.js" defer></script>
   <script src="./assets/forecast-core.js" defer></script>
   <script src="./assets/forecast.js" defer></script>
+  <script src="./assets/weather-intel-core.js" defer></script>
+  <script src="./assets/weather-intel.js" defer></script>
   <script src="./assets/places-core.js" defer></script>
   <script src="./assets/places.js" defer></script>
   <script src="./assets/advisory-core.js" defer></script>
@@ -48,6 +50,19 @@
       <section class="weather-banner" id="weather-banner" aria-labelledby="weather-headline">
         <div class="weather-banner-main"><span class="weather-banner-symbol" aria-hidden="true">☁</span><div class="weather-banner-copy"><span class="weather-banner-kicker">LOCAL WEATHER · MODEL FORECAST</span><h2 id="weather-headline">สภาพอากาศใกล้คุณ</h2><p id="weather-summary" role="status" aria-live="polite">เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่</p><small id="weather-detail">ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ</small></div></div>
         <button id="weather-banner-action" type="button" class="weather-banner-action">ไปที่ฝนใกล้ฉัน</button>
+      </section>
+      <section class="weather-intel" id="weather-intel" aria-labelledby="intel-place">
+        <div class="intel-top"><div><span class="intel-kicker">WEATHER INTELLIGENCE · รายงานสภาพอากาศตามพื้นที่</span><h2 id="intel-place">เลือกตำแหน่งและกดดึงพยากรณ์เพื่ออ่านรายงาน</h2><p id="intel-condition">ยังไม่มีข้อมูลสภาพอากาศเฉพาะพื้นที่</p></div><span class="intel-source-tag">ข้อมูลแบบจำลอง + สถานะภาพเรดาร์</span></div>
+        <div class="intel-grid">
+          <div><small>ฝน · แบบจำลอง</small><strong id="intel-rain">—</strong></div>
+          <div><small>อุณหภูมิ · แบบจำลอง</small><strong id="intel-temperature">—</strong></div>
+          <div><small>หมอกและทัศนวิสัย · แบบจำลอง</small><strong id="intel-fog">—</strong></div>
+          <div><small>เมฆ · แบบจำลอง</small><strong id="intel-cloud">—</strong></div>
+          <div><small>ลม · แบบจำลอง</small><strong id="intel-wind">—</strong></div>
+          <div><small>พยากรณ์ฝน 3 ชั่วโมง · แบบจำลอง</small><strong id="intel-forecast">ไม่มีข้อมูลพยากรณ์</strong></div>
+        </div>
+        <p class="intel-model-time" id="intel-model-time">แหล่งข้อมูลอุณหภูมิ/ฝน/หมอก/ลม: Open-Meteo (แบบจำลอง) • ยังไม่ได้รับข้อมูล</p>
+        <div class="intel-radar-box"><span>ภาพเรดาร์ฝน TMD (ข้อมูลตรวจวัดแยกต่างหาก)</span><p id="intel-radar">ยังไม่มีข้อมูลสถานะภาพ</p><small id="intel-radar-source">ยังไม่มีเวลาบันทึกภาพ</small><small>ภาพเรดาร์ PNG ที่ใช้ยังไม่มีพิกัดอ้างอิงที่ยืนยันได้ จึงไม่สามารถบอกว่าฝนตกตรงจุด GPS หรือวัดอุณหภูมิ/หมอกจากภาพนี้</small></div>
       </section>
       <section class="public-advisory" aria-labelledby="advisory-heading">
         <div class="advisory-title">WEATHER ADVISORY · MODEL FORECAST</div>
@@ -117,7 +132,7 @@
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.7–2.0 beta · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.8 Weather Intelligence · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>

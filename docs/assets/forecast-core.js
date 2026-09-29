@@ -23,7 +23,7 @@
     u.searchParams.set('latitude', String(p.latitude));
     u.searchParams.set('longitude', String(p.longitude));
     u.searchParams.set('hourly', 'precipitation_probability,precipitation');
-    u.searchParams.set('current', 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m');
+    u.searchParams.set('current', 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,precipitation,cloud_cover,visibility');
     u.searchParams.set('timeformat', 'unixtime');
     u.searchParams.set('timezone', 'Asia/Bangkok');
     u.searchParams.set('forecast_days', '2');
@@ -104,9 +104,12 @@
     const feelsLike = optionalNumber(c.apparent_temperature, -100, 90);
     const humidity = optionalNumber(c.relative_humidity_2m, 0, 100);
     const wind = optionalNumber(c.wind_speed_10m, 0, 400);
+    const precipitation = units.precipitation === 'mm' ? optionalNumber(c.precipitation, 0, 1000) : null;
+    const cloudCover = units.cloud_cover === '%' ? optionalNumber(c.cloud_cover, 0, 100) : null;
+    const visibility = units.visibility === 'm' ? optionalNumber(c.visibility, 0, 100000) : null;
     const code = Number.isInteger(c.weather_code) && c.weather_code >= 0 && c.weather_code <= 99 ? c.weather_code : null;
-    if ([temperature, feelsLike, humidity, wind, code].every(v => v === null)) return null;
-    return { timestamp, temperature, feelsLike, humidity, wind, code, description: weatherDescription(code) };
+    if ([temperature, feelsLike, humidity, wind, code, precipitation, cloudCover, visibility].every(v => v === null)) return null;
+    return { timestamp, temperature, feelsLike, humidity, wind, precipitation, cloudCover, visibility, code, description: weatherDescription(code) };
   }
   return { buildUrl, roundedLocation, parseForecast, parseCurrent, weatherDescription, advisory };
 });
