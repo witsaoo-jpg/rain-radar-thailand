@@ -17,6 +17,10 @@ from urllib.parse import urljoin, urlsplit
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image, UnidentifiedImageError
+if __package__:
+    from .build_history import attach_history
+else:
+    from build_history import attach_history
 
 STATIONS = {
     'thailand': {'source': 'https://weather.tmd.go.th/THA_Z.php', 'fallback': 'https://satda.tmd.go.th/wp-content/uploads/data/radar_composite/radar_composite.php'},
@@ -159,16 +163,20 @@ def fetch_one(key: str, output: Path, *, session=None) -> dict:
     return entry
 
 
-def build(output: Path, *, session=None) -> dict:
+def build(output: Path, *, session=None, previous_site=False, previous=None, now=None) -> dict:
     (output / 'images').mkdir(parents=True, exist_ok=True)
     # Delete stale images: a failed fetch must never look like current weather.
     for old in (output / 'images').iterdir():
         if old.is_file() and old.name.split('.')[0] in STATIONS:
             old.unlink()
-    manifest = {'schema_version': 1, 'generated_at': datetime.now(timezone.utc).isoformat(), 'stations': {}}
+    now = now or datetime.now(timezone.utc)
+    manifest = {'schema_version': 2, 'generated_at': now.isoformat(), 'stations': {}}
     for key in STATIONS:
         manifest['stations'][key] = fetch_one(key, output / 'images', session=session)
         print(key, 'available' if manifest['stations'][key]['available'] else 'unavailable', flush=True)
+    if previous_site or previous is not None:
+        attach_history(output, manifest, validator=validate_image, session=session,
+                       previous=previous, now=now)
     (output / 'radar.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return manifest
 
@@ -176,8 +184,9 @@ def build(output: Path, *, session=None) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, default=Path('docs/data'))
+    parser.add_argument("--previous-site", action="store_true", help="Validate snapshots from prior public Pages deployment")
     args = parser.parse_args()
-    build(args.output)
+    build(args.output, previous_site=args.previous_site)
 
 
 if __name__ == '__main__':

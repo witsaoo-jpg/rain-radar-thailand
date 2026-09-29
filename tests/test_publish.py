@@ -83,5 +83,16 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert './assets/styles.css' in text and './assets/app.js' in text
     assert "fetch('./data/radar.json'" in js
     assert '/api/radar/' not in js
-    assert 'navigator.geolocation.getCurrentPosition' in js
+    assert 'navigator.geolocation.getCurrentPosition' in Path('docs/assets/near-me.js').read_text()
+    assert './assets/near-me.js' in text and './assets/near-me.css' in text
+    assert 'gps-map-wrap' in text and 'gps-clear-button' in text
+    assert 'Credit: <strong>witsaoya</strong>' in text
+    assert 'https://www.freecounterstat.com' in text
+    assert 'counter6.optistats.ovh/private/freecounterstat.php?c=qyc8yzea1rsx5tfnpsymctx2sh78mtlg' in text
+    assert 'referrerpolicy="no-referrer"' in text
+    assert './assets/animation.js' in text and 'history-play' in text and 'history-slider' in text
+    assert 'https://www.tmd.go.th/warning-and-events/warning-storm' in text
+    assert './manifest.webmanifest' in text and './assets/pwa.js' in text
+    assert 'Credit: <strong>witsaoya</strong>' in text
+    assert Path('docs/sw.js').is_file() and Path('scripts/build_history.py').is_file()
     assert '© original data providers' not in text
