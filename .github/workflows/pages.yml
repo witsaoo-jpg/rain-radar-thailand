@@ -35,6 +35,7 @@ jobs:
       - name: Validate browser JavaScript
         run: |
           node --check docs/assets/radar-utils.js
+          node --check docs/assets/radar-directory.js
           node --check docs/assets/places-core.js
           node --check docs/assets/places.js
           node --check docs/assets/advisory-core.js
@@ -66,6 +67,7 @@ jobs:
           node --test tests/test_place_name.cjs
           node --test tests/test_rain_outlook.cjs
           node --test tests/test_rain_outlook_ui.cjs
+          node --test tests/test_radar_directory.cjs
           node --test tests/test_places_history.cjs
           node --test tests/test_advisory.cjs
       - name: Run backend and snapshot tests
