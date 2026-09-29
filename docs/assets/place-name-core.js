@@ -15,7 +15,7 @@
  const clean=x=>typeof x==='string'?x.trim().replace(/[\u0000-\u001f\u007f]/g,'').slice(0,70):'';
  function parse(data,lat,lon){
   const p=valid(lat,lon);
-  if(!data||typeof data!=='object'||/ip/i.test(String(data.lookupSource||'')))return null;
+  if(!data||typeof data!=='object'||data.lookupSource!=='coordinates')return null;
   if(!Number.isFinite(data.latitude)||!Number.isFinite(data.longitude)||Math.abs(data.latitude-p.latitude)>.02||Math.abs(data.longitude-p.longitude)>.02)return null;
   const locality=clean(data.locality),city=clean(data.city),province=clean(data.principalSubdivision);
   const country=clean(data.countryName),isThai=String(data.countryCode||'').toUpperCase()==='TH';
