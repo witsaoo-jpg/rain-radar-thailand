@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.12 Rainfall Outlook
+# Rain Radar Thailand · Phase 1.12.1 GPS Nearby Place Names
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -178,3 +178,9 @@ Multi-model comparisons show the numeric range of valid 120-hour accumulation fo
 Phase 2.0 **preparedness integration, not completed hydrological prediction**: Official [TMD severe weather warnings](https://www.tmd.go.th/warning-and-events/warning-storm) and [ThaiWater](https://www.thaiwater.net/) are linked from the rain outlook. No live hydrological data, drainage capacity, inundation model or verified georeferenced radar cells are yet integrated; the app does not publish evacuation instructions or the label "มหาอุทกภัย" derived from precipitation alone. Direct model API terms/attribution and quotas must be respected before scaling traffic or monetization.
 
 The original radar dashboard, six-city public view, opt-in GPS flow, saved places, visitor counter, and Credit: witsaoya remain intact. Front-end regression tests: `node --test tests/test_rain_outlook.cjs` plus all existing CI checks.
+
+## Phase 1.12.1 — Optional locality names instead of coordinates
+
+On the Location First card, current device GPS can be reverse-geocoded into an **approximate nearby locality, town and province**. This is a third-party geocoding result, not an address verification, exact nearby landmark, or the location of a home. It is obtained via BigDataCloud's free client-side `reverse-geocode-client` endpoint after a *separate explicit consent click*, which clearly discloses that rounded live GPS and connection information are received by the provider. Once opted in, future consented live-GPS updates may resolve names automatically. The user can opt out at any time, and only a consent flag is stored locally, never GPS coordinates or the resolved name. Saved favorites and externally provided coordinates are not sent to the free client API, in accordance with the provider's client-side usage rules. The browser uses four-decimal rounding in this optional service. API errors and rejected/far-away/IP-derived results leave the existing GPS label as a fallback; pending fetches are aborted when the current place changes.
+
+BigDataCloud free service policy: https://www.bigdatacloud.com/docs/article/why-is-reverse-geocoding-api-free and domain guidance: https://www.bigdatacloud.com/docs/api-domains . This is independent of the existing Open-Meteo weather-model forecast consent.
