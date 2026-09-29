@@ -2,8 +2,8 @@
 (() => {
  'use strict';
  const $=id=>document.getElementById(id),core=window.RainPlacesCore;
- const root=$('favorite-places'),list=$('places-list'),form=$('places-form'),notice=$('places-status');
- if(!core||!root)return;
+ const root=$('places-heading'),list=$('places-list'),form=$('places-form'),notice=$('places-status');
+ if(!core||!root||!list||!form||!notice)return;
  let places=[];
  function message(x){notice.textContent=x;}
  function load(){try{places=core.sanitize(JSON.parse(localStorage.getItem(core.KEY)||'[]'));}catch(e){places=[];message('เบราว์เซอร์ไม่สามารถอ่านสถานที่ที่บันทึกไว้ได้');}}
@@ -41,10 +41,10 @@
   }catch(error){message(error.message==='Duplicate name'?'ชื่อสถานที่นี้ถูกบันทึกแล้ว':error.message==='Limit reached'?'บันทึกได้ไม่เกิน 5 สถานที่':'กรุณาระบุชื่อและพิกัด Latitude/Longitude ให้ถูกต้อง');}
  });
  $('places-use-gps').addEventListener('click',()=>{
-  if(!latestGPS){message('กรุณากดอนุญาต GPS ในแผงฝนใกล้ฉันก่อน');return;}
+  if(!latestGPS){message('ยังไม่มีค่าพิกัดในหน้านี้ กรุณากดอัปเดตพิกัดที่แผงฝนใกล้ฉันก่อน');return;}
   $('place-lat').value=latestGPS.latitude.toFixed(4);
   $('place-lon').value=latestGPS.longitude.toFixed(4);
-  message('คัดลอกพิกัด GPS ลงในช่องแล้ว — ต้องตั้งชื่อและกดบันทึกเอง');
+  message('ใส่พิกัด GPS ในช่องแล้ว กรุณาตั้งชื่อสถานที่และกดบันทึก');
  });
  let latestGPS=null;
  window.addEventListener('rainradar:location',event=>{
