@@ -39,6 +39,7 @@
     external.removeAttribute('href');
     hideMap();
     setMessage('กดอนุญาตเพื่อแสดงตำแหน่งของคุณ โดยไม่บันทึกพิกัดไว้ในระบบ');
+    if (typeof CustomEvent === 'function' && typeof window.dispatchEvent === 'function') window.dispatchEvent(new CustomEvent('rainradar:location', { detail: { coords: null } }));
   }
   function mapUrl(p) {
     const lat = p.latitude;
@@ -76,6 +77,7 @@
     external.hidden = false;
     hideMap();
     setMessage('ได้รับพิกัดแล้ว • จุดบนแผนที่เป็นตำแหน่งอุปกรณ์ ไม่ใช่จุดที่ยืนยันว่าฝนตก');
+    if (typeof CustomEvent === 'function' && typeof window.dispatchEvent === 'function') window.dispatchEvent(new CustomEvent('rainradar:location', { detail: { coords: { latitude, longitude } } }));
   }
   locate.addEventListener('click', () => {
     if (!window.isSecureContext || !navigator.geolocation) {

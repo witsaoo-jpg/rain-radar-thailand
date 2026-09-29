@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.3
+# Rain Radar Thailand · Phase 1.4
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -90,3 +90,14 @@ The footer credits **witsaoya** and loads the visitor-counter image from a third
 - Tests: `python -m pytest -q tests/test_app.py tests/test_publish.py tests/test_history.py` and `node --test tests/test_near_me.cjs`; GitHub Actions gates public deployment on these tests and JavaScript syntax checks.
 
 The weather source can be unavailable without this application being able to fix it. Never use this project as a substitute for official emergency alerts.
+
+## Phase 1.4 — opt-in local rain forecast
+
+- User must first grant browser GPS access, then separately click **ดึงพยากรณ์พื้นที่ของฉัน** before this site sends approximate coordinates to Open-Meteo. Coordinates are rounded to two decimal places client-side and are not added to the repository, application storage, or site backend. Open-Meteo receives those coordinates and normal connection information under its own privacy policy.
+- Request: `https://api.open-meteo.com/v1/forecast` with hourly `precipitation_probability` and `precipitation`, Unix timestamps, Asia/Bangkok timezone, 2 forecast days. Display 6 upcoming full-hour values. The three-hour summary is the maximum available model probability and sum of precipitation only when all three amount values are available. Unknown values remain unknown.
+- Model forecast is **not** a TMD radar observation, GPS rain measurement, official emergency warning, guaranteed rainfall, or imminent rain alert. Model grid coordinates may differ from device GPS. The display gives forecast retrieval time and per-hour forecast time.
+- A previously requested forecast is cleared when GPS is cleared or changed, including pending results. The "clear forecast" control also cancels a pending request; geolocation remains until separately cleared.
+- Radar pixel-to-geographic coordinates have not been verified from the current PNG source. Consequently v1.4 shows an honest unsupported-state notice instead of inventing distance to a rain cell, its travel direction or arrival time. A genuinely georeferenced radar/QPE dataset with documented timestamps and projection would be required to ship those measurements.
+- Source and terms: [Open-Meteo API documentation](https://open-meteo.com/en/docs), [Open-Meteo terms](https://open-meteo.com/en/terms), [TMD official warnings](https://www.tmd.go.th/warning-and-events/warning-storm). Check whether the site's use qualifies for Open-Meteo's free non-commercial tier before changing traffic or monetizing.
+- Browser forecast API fetches always use network and are not stored by the PWA service worker. Site counter remains a separate optistats.ovh third party.
+- Automated checks include `node --test tests/test_forecast.cjs` and the existing GPS/radar/Python tests.
