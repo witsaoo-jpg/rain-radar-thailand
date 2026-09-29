@@ -27,6 +27,8 @@
   <script src="./assets/easy-refresh.js" defer></script>
   <script src="./assets/public-overview.js" defer></script>
   <script src="./assets/home.js" defer></script>
+  <script src="./assets/rain-outlook-core.js" defer></script>
+  <script src="./assets/rain-outlook.js" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -71,6 +73,24 @@
         <section id="home-forecast" class="home-forecast" hidden>
           <h2>พยากรณ์รายชั่วโมง</h2><div id="home-hours" class="home-hours"></div>
           <h2>พยากรณ์ 7 วัน</h2><div id="home-days" class="home-days"></div>
+        </section>
+        <section id="rain-outlook" class="rain-outlook" aria-labelledby="outlook-heading">
+          <div class="outlook-heading"><span>RAINFALL OUTLOOK · ECMWF</span><h2 id="outlook-heading">ฝนสะสมล่วงหน้า 5 วัน</h2>
+            <p>ตรวจสอบปริมาณฝนที่แบบจำลองคาดการณ์ในพื้นที่ที่เลือก ไม่ใช่การเตือนภัยน้ำท่วมหรือข้อมูลเรดาร์ตรวจวัด</p></div>
+          <p id="outlook-status" role="status" aria-live="polite">เลือก GPS หรือสถานที่โปรดก่อน แล้วกดวิเคราะห์เพื่อขอข้อมูล</p>
+          <button id="outlook-request" type="button" disabled>วิเคราะห์ฝนสะสม 5 วัน</button>
+          <p class="outlook-disclosure">เมื่อกดวิเคราะห์ เว็บไซต์จะส่งพิกัดที่ปัดเศษ 2 ตำแหน่งไป Open-Meteo เพื่อขอผล ECMWF, GFS และ ICON โดยตรง ไม่เก็บข้อมูลพิกัดไว้บนเซิร์ฟเวอร์ของโครงการ</p>
+          <div class="outlook-numbers"><div id="outlook-models" class="outlook-models"></div></div>
+          <p id="outlook-summary" class="outlook-summary">ยังไม่ได้ขอข้อมูลแบบจำลอง</p>
+          <div id="outlook-compare" class="outlook-compare" aria-label="เปรียบเทียบปริมาณฝนสะสมจากแบบจำลอง"></div>
+          <button id="outlook-ensemble" type="button" disabled>ดูความไม่แน่นอน ECMWF Ensemble</button>
+          <p id="outlook-ensemble-result" class="outlook-ensemble-result" hidden></p>
+          <p id="outlook-source" class="outlook-source">ECMWF / NOAA GFS / DWD ICON ผ่าน Open-Meteo • ยังไม่ได้ดึงข้อมูล</p>
+          <aside class="outlook-caution" aria-label="ข้อจำกัดการประเมินฝนและน้ำท่วม">
+            <strong>การเตรียมพร้อม ไม่ใช่ประกาศเตือนภัย</strong>
+            <p>ฝนสะสมตามแบบจำลองไม่ใช่ระดับน้ำจริง แอปยังไม่ได้คำนวณน้ำท่วม ไม่ใช้ตัวเลขฝนสะสมเพียงอย่างเดียวสั่งอพยพ หรือออกประกาศระดับภัยพิบัติขึ้นเอง ข้อมูลเรดาร์ TMD เป็นภาพตรวจวัดแยกต่างหาก</p>
+            <div class="outlook-links"><a href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">ประกาศเตือนภัย TMD ↗</a><a href="https://www.thaiwater.net/" target="_blank" rel="noopener noreferrer">ข้อมูลสถานการณ์น้ำ ThaiWater ↗</a></div>
+          </aside>
         </section>
         <details id="home-national" class="home-national"><summary>ดูพยากรณ์ภาพรวม 6 เมืองตัวแทนของประเทศไทย</summary>
       <section class="public-overview" aria-labelledby="public-weather-headline">
@@ -186,7 +206,7 @@
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.11 Location First · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.12 Rainfall Outlook · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
