@@ -13,7 +13,6 @@
  function showResult(d){
    liveName=d;
    const head=$('home-place');
-   if(head&&!$('home-consent').hidden)return;
    if(head)head.textContent=d.title;
    details.textContent=d.detail||'ชื่อพื้นที่ใกล้เคียงจากฐานข้อมูลแผนที่';
    status.textContent='ชื่อพื้นที่ใกล้เคียงจาก BigDataCloud • ไม่ยืนยันตำแหน่งบ้านเลขที่';
