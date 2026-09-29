@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.4
+# Rain Radar Thailand · Phase 1.6
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -107,3 +107,13 @@ The weather source can be unavailable without this application being able to fix
 - The same consent-based Open-Meteo request already powering Phase 1.4 also requests current model estimates (temperature, apparent temperature, relative humidity, wind speed and WMO weather code). No extra remote request or site-side storage. Coordinates are rounded to two decimal places before transmission.
 - The banner summarizes weather code, temperature and maximum rain probability in the next three hourly forecast intervals. Model/current timestamp and retrieval time are labeled separately. Missing/stale values cannot be displayed as current, and a failed request or cleared GPS resets the banner safely.
 - It is **not an official TMD warning**, an onsite rain measurement, or a push notification. Always consult official TMD warnings when appropriate. The existing counter and Credit: witsaoya are unchanged.
+
+## Phase 1.5.1 / 1.6 — history quality and My Locations
+
+- Reconcile replay/history paths with the producer's actual validated `./data/images/history/<station>/<sha>.<extension>` naming. Paths are constrained to the selected radar station. Duplicate or malformed frames are excluded; timestamps are sorted by explicit ISO UTC offset.
+- Radar manifest older than 90 minutes (or >5 minutes into the future) is **not presented as current weather**. The page shows an unavailable state with the official source link. Snapshot capture time is NOT radar observation time. Replay is never treated as a current observation.
+- Favorite places may be explicitly saved, named and deleted on the same browser (up to five). Enter latitude and longitude directly, or click to copy an already-consented GPS reading into the form. No external geocoder or automatic reverse-geolocation calls. Local browser storage is optional; data does not sync to other devices.
+- Selecting a saved location passes coordinates only inside this webpage. It resets the prior forecast and explicitly requires another click on the forecast button, where coordinates are rounded to 2 decimals before the request to Open-Meteo. The banner identifies the selected name and does not claim to be an official radar-based nowcast.
+- **Radar-only localized nowcasting/distance-to-rain remains unsupported** with the present unlabeled PNG raster: accurate location-based overlay needs authenticated geographic grid/projection, calibrated observation timestamps, and validated motion estimation. The app does not pretend its weather model percentages are radar measurements.
+- Existing dashboard, TMD sources, third-party visitor counter and `Credit: witsaoya` remain intact.
+- JavaScript regression checks: `node --test tests/test_places_history.cjs`, `node --test tests/test_near_me.cjs`, and `node --test tests/test_forecast.cjs`.
