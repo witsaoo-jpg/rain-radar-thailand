@@ -5,6 +5,7 @@ const core=require('../docs/assets/forecast-core.js');
 function harness({stored=false,permission='prompt'}={}){
  const ids=['tab-home','tab-radar','tab-more','home-view','tools-view','home-place','home-icon','home-temperature','home-condition','home-feels','home-rain','home-meta','home-consent','home-actions','home-national','home-location','home-location-status','home-auto-toggle','home-refresh','home-forecast','home-hours','home-days','home-change','home-open-radar','home-open-places','gps-button','forecast-request','places-manage','radar-title'];
  const listeners={},nodes=Object.fromEntries(ids.map(id=>[id,{id,hidden:false,disabled:false,textContent:'',value:'',checked:false,open:false,attributes:{},listeners:{},children:[],addEventListener(type,fn){this.listeners[type]=fn;},setAttribute(k,v){this.attributes[k]=v;},removeAttribute(k){delete this.attributes[k];},scrollIntoView(){this.scrolled=true;},click(){this.listeners.click?.();},append(...x){this.children.push(...x);},replaceChildren(...x){this.children=x;},classList:{toggle(){},add(){},remove(){}}}]));
+ nodes['tools-view'].hidden=true;
  const classes={toggle(){}},store=new Map(stored?[['rainradar:auto-location:v1','yes']]:[]);
  let gpsCalls=0;nodes['gps-button'].click=()=>{gpsCalls++;};
  nodes['forecast-request'].disabled=false;
