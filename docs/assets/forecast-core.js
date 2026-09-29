@@ -26,7 +26,8 @@
     u.searchParams.set('current', 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,precipitation,cloud_cover,visibility');
     u.searchParams.set('timeformat', 'unixtime');
     u.searchParams.set('timezone', 'Asia/Bangkok');
-    u.searchParams.set('forecast_days', '2');
+    u.searchParams.set('daily', 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max');
+    u.searchParams.set('forecast_days', '7');
     return u.toString();
   }
   function optionalNumber(value, lower, upper) {
@@ -111,5 +112,34 @@
     if ([temperature, feelsLike, humidity, wind, code, precipitation, cloudCover, visibility].every(v => v === null)) return null;
     return { timestamp, temperature, feelsLike, humidity, wind, precipitation, cloudCover, visibility, code, description: weatherDescription(code) };
   }
-  return { buildUrl, roundedLocation, parseForecast, parseCurrent, weatherDescription, advisory };
+
+  function parseDaily(data, nowMs) {
+    if (!data || data.timezone !== 'Asia/Bangkok' || !data.daily || !data.daily_units) return [];
+    const d=data.daily, u=data.daily_units;
+    if (!Array.isArray(d.time)||u.temperature_2m_max!=='°C'||u.temperature_2m_min!=='°C'||
+      u.precipitation_probability_max!=='%') return [];
+    const names=['weather_code','temperature_2m_max','temperature_2m_min','precipitation_probability_max','sunrise','sunset','uv_index_max'];
+    if(names.some(k=>!Array.isArray(d[k])||d[k].length!==d.time.length)) return [];
+    const now=Number.isFinite(nowMs)?nowMs:Date.now();
+    const localToday=new Date(now+7*3600000).toISOString().slice(0,10);
+    const offset=Number.isInteger(data.utc_offset_seconds)?data.utc_offset_seconds:25200;
+    let previous=-Infinity; const out=[];
+    for(let i=0;i<d.time.length;i++){
+      const t=d.time[i];if(!Number.isSafeInteger(t)||t<=previous)return [];
+      previous=t;
+      // Open-Meteo Unix daily timestamps represent local midnight with a GMT offset; add the offset for the calendar date.
+      const day=new Date((t+offset)*1000).toISOString().slice(0,10);
+      if(day<localToday||out.length>=7)continue;
+      const code=Number.isInteger(d.weather_code[i])&&d.weather_code[i]>=0&&d.weather_code[i]<=99?d.weather_code[i]:null;
+      const max=optionalNumber(d.temperature_2m_max[i],-80,70);
+      const min=optionalNumber(d.temperature_2m_min[i],-80,70);
+      const probability=optionalNumber(d.precipitation_probability_max[i],0,100);
+      const sunrise=Number.isSafeInteger(d.sunrise[i])?d.sunrise[i]*1000:null;
+      const sunset=Number.isSafeInteger(d.sunset[i])?d.sunset[i]*1000:null;
+      const uv=u.uv_index_max==='UV index'?optionalNumber(d.uv_index_max[i],0,30):null;
+      out.push({date:day,code,max,min,probability,sunrise,sunset,uv});
+    }
+    return out;
+  }
+  return { buildUrl, roundedLocation, parseForecast, parseDaily, parseCurrent, weatherDescription, advisory };
 });
