@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Rain Radar Thailand",
+  "short_name": "RainRadar",
+  "description": "เครื่องมือดูภาพเรดาร์ฝนจากแหล่งทางการแบบไม่เป็นทางการ",
+  "lang": "th",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071426",
+  "theme_color": "#071426",
+  "icons": [
+    {
+      "src": "./assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
