@@ -123,3 +123,14 @@
 .weather-hourly-link{font-size:10px;color:#9eead6;text-decoration:underline;text-underline-offset:3px}
 .weather-intel #intel-grid[hidden],.weather-banner-controls [hidden]{display:none!important}
 @media(max-width:740px){.weather-banner-controls{align-items:flex-start;margin:13px 0 0 47px}.weather-banner-controls .weather-banner-action{margin:0;white-space:normal;text-align:left}}
+
+/* Phase 1.9.1 — comfortable single-action control, including on phones. */
+.easy-refresh{display:flex;align-items:center;gap:15px;margin:0 0 18px;padding:16px 18px;background:#173b3c;border:1px solid #478678;border-radius:12px}
+.easy-refresh button{font:inherit;font-size:17px;line-height:1.5;font-weight:750;min-height:58px;min-width:250px;padding:12px 20px;color:#ecfff7;background:#23775f;border:2px solid #59ac8b;border-radius:10px;cursor:pointer}
+.easy-refresh button:focus-visible{outline:3px solid #e4fff1;outline-offset:3px}
+.easy-refresh button:disabled{opacity:.7;cursor:wait}
+.easy-refresh-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+.easy-refresh-copy strong{font-size:13px;color:#d8f9ec}
+.easy-refresh-copy span{font-size:11px;color:#a5c8c9;line-height:1.65}
+.easy-refresh #easy-refresh-status{color:#8de1cd}
+@media(max-width:740px){.easy-refresh{flex-direction:column;align-items:stretch;padding:12px}.easy-refresh button{min-width:0;width:100%;min-height:60px;font-size:16px}}
