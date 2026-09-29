@@ -23,6 +23,7 @@
     u.searchParams.set('latitude', String(p.latitude));
     u.searchParams.set('longitude', String(p.longitude));
     u.searchParams.set('hourly', 'precipitation_probability,precipitation');
+    u.searchParams.set('current', 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m');
     u.searchParams.set('timeformat', 'unixtime');
     u.searchParams.set('timezone', 'Asia/Bangkok');
     u.searchParams.set('forecast_days', '2');
@@ -73,5 +74,39 @@
     if (max >= 40) return 'บางชั่วโมงมีโอกาสเกิดฝน ควรตรวจสภาพอากาศอีกครั้งก่อนออกเดินทาง';
     return 'แบบจำลองให้ค่าโอกาสเกิดฝนไม่สูงในช่วงนี้ แต่ยังมีฝนเฉพาะจุดได้ โปรดตรวจเรดาร์และประกาศทางการ';
   }
-  return { buildUrl, roundedLocation, parseForecast, advisory };
+
+  // Current values are model/grid estimates, not on-site observations.
+  function weatherDescription(code) {
+    if (!Number.isInteger(code)) return 'ไม่มีข้อมูลสภาพท้องฟ้า';
+    if (code === 0) return 'ท้องฟ้าแจ่มใส';
+    if (code === 1) return 'ท้องฟ้าโปร่งเป็นส่วนใหญ่';
+    if (code === 2) return 'มีเมฆบางส่วน';
+    if (code === 3) return 'เมฆมาก';
+    if (code === 45 || code === 48) return 'มีหมอก';
+    if ([51,53,55,56,57].includes(code)) return 'ฝนละออง';
+    if ([61,63,65,66,67].includes(code)) return 'มีฝน';
+    if ([71,73,75,77].includes(code)) return 'มีหิมะ';
+    if ([80,81,82].includes(code)) return 'มีฝนเป็นแห่ง ๆ';
+    if ([85,86].includes(code)) return 'หิมะตกเป็นแห่ง ๆ';
+    if ([95,96,99].includes(code)) return 'มีพายุฝนฟ้าคะนองตามแบบจำลอง';
+    return 'ไม่มีข้อมูลสภาพท้องฟ้าที่จำแนกได้';
+  }
+  function parseCurrent(data, nowMs) {
+    if (!data || !data.current || !data.current_units) return null;
+    const units = data.current_units, c = data.current;
+    if (units.temperature_2m !== '°C' || units.apparent_temperature !== '°C' ||
+        units.relative_humidity_2m !== '%' || units.wind_speed_10m !== 'km/h') return null;
+    const now = Number.isFinite(nowMs) ? nowMs : Date.now();
+    const timestamp = Number.isSafeInteger(c.time) ? c.time * 1000 : NaN;
+    // Older than 2h or unexpectedly future means there is no defensible current label.
+    if (!Number.isFinite(timestamp) || now - timestamp > 7200000 || timestamp - now > 900000) return null;
+    const temperature = optionalNumber(c.temperature_2m, -100, 70);
+    const feelsLike = optionalNumber(c.apparent_temperature, -100, 90);
+    const humidity = optionalNumber(c.relative_humidity_2m, 0, 100);
+    const wind = optionalNumber(c.wind_speed_10m, 0, 400);
+    const code = Number.isInteger(c.weather_code) && c.weather_code >= 0 && c.weather_code <= 99 ? c.weather_code : null;
+    if ([temperature, feelsLike, humidity, wind, code].every(v => v === null)) return null;
+    return { timestamp, temperature, feelsLike, humidity, wind, code, description: weatherDescription(code) };
+  }
+  return { buildUrl, roundedLocation, parseForecast, parseCurrent, weatherDescription, advisory };
 });
