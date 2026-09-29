@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.9.1 Easy Refresh
+# Rain Radar Thailand · Phase 1.10 Easy Public Weather
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -145,3 +145,11 @@ The opt-in GPS/forecast flow, local-only favorite places, PWA, third-party visit
 - Before selecting a place, it updates the public radar only and explains how to select GPS or a favorite place. After selecting a place, clicking is consent to contact Open-Meteo for a fresh model report. Loading and success/failure are announced in a live region, and the control is disabled while its own requests are pending.
 - "Refresh" checks the newest **published** TMD snapshot; it does not make GitHub Actions run immediately nor assert that the radar observation time has changed. The forecast and radar remain separate data sources.
 - Uses a bumped PWA shell cache version; backend, original radar dashboard, Counter and Credit: witsaoya remain unchanged. `node --test tests/test_easy_refresh.cjs` checks the opt-in and no-reload behavior.
+
+## Phase 1.10 — weather first, large typography and simple flow
+
+- On opening the site, a static public snapshot from Open-Meteo automatically shows the conditions of **six fixed Thai representative cities** (Chiang Mai, Khon Kaen, Bangkok, Chonburi, Kanchanaburi and Hat Yai). This requires no browser geolocation, no browser-side third-party forecast call, and no user action. These are city grid forecasts, **not** direct radar interpretation or a complete nationwide forecast.
+- The summary counts only represented cities whose maximum hourly model rain probability in the next three forecast intervals reaches 50%. It does not claim that all other parts of Thailand are dry. Labels show source and snapshot retrieval time. A snapshot older than 120 minutes, or with insufficient valid city data, is unavailable rather than falsely current.
+- Large text and touch targets are used at the top and on mobile. The detailed forecast tiles and advisory are folded into a voluntary “ดูรายละเอียด...” section so the radar can be found without scrolling through numerous empty dashboard cards. Personal forecasts still require first choosing GPS/favorite place and explicitly consenting to send rounded coordinates to Open-Meteo.
+- The big refresh requests the newest **published** public overview and radar snapshot, plus a fresh personal forecast only after the user has selected a place and clicks. It does not trigger GitHub Actions instantly. TMD official warning link remains prominent; all prior radar controls, visitors counter and Credit: witsaoya stay unchanged.
+- Build: GitHub Pages Actions generates `docs/data/public-overview.json` at each deployment. Any upstream failure writes `status=unavailable, cities=[]`. Tests include `pytest tests/test_public_overview.py` and `node --test tests/test_public_overview.cjs`.
