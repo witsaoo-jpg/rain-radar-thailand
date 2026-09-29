@@ -99,7 +99,7 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'forecast-consent' in text and 'forecast-request' in text
     assert 'ระยะห่างจากกลุ่มฝน' in text and 'ยังไม่เปิดการคำนวณ' in text
     assert 'Credit: <strong>witsaoya</strong>' in text
-    assert 'rain-radar-shell-v14' in Path('docs/sw.js').read_text()
+    assert 'rain-radar-shell-v15' in Path('docs/sw.js').read_text()
     assert 'forecast-core.js' in Path('docs/sw.js').read_text()
     assert 'id="weather-banner"' in text
     assert 'id="weather-headline"' in text
