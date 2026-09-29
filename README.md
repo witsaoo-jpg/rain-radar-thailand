@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.12.1 GPS Nearby Place Names
+# Rain Radar Thailand · Phase 1.12.2 Public Rain Summary
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -184,3 +184,7 @@ The original radar dashboard, six-city public view, opt-in GPS flow, saved place
 On the Location First card, current device GPS can be reverse-geocoded into an **approximate nearby locality, town and province**. This is a third-party geocoding result, not an address verification, exact nearby landmark, or the location of a home. It is obtained via BigDataCloud's free client-side `reverse-geocode-client` endpoint after a *separate explicit consent click*, which clearly discloses that rounded live GPS and connection information are received by the provider. Once opted in, future consented live-GPS updates may resolve names automatically. The user can opt out at any time, and only a consent flag is stored locally, never GPS coordinates or the resolved name. Saved favorites and externally provided coordinates are not sent to the free client API, in accordance with the provider's client-side usage rules. The browser uses four-decimal rounding in this optional service. API errors and rejected/far-away/IP-derived results leave the existing GPS label as a fallback; pending fetches are aborted when the current place changes.
 
 BigDataCloud free service policy: https://www.bigdatacloud.com/docs/article/why-is-reverse-geocoding-api-free and domain guidance: https://www.bigdatacloud.com/docs/api-domains . This is independent of the existing Open-Meteo weather-model forecast consent.
+
+## Phase 1.12.2 — Rain outlook explained in Thai for the public
+
+After an explicit model analysis, a prominent large-print summary explains the 24-hour, 72-hour and 120-hour accumulation ranges based only on complete valid ECMWF/GFS/ICON data. It states how many of three models actually have each complete accumulation period, describes their numerical difference, and gives ordinary preparedness guidance to consult daily forecasts, TMD warnings and radar. It never infers flooding, event probabilities or guaranteed safety from rainfall alone. If model results are missing it visibly reports insufficient evidence rather than replacing them with zero. The detailed numerical comparison remains accessible in an expandable section, with optional ECMWF Ensemble below. Changing or clearing the selected location clears the entire previous summary. Tests are included in the existing Rain Outlook suites. Original weather home, opt-in GPS, TMD radar, Counter and Credit: witsaoya remain unchanged.
