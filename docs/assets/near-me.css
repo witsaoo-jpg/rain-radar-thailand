@@ -257,3 +257,13 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
 .outlook-links a{color:#a4efd8;font-size:14px;text-decoration:underline;text-underline-offset:3px}
 .rain-outlook [hidden]{display:none!important}
 @media(max-width:780px){.outlook-models{grid-template-columns:1fr}.outlook-compare-row{grid-template-columns:1.25fr repeat(3,1fr);gap:4px;font-size:11px}.rain-outlook{padding:13px}.rain-outlook button{width:100%;margin:4px 0}.outlook-card{gap:6px}}
+
+/* v1.12.1 current GPS locality, optional independent consent. */
+.home-locality{margin:12px 0 5px;padding:12px 14px;border:1px solid #416977;border-radius:10px;background:#132e46}
+.home-locality .home-place-detail{font-size:16px;line-height:1.5;color:#c8f4e8;font-weight:650}
+.home-locality button{min-height:43px;padding:9px 11px;margin:6px 7px 4px 0;border:1px solid #519b87;border-radius:8px;background:#215849;color:#e8fff5;font-size:13px;font-weight:700;cursor:pointer}
+.home-locality #home-place-revoke{background:transparent;color:#bfded7}
+.home-locality #home-place-status{font-size:12px;line-height:1.6;color:#add3ce}
+.home-locality small{display:block;color:#98b8c4;font-size:11px;line-height:1.6}
+.home-locality a{color:#96e6d4}
+@media(max-width:740px){.home-locality button{width:100%;min-height:49px;font-size:14px}.home-locality .home-place-detail{font-size:15px}}
