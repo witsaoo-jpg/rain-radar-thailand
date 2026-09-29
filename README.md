@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.6
+# Rain Radar Thailand · Phase 1.7–2.0 beta
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -117,3 +117,12 @@ The weather source can be unavailable without this application being able to fix
 - **Radar-only localized nowcasting/distance-to-rain remains unsupported** with the present unlabeled PNG raster: accurate location-based overlay needs authenticated geographic grid/projection, calibrated observation timestamps, and validated motion estimation. The app does not pretend its weather model percentages are radar measurements.
 - Existing dashboard, TMD sources, third-party visitor counter and `Credit: witsaoya` remain intact.
 - JavaScript regression checks: `node --test tests/test_places_history.cjs`, `node --test tests/test_near_me.cjs`, and `node --test tests/test_forecast.cjs`.
+
+## GPS favorites hotfix and public-weather roadmap implementation
+
+- Fix: `places.js` previously returned early because it looked for an absent `favorite-places` DOM id. It now initializes against the actual `places-heading` element. The GPS copy button fills coordinates, and saving still requires a user-provided name and an explicit click.
+- Phase 1.7: Add a separately labeled, plain-language weather-model advisory from a forecast the user deliberately requests. Values are not radar nowcasting or official TMD warnings. A cleared/changed location invalidates the previous advisory.
+- Phase 1.8: Add an opt-in interactive OpenStreetMap view of the selected GPS/favorite location. The external iframe is only loaded on a separate explicit click. It is not an overlay over ungeoreferenced TMD radar and cannot give storm distance or rain arrival time.
+- Phase 2.0 **foreground beta only**: Users may opt into in-page advisories when requesting a forecast, with an optional browser Notification permission requested only by user gesture. No background subscription, persistent monitoring, remote push, server, automatic weather checking or official emergency alert claim is implemented. For reliable notifications while the site is closed, a backend/push provider, VAPID, consent/opt-out storage and quotas must be designed and deployed separately.
+- Model data source: Open-Meteo; observed radar source: TMD; official severe weather warnings remain linked to TMD. No automatic sharing of GPS with forecast or OpenStreetMap providers.
+- CI now tests favorite-panel initialization, advisory thresholds, in-session opt-in, and all earlier frontend/backend/snapshot tests.

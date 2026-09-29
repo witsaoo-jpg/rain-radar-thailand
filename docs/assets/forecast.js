@@ -18,6 +18,7 @@
    hourly.replaceChildren();
    status.textContent=message||'กดอนุญาต GPS ด้านบนก่อน จากนั้นเลือกส่งพิกัดโดยประมาณเพื่อขอพยากรณ์';
    bannerMessage('สภาพอากาศใกล้คุณ','เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่','ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ');
+   window.dispatchEvent(new CustomEvent('rainradar:forecast-cleared'));
    action.textContent='ไปที่ฝนใกล้ฉัน';
  }
  function setLocation(coords,placeName){
@@ -27,6 +28,7 @@
    selectedPlace=typeof placeName==='string'&&placeName.trim()?placeName.trim().slice(0,30):'ตำแหน่งของคุณ';
    seq++;if(controller)controller.abort();controller=null;
    content.hidden=true;hourly.replaceChildren();
+   window.dispatchEvent(new CustomEvent('rainradar:forecast-cleared'));
    request.disabled=false;cancel.hidden=false;notice.hidden=false;
    status.textContent='พื้นที่: '+selectedPlace+' • กดปุ่มด้านล่างก่อนส่งพิกัดโดยประมาณไป Open-Meteo';
    bannerMessage('เลือกพื้นที่: '+selectedPlace,'กดดึงพยากรณ์ด้านล่างเพื่อรับรายงานสภาพอากาศตามพื้นที่','ต้องยินยอมส่งพิกัดโดยประมาณไปยัง Open-Meteo ก่อน');
@@ -71,10 +73,12 @@
        (currentWeather ? 'แบบจำลองเวลา '+fmtTime(currentWeather.timestamp)+' • ' : 'ข้อมูลสภาพอากาศปัจจุบันไม่พร้อม • ') +
        'ดึงข้อมูลเมื่อ '+fmtTime(Date.now())+' • Open-Meteo • ไม่ใช่ประกาศเตือนภัย');
      action.textContent='ดูรายละเอียดรายชั่วโมง';
+     window.dispatchEvent(new CustomEvent('rainradar:forecast',{detail:{result,currentWeather,selectedPlace,retrievedAt:Date.now(),coordinates:{...location}}}));
    }catch(error){
      if(current!==seq||signal.aborted)return;
      status.textContent='ไม่สามารถดึงข้อมูลพยากรณ์ได้ โปรดลองใหม่ภายหลัง และดูข้อมูลจากกรมอุตุนิยมวิทยาโดยตรง';
      bannerMessage('ยังไม่สามารถรายงานสภาพอากาศได้','ข้อมูลตามพิกัดยังไม่พร้อม กรุณาลองอีกครั้ง','ตรวจสอบเรดาร์และประกาศจากกรมอุตุนิยมวิทยาโดยตรง');
+     window.dispatchEvent(new CustomEvent('rainradar:forecast-cleared'));
    }finally{
      if(current===seq){request.disabled=false;request.textContent='อัปเดตพยากรณ์';}
    }
