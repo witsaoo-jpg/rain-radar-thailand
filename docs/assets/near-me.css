@@ -232,3 +232,28 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
  .home-quick button{font-size:15px;min-height:59px}
  .home-forecast h2{font-size:20px}
 }
+
+/* Rainfall Outlook v1.12 — forecasts are not warnings. */
+.rain-outlook{margin:0 0 16px;padding:19px;border:1px solid #417b83;border-radius:16px;background:linear-gradient(130deg,#10363e,#142b42);color:#dff7f0}
+.outlook-heading>span{font-size:11px;font-weight:800;letter-spacing:1px;color:#8ce5d1}
+.outlook-heading h2{font-size:clamp(22px,3vw,29px);margin:7px 0;color:#eefff7}
+.outlook-heading p,.rain-outlook>p{font-size:13px;line-height:1.7;color:#b0d1d2}
+.rain-outlook #outlook-status{font-size:15px;color:#b5eedb;font-weight:650;margin:14px 0}
+.rain-outlook button{min-height:49px;padding:11px 15px;border-radius:9px;border:1px solid #58aa92;color:#ebfff4;background:#235e51;font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.rain-outlook button:disabled{cursor:not-allowed;opacity:.55}
+.rain-outlook .outlook-disclosure{color:#9fc8c9;font-size:12px}
+.outlook-models{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+.outlook-card{background:#102b3d;border:1px solid #386174;border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:9px;font-size:14px;color:#c7e7e1}
+.outlook-name{font-weight:800;color:#92e8d2;font-size:15px}
+.outlook-summary{font-size:15px!important;color:#e2f8ea!important;font-weight:700}
+.outlook-compare{display:grid;gap:4px;margin:11px 0}
+.outlook-compare-row{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:9px;padding:10px;border:1px solid #365a6a;border-radius:7px;font-size:12px}
+.outlook-compare-row span:last-child{color:#95e5d5;font-weight:700}
+.outlook-ensemble-result{padding:12px;border-radius:9px;background:#1b4551;color:#e1fff4!important}
+.outlook-caution{border-top:1px solid #456473;margin-top:17px;padding-top:13px}
+.outlook-caution strong{color:#ffe2a4;font-size:15px}
+.outlook-caution p{font-size:12px;line-height:1.75;color:#b7d1d0}
+.outlook-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.outlook-links a{color:#a4efd8;font-size:14px;text-decoration:underline;text-underline-offset:3px}
+.rain-outlook [hidden]{display:none!important}
+@media(max-width:780px){.outlook-models{grid-template-columns:1fr}.outlook-compare-row{grid-template-columns:1.25fr repeat(3,1fr);gap:4px;font-size:11px}.rain-outlook{padding:13px}.rain-outlook button{width:100%;margin:4px 0}.outlook-card{gap:6px}}
