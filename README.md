@@ -75,3 +75,7 @@ Radar echoes can include non-precipitation objects. Source pages may report UTC.
 - To run frontend tests: `node --test tests/test_near_me.cjs`; test-before-deploy runs in GitHub Actions.
 
 The public TMD radar disclaimer describes its imagery as near-real-time and subject to non-precipitation echoes: https://weather.tmd.go.th/disclaimer.html
+
+## Footer attribution and optional visitor counter
+
+The footer credits **witsaoya** and loads the visitor-counter image from a third-party provider, FreeCounterStat / optistats.ovh. This is not an in-house measurement. Visiting the website can contact that provider when the image is loaded, potentially exposing browser connection information (such as IP address and user agent) according to the provider's policies. The image uses `loading="lazy"` and `referrerpolicy="no-referrer"`. Counter availability and accuracy are outside this project's control.
