@@ -41,6 +41,13 @@
  }
  const onGPS=event=>{if(event.detail?.coords)setLocation(event.detail.coords,event.detail?.name);else reset('ล้างข้อมูลพยากรณ์แล้ว กรุณาเลือก GPS หรือสถานที่โปรดอีกครั้ง');};
  window.addEventListener('rainradar:location',onGPS);
+ // Explicit "ดูอากาศ" click both selects saved place and consents to sending rounded coordinates.
+ window.addEventListener('rainradar:favorite-forecast',event=>{
+   if(!event.detail?.coords)return;
+   window.dispatchEvent(new CustomEvent('rainradar:location',{detail:event.detail}));
+   if(location && !request.disabled)request.click();
+ });
+
  // A deliberate click on the accessible top refresh is a fresh forecast request; selection alone is not.
  window.addEventListener('rainradar:refresh-forecast',()=>{if(location && !request.disabled)request.click();});
  request.addEventListener('click',async()=>{
