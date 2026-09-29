@@ -90,4 +90,9 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'https://www.freecounterstat.com' in text
     assert 'counter6.optistats.ovh/private/freecounterstat.php?c=qyc8yzea1rsx5tfnpsymctx2sh78mtlg' in text
     assert 'referrerpolicy="no-referrer"' in text
+    assert './assets/animation.js' in text and 'history-play' in text and 'history-slider' in text
+    assert 'https://www.tmd.go.th/warning-and-events/warning-storm' in text
+    assert './manifest.webmanifest' in text and './assets/pwa.js' in text
+    assert 'Credit: <strong>witsaoya</strong>' in text
+    assert Path('docs/sw.js').is_file() and Path('scripts/build_history.py').is_file()
     assert '© original data providers' not in text
