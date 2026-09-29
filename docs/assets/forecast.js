@@ -68,6 +68,7 @@
      if(current!==seq)return;
      const result=core.parseForecast(data,Date.now());
      const currentWeather=core.parseCurrent(data,Date.now());
+     const daily=core.parseDaily(data,Date.now());
      $('forecast-probability').textContent=result.maxProbability===null?'ไม่มีข้อมูล':result.maxProbability.toFixed(0)+'%';
      $('forecast-amount').textContent=result.sumPrecipitation===null?'ข้อมูลไม่ครบ':result.sumPrecipitation.toFixed(1)+' มม.';
      $('forecast-advice').textContent=core.advisory(result.maxProbability);
@@ -89,7 +90,7 @@
        (currentWeather ? 'แบบจำลองเวลา '+fmtTime(currentWeather.timestamp)+' • ' : 'ข้อมูลสภาพอากาศปัจจุบันไม่พร้อม • ') +
        'ดึงข้อมูลเมื่อ '+fmtTime(Date.now())+' • Open-Meteo • ไม่ใช่ประกาศเตือนภัย');
      action.textContent='อัปเดตรายงานอากาศ';action.disabled=false;hourlyLink.hidden=false;
-     window.dispatchEvent(new CustomEvent('rainradar:forecast',{detail:{result,currentWeather,selectedPlace,retrievedAt:Date.now(),coordinates:{...location}}}));
+     window.dispatchEvent(new CustomEvent('rainradar:forecast',{detail:{result,currentWeather,daily,selectedPlace,retrievedAt:Date.now(),coordinates:{...location}}}));
    }catch(error){
      if(current!==seq||signal.aborted)return;
      status.textContent='ไม่สามารถดึงข้อมูลพยากรณ์ได้ โปรดลองใหม่ภายหลัง และดูข้อมูลจากกรมอุตุนิยมวิทยาโดยตรง';
