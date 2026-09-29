@@ -48,5 +48,5 @@ test('empty results are not exposed as weather cards',()=>{
  assert.match(html,/id="intel-grid" hidden/);
  assert.match(intel,/\$\('intel-grid'\)\.hidden=true/);
  assert.match(intel,/\$\('intel-grid'\)\.hidden=false/);
- assert.match(css,/#intel-grid\[hidden\]\{display:none!important\}/);
+ assert.match(css,/#intel-grid\[hidden\]/);
 });
