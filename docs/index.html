@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="./assets/styles.css" />
   <link rel="stylesheet" href="./assets/near-me.css" />
   <script src="./assets/radar-utils.js" defer></script>
+  <script src="./assets/radar-directory.js" defer></script>
   <script src="./assets/app.js" defer></script>
   <script src="./assets/near-me.js" defer></script>
   <script src="./assets/forecast-core.js" defer></script>
@@ -36,14 +37,12 @@
 <div class="shell">
   <aside class="sidebar" aria-label="เมนูเลือกเรดาร์">
     <div class="brand"><div class="brand-mark" aria-hidden="true"><span></span></div><div><strong>RAIN<span>RADAR</span></strong><small>THAILAND • WEATHER VIEWER</small></div></div>
-    <div class="sidebar-section"><div class="section-kicker">RADAR STATIONS</div>
-      <nav id="station-nav" class="station-nav" aria-label="สถานีเรดาร์">
-        <button type="button" class="station-link selected" data-station="thailand"><span class="station-icon">◉</span><span>เรดาร์ทั่วประเทศ<small>Thailand composite</small></span><span class="nav-indicator"></span></button>
-        <button type="button" class="station-link" data-station="sattahip"><span class="station-icon">⌁</span><span>สัตหีบ · ชลบุรี<small>Sattahip radar</small></span><span class="nav-indicator"></span></button>
-        <button type="button" class="station-link" data-station="rayong"><span class="station-icon">⌁</span><span>ระยอง<small>Rayong radar</small></span><span class="nav-indicator"></span></button>
-        <button type="button" class="station-link" data-station="suvarnabhumi"><span class="station-icon">⌁</span><span>สุวรรณภูมิ<small>Bangkok & vicinity</small></span><span class="nav-indicator"></span></button>
-        <button type="button" class="station-link" data-station="thailand-loop"><span class="station-icon">▷</span><span>ภาพเคลื่อนไหว<small>National radar loop</small></span><span class="nav-indicator"></span></button>
-      </nav>
+    <div class="sidebar-section radar-explorer"><div class="section-kicker">RADAR EXPLORER · เรดาร์ทั่วไทย</div>
+      <label for="radar-station-search" class="radar-search-label">ค้นหาสถานีหรือจังหวัด</label>
+      <input id="radar-station-search" type="search" autocomplete="off" placeholder="เช่น ระยอง ขอนแก่น ภูเก็ต" aria-describedby="radar-search-status"/>
+      <p id="radar-search-status" role="status" aria-live="polite">กำลังเตรียมรายชื่อสถานี…</p>
+      <nav id="station-nav" class="station-nav" aria-label="เลือกเรดาร์ตามภูมิภาค"></nav>
+      <p class="radar-directory-help">◎ ตรวจภาพ Snapshot ในแอป · ↗ เปิดหน้าต้นทาง/สารบัญ TMD สำหรับสถานีอื่น รายชื่อไม่รับรองว่าภาพล่าสุดพร้อมใช้งาน</p>
     </div>
     <div class="sidebar-bottom">
       <div class="source-block"><span class="source-dot"></span><div><b>DATA SOURCE</b><div>Thai Meteorological Department</div><small>แอปทดลอง • ไม่ใช่แอปทางการ</small></div></div>
@@ -220,7 +219,7 @@
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.12.2 Public Rain Summary · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.13 National Radar Explorer · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
