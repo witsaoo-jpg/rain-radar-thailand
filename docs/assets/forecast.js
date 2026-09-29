@@ -6,13 +6,13 @@
  const banner=$('weather-banner'),headline=$('weather-headline'),summary=$('weather-summary'),detail=$('weather-detail'),action=$('weather-banner-action');
  const request=$('forecast-request'),cancel=$('forecast-clear'),notice=$('forecast-consent'),status=$('forecast-status'),content=$('forecast-result'),hourly=$('forecast-hours');
  if(!core||!request)return;
- let location=null,seq=0,controller=null;
+ let location=null,seq=0,controller=null,selectedPlace='ตำแหน่งของคุณ';
  const bannerMessage=(heading,message,more='')=>{if(!banner)return;headline.textContent=heading;summary.textContent=message;detail.textContent=more;};
  const fmtTime=ms=>new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(ms)+' น.';
  function reset(message) {
    seq++;
    if(controller)controller.abort();
-   controller=null;location=null;
+   controller=null;location=null;selectedPlace='ตำแหน่งของคุณ';
    request.disabled=true;request.textContent='ดึงพยากรณ์พื้นที่ของฉัน';
    cancel.hidden=true;notice.hidden=true;content.hidden=true;
    hourly.replaceChildren();
@@ -20,17 +20,18 @@
    bannerMessage('สภาพอากาศใกล้คุณ','เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่','ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ');
    action.textContent='ไปที่ฝนใกล้ฉัน';
  }
- function setLocation(coords){
+ function setLocation(coords,placeName){
    if(!coords||!core.roundedLocation){reset();return;}
    try{location=core.roundedLocation(coords.latitude,coords.longitude);}
    catch(e){reset('พิกัดไม่ถูกต้อง ไม่สามารถขอพยากรณ์ได้');return;}
+   selectedPlace=typeof placeName==='string'&&placeName.trim()?placeName.trim().slice(0,30):'ตำแหน่งของคุณ';
    seq++;if(controller)controller.abort();controller=null;
    content.hidden=true;hourly.replaceChildren();
    request.disabled=false;cancel.hidden=false;notice.hidden=false;
-   status.textContent='พร้อมขอพยากรณ์ ต้องกดปุ่มด้านล่างก่อนส่งพิกัดไป Open-Meteo';
-   bannerMessage('พบตำแหน่งของคุณแล้ว','กดดึงพยากรณ์ด้านล่างเพื่อรับรายงานสภาพอากาศตามพื้นที่','ต้องยินยอมส่งพิกัดโดยประมาณไปยัง Open-Meteo ก่อน');
+   status.textContent='พื้นที่: '+selectedPlace+' • กดปุ่มด้านล่างก่อนส่งพิกัดโดยประมาณไป Open-Meteo';
+   bannerMessage('เลือกพื้นที่: '+selectedPlace,'กดดึงพยากรณ์ด้านล่างเพื่อรับรายงานสภาพอากาศตามพื้นที่','ต้องยินยอมส่งพิกัดโดยประมาณไปยัง Open-Meteo ก่อน');
  }
- const onGPS=event=>{if(event.detail?.coords)setLocation(event.detail.coords);else reset('ล้างข้อมูลพยากรณ์แล้ว กรุณาอนุญาต GPS หากต้องการใช้งานอีกครั้ง');};
+ const onGPS=event=>{if(event.detail?.coords)setLocation(event.detail.coords,event.detail?.name);else reset('ล้างข้อมูลพยากรณ์แล้ว กรุณาเลือก GPS หรือสถานที่โปรดอีกครั้ง');};
  window.addEventListener('rainradar:location',onGPS);
  request.addEventListener('click',async()=>{
    if(!location)return;
@@ -66,7 +67,7 @@
      const max=result.maxProbability===null?'ไม่ทราบ':result.maxProbability.toFixed(0)+'%';
      const temp=currentWeather?.temperature===null || !currentWeather?'ไม่ทราบอุณหภูมิ':currentWeather.temperature.toFixed(1)+'°C';
      const condition=currentWeather?.description||'ไม่มีข้อมูลสภาพอากาศปัจจุบัน';
-     bannerMessage('สภาพอากาศใกล้คุณ · '+condition, temp+' | โอกาสเกิดฝนสูงสุดใน 3 ชั่วโมงที่แสดง '+max,
+     bannerMessage('สภาพอากาศ: '+selectedPlace+' · '+condition, temp+' | โอกาสเกิดฝนสูงสุดใน 3 ชั่วโมงที่แสดง '+max,
        (currentWeather ? 'แบบจำลองเวลา '+fmtTime(currentWeather.timestamp)+' • ' : 'ข้อมูลสภาพอากาศปัจจุบันไม่พร้อม • ') +
        'ดึงข้อมูลเมื่อ '+fmtTime(Date.now())+' • Open-Meteo • ไม่ใช่ประกาศเตือนภัย');
      action.textContent='ดูรายละเอียดรายชั่วโมง';
