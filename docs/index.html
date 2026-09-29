@@ -27,6 +27,8 @@
   <script src="./assets/easy-refresh.js" defer></script>
   <script src="./assets/public-overview.js" defer></script>
   <script src="./assets/home.js" defer></script>
+  <script src="./assets/place-name-core.js" defer></script>
+  <script src="./assets/place-name.js" defer></script>
   <script src="./assets/rain-outlook-core.js" defer></script>
   <script src="./assets/rain-outlook.js" defer></script>
 </head>
@@ -63,6 +65,7 @@
           <div class="home-current"><div id="home-icon" aria-hidden="true" class="home-weather-icon">☁</div><div><div id="home-temperature" class="home-temperature">—</div><div id="home-condition" class="home-condition" role="status" aria-live="polite">เลือกใช้ตำแหน่งเพื่อดูอากาศของพื้นที่คุณ</div><div id="home-feels" class="home-feels"></div></div></div>
           <p id="home-rain" class="home-rain">ข้อมูลพยากรณ์เฉพาะพื้นที่ยังไม่พร้อม</p>
           <p id="home-meta" class="home-meta">ข้อมูลจาก Open-Meteo (แบบจำลอง) • ไม่ใช่การตรวจวัดอากาศตรงจุด GPS</p>
+          <div class="home-locality"><p id="home-place-detail" class="home-place-detail"></p><button type="button" id="home-place-lookup">📍 แสดงชื่อพื้นที่จาก GPS</button><button type="button" id="home-place-revoke">ปิดการค้นหาชื่อพื้นที่</button><p id="home-place-status" role="status" aria-live="polite">ต้องยินยอมก่อนส่งพิกัดไปยังบริการแผนที่ภายนอก</p><small>บริการ BigDataCloud ใช้พิกัด GPS ที่ปัดเศษ 4 ตำแหน่งเพื่อคืนชื่อพื้นที่โดยประมาณ • อาจไม่ตรงกับเขตการปกครองหรือสถานที่จริง • <a href="https://www.bigdatacloud.com/" target="_blank" rel="noopener noreferrer">แหล่งข้อมูล ↗</a></small></div>
           <div id="home-consent" class="home-consent">
             <p>กดปุ่มด้านล่างเพื่ออนุญาต GPS ส่งพิกัดที่ปัดเศษ 2 ตำแหน่งไป Open-Meteo และจดจำการเลือกให้แสดงอากาศอัตโนมัติเมื่อกลับมา คุณปิดได้ทุกเมื่อ โดยเว็บไม่เก็บพิกัดลงฐานข้อมูล</p>
             <button id="home-location" type="button">📍 อนุญาต GPS และเปิดอากาศอัตโนมัติ</button>
@@ -206,7 +209,7 @@
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.12 Rainfall Outlook · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.12.1 GPS Place Names · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
