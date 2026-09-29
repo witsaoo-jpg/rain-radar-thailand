@@ -41,6 +41,8 @@
  }
  const onGPS=event=>{if(event.detail?.coords)setLocation(event.detail.coords,event.detail?.name);else reset('ล้างข้อมูลพยากรณ์แล้ว กรุณาเลือก GPS หรือสถานที่โปรดอีกครั้ง');};
  window.addEventListener('rainradar:location',onGPS);
+ // A deliberate click on the accessible top refresh is a fresh forecast request; selection alone is not.
+ window.addEventListener('rainradar:refresh-forecast',()=>{if(location && !request.disabled)request.click();});
  request.addEventListener('click',async()=>{
    if(!location)return;
    const current=++seq;

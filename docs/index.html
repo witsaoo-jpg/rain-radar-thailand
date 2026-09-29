@@ -24,6 +24,7 @@
   <script src="./assets/selected-map.js" defer></script>
   <script src="./assets/animation.js" defer></script>
   <script src="./assets/pwa.js" defer></script>
+  <script src="./assets/easy-refresh.js" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -47,6 +48,10 @@
     <header class="topbar"><div class="crumb">WEATHER INTELLIGENCE <span>/</span> <b>LIVE RADAR</b></div><div class="header-right"><div class="timezone-chip"><span class="pulse-dot"></span><span id="clock">เวลาไทย • --:--</span></div><span class="avatar">TH</span></div></header>
     <main class="content">
       <div class="intro"><div><p class="eyebrow"><span class="green-line"></span> THAILAND PRECIPITATION MONITOR</p><h1>ติดตามฝน <span>แบบใกล้เวลาจริง</span></h1><p class="subtitle">ภาพตรวจวัดจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา ดูการเคลื่อนตัวของกลุ่มฝนก่อนออกเดินทางหรือออกกำลังกาย</p></div><div class="intro-actions"><span class="soft-badge"><i></i> ตรวจสอบภาพใหม่ทุก 5 นาที · เผยแพร่ snapshot ตาม GitHub Actions</span></div></div>
+      <section class="easy-refresh" aria-label="อัปเดตข้อมูลอากาศและเรดาร์">
+        <button id="easy-refresh-button" type="button" aria-describedby="easy-refresh-help easy-refresh-status">↻ อัปเดตสภาพอากาศและเรดาร์</button>
+        <div class="easy-refresh-copy"><strong>กดครั้งเดียวเพื่อดูข้อมูลล่าสุด</strong><span id="easy-refresh-help">หากเลือกพื้นที่แล้ว การกดปุ่มนี้จะส่งพิกัดโดยประมาณไป Open-Meteo เพื่อขอรายงานใหม่ และตรวจสอบ Snapshot เรดาร์ TMD โดยไม่ต้องเปิด GPS ซ้ำ</span><span id="easy-refresh-status" role="status" aria-live="polite">ยังไม่ได้กดอัปเดตข้อมูล</span></div>
+      </section>
       <section class="weather-banner" id="weather-banner" aria-labelledby="weather-headline">
         <div class="weather-banner-main"><span class="weather-banner-symbol" aria-hidden="true">☁</span><div class="weather-banner-copy"><span class="weather-banner-kicker">LOCAL WEATHER · MODEL FORECAST</span><h2 id="weather-headline">สภาพอากาศใกล้คุณ</h2><p id="weather-summary" role="status" aria-live="polite">เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่</p><small id="weather-detail">ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ</small></div></div>
         <div class="weather-banner-controls"><button id="weather-banner-action" type="button" class="weather-banner-action">เลือกพื้นที่ / เปิด GPS</button><a id="weather-hourly-link" class="weather-hourly-link" href="#local-forecast-title" hidden>ดูพยากรณ์รายชั่วโมง ↓</a></div>
@@ -132,7 +137,7 @@
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.9 One-tap Weather · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.9.1 Easy Refresh · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
