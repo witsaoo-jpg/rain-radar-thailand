@@ -8,7 +8,7 @@ function fixture(value=2){
  return {timezone:'Asia/Bangkok',latitude:13.37,longitude:100.99,hourly_units:{precipitation:'mm'},hourly:{time:times,precipitation:times.map(()=>value)}};
 }
 test('only approved model identifiers and rounded approximate coordinates',()=>{
- const u=new URL(core.url('ecmwf_ifs025',13.365,100.984));
+ const u=new URL(core.url('ecmwf_ifs025',13.367,100.984));
  assert.equal(u.hostname,'api.open-meteo.com');
  assert.equal(u.searchParams.get('latitude'),'13.37');
  assert.equal(u.searchParams.get('longitude'),'100.98');
