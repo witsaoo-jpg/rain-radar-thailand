@@ -10,10 +10,13 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./assets/styles.css" />
   <link rel="stylesheet" href="./assets/near-me.css" />
+  <script src="./assets/radar-utils.js" defer></script>
   <script src="./assets/app.js" defer></script>
   <script src="./assets/near-me.js" defer></script>
   <script src="./assets/forecast-core.js" defer></script>
   <script src="./assets/forecast.js" defer></script>
+  <script src="./assets/places-core.js" defer></script>
+  <script src="./assets/places.js" defer></script>
   <script src="./assets/animation.js" defer></script>
   <script src="./assets/pwa.js" defer></script>
 </head>
@@ -67,10 +70,20 @@
             <div id="gps-map-wrap" class="gps-map-wrap" hidden><iframe id="gps-map-frame" title="ตำแหน่งอุปกรณ์บน OpenStreetMap" loading="lazy" referrerpolicy="no-referrer"></iframe><p class="gps-disclaimer">แผนที่ตำแหน่งแยกจากภาพเรดาร์ TMD ยังไม่ได้ซ้อนพิกัดบนภาพเรดาร์ เพราะไม่มีค่าพิกัดอ้างอิงของภาพที่ยืนยันได้</p></div>
             <a id="gps-map-link" class="gps-link" hidden target="_blank" rel="noopener noreferrer">เปิดตำแหน่งบน OpenStreetMap ↗ (ส่งพิกัดให้ OSM เมื่อกด)</a>
             <p class="gps-privacy">การกดแสดงแผนที่หรือเปิดลิงก์จะส่งพิกัดให้ OpenStreetMap เพื่อแสดงตำแหน่ง และไม่ใช่การคำนวณว่าฝนตก ณ จุดนี้</p></section>
+          <section class="side-card places-card" aria-labelledby="places-heading">
+            <div class="side-heading"><span class="side-symbol">⌂</span><span id="places-heading">สถานที่ของฉัน · My Locations</span></div>
+            <p class="places-note">บันทึกได้สูงสุด 5 สถานที่ในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่ต้องสมัครบัญชีหรือแชร์พิกัดโดยอัตโนมัติ</p>
+            <div class="places-list-head">สถานที่ที่บันทึกไว้ <span id="places-count">0/5</span></div><div id="places-list" class="places-list"></div>
+            <form id="places-form" class="places-form"><label for="place-name">ชื่อสถานที่</label><input id="place-name" maxlength="30" autocomplete="off" placeholder="เช่น บ้าน หรือที่ทำงาน" required />
+              <div class="places-coords"><label for="place-lat">Latitude<input id="place-lat" type="number" min="-90" max="90" step="any" placeholder="13.361" required /></label><label for="place-lon">Longitude<input id="place-lon" type="number" min="-180" max="180" step="any" placeholder="100.984" required /></label></div>
+              <button type="button" id="places-use-gps" class="gps-secondary">ใช้พิกัด GPS ที่อนุญาตแล้ว</button><button type="submit" class="gps-button">บันทึกสถานที่</button></form>
+            <p id="places-status" class="places-note" role="status" aria-live="polite"></p><button id="places-clear-all" type="button" class="gps-secondary">ลบสถานที่ทั้งหมด</button>
+            <p class="places-note">การเลือกสถานที่จะแสดงคำขอพยากรณ์ใหม่ คุณต้องกดยินยอมส่งพิกัดโดยประมาณไป Open-Meteo อีกครั้ง</p>
+          </section>
           <section class="side-card local-forecast-card" aria-labelledby="local-forecast-title">
             <div class="side-heading"><span class="side-symbol">☂</span><span id="local-forecast-title">พยากรณ์ฝนใกล้ฉัน</span></div>
             <p id="forecast-status" role="status" aria-live="polite">กดอนุญาต GPS ด้านบนก่อน จากนั้นเลือกส่งพิกัดโดยประมาณเพื่อขอพยากรณ์</p>
-            <p id="forecast-consent" class="forecast-privacy" hidden>เมื่อกดดึงพยากรณ์ เว็บไซต์จะส่งพิกัด GPS ที่ปัดเศษเหลือ 2 ตำแหน่ง (ประมาณระดับกิโลเมตร) ไปยัง Open-Meteo ไม่ส่งพิกัดโดยอัตโนมัติ และไม่เก็บไว้ในฐานข้อมูลของเว็บไซต์ ผู้ให้บริการอาจได้รับข้อมูลการเชื่อมต่อของคุณ</p>
+            <p id="forecast-consent" class="forecast-privacy" hidden>เมื่อกดดึงพยากรณ์ เว็บไซต์จะส่งพิกัดที่เลือก (GPS หรือสถานที่โปรด) ที่ปัดเศษเหลือ 2 ตำแหน่ง (ประมาณระดับกิโลเมตร) ไปยัง Open-Meteo ไม่ส่งพิกัดโดยอัตโนมัติ และไม่เก็บไว้ในฐานข้อมูลของเว็บไซต์ ผู้ให้บริการอาจได้รับข้อมูลการเชื่อมต่อของคุณ</p>
             <div class="gps-actions"><button id="forecast-request" class="gps-button" type="button" disabled>ดึงพยากรณ์พื้นที่ของฉัน</button><button id="forecast-clear" class="gps-secondary" type="button" hidden>ล้างพยากรณ์</button></div>
             <div id="forecast-result" hidden>
               <div class="forecast-overview"><div><small>โอกาสเกิดฝนสูงสุดใน 3 ชั่วโมงที่แสดง (แบบจำลอง)</small><strong id="forecast-probability">—</strong></div><div><small>ผลรวมปริมาณฝนพยากรณ์ 3 ชั่วโมง (เมื่อครบข้อมูล)</small><strong id="forecast-amount">—</strong></div></div>
@@ -88,7 +101,7 @@
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.4 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.6 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
