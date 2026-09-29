@@ -53,3 +53,31 @@ def test_bad_api_produces_unavailable_manifest_without_fake_weather(tmp_path):
     result=mod.build(tmp_path,session=FakeSession(),now=NOW)
     assert result['status']=='unavailable' and result['cities']==[]
     assert json.loads((tmp_path/'public-overview.json').read_text())['cities']==[]
+
+def test_batch_timeout_falls_back_to_individual_city_requests():
+    import requests
+    class FakeResponse:
+        status_code=200
+        headers={'content-type':'application/json'}
+        def __init__(self,url,payload):
+            self.url=url
+            self.payload=json.dumps(payload).encode()
+        def __enter__(self):return self
+        def __exit__(self,*args):return False
+        def iter_content(self,chunk_size=32768):yield self.payload
+    class Session:
+        def __init__(self):self.calls=[]
+        def get(self,url,**kwargs):
+            self.calls.append(url)
+            assert kwargs['allow_redirects'] is False
+            if url==mod.forecast_url():
+                raise requests.ReadTimeout('simulate batch endpoint slowness')
+            for city in mod.CITIES[:3]:
+                if url==mod.single_url(city):
+                    return FakeResponse(url,item())
+            raise requests.ReadTimeout('other city unavailable')
+    session=Session()
+    result=mod.fetch_batch(session=session,now=NOW)
+    assert len(result)==3 and result[0]['city']=='เชียงใหม่'
+    assert mod.forecast_url() in session.calls
+    assert mod.single_url(mod.CITIES[0]) in session.calls
