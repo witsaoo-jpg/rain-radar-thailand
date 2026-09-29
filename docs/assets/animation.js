@@ -11,6 +11,7 @@
   index=i;slider.value=String(i);
   const f=frames[i];
   label.textContent='บันทึกภาพ '+new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',day:'numeric',month:'short',hour12:false}).format(new Date(f.captured_at))+' น. • เวลาตรวจวัดจริงไม่ยืนยัน';
+  el('fetched-time').textContent='บันทึก Snapshot: '+label.textContent.split(' • ')[0].replace('บันทึกภาพ ','');
   showSnapshot(f.path,entry);
  }
  window.radarHistoryUpdate=(current,station)=>{
