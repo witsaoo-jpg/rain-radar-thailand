@@ -12,3 +12,14 @@
 .gps-card .gps-disclaimer{font-size:10px;color:#a3bac5;line-height:1.7;margin:9px 0 0}
 .gps-card .gps-link{margin-top:12px}
 .gps-card [hidden]{display:none!important}
+
+/* Footer credit and optional external visitor counter */
+.site-footer{align-items:flex-start;flex-wrap:wrap}
+.site-footer .footer-meta{display:flex;flex-direction:column;align-items:flex-end;gap:9px;max-width:100%;text-align:right}
+.site-footer .footer-credit{font-size:11px;color:#a9d9d1;letter-spacing:.1px}
+.site-footer .footer-credit strong{color:#7fe6ca}
+.site-footer .footer-counter{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:10px;letter-spacing:0;color:#8daaba}
+.site-footer .footer-counter a{display:inline-flex;max-width:100%}
+.site-footer .footer-counter img{display:block;max-width:100%;height:auto;border:0}
+.site-footer .footer-counter small{font-size:9px;line-height:1.6;color:#7896a6;max-width:270px}
+@media(max-width:740px){.site-footer .footer-meta,.site-footer .footer-counter{align-items:flex-start;text-align:left}}
