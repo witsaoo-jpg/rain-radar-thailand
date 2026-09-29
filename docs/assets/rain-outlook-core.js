@@ -1,0 +1,79 @@
+/* Rainfall outlook: comparisons are forecast model guidance, never a flood warning.
+   Open-Meteo precipitation = preceding-hour millimetres. Unix timestamps are UTC. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.RainOutlookCore=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+ 'use strict';
+ const MODELS=[
+  {id:'ecmwf_ifs025',label:'ECMWF IFS 0.25°'},
+  {id:'ncep_gfs_global',label:'NOAA GFS Global'},
+  {id:'icon_global',label:'DWD ICON Global'}
+ ];
+ const WINDOWS=[24,72,120],STEP=3600;
+ function location(lat,lon){
+  if(typeof lat!=='number'||typeof lon!=='number'||!Number.isFinite(lat)||!Number.isFinite(lon)||lat < -90||lat > 90||lon < -180||lon > 180)throw new Error('Invalid location');
+  return {lat:Number(lat.toFixed(2)),lon:Number(lon.toFixed(2))};
+ }
+ function url(model,lat,lon){
+  if(!MODELS.some(m=>m.id===model))throw new Error('Unapproved model');
+  const p=location(lat,lon),u=new URL('https://api.open-meteo.com/v1/forecast');
+  for(const [k,v] of Object.entries({latitude:p.lat,longitude:p.lon,hourly:'precipitation',models:model,forecast_days:7,timeformat:'unixtime',timezone:'Asia/Bangkok',precipitation_unit:'mm'}))u.searchParams.set(k,String(v));
+  return u.toString();
+ }
+ function ensembleUrl(lat,lon){
+  const p=location(lat,lon),u=new URL('https://ensemble-api.open-meteo.com/v1/ensemble');
+  for(const [k,v] of Object.entries({latitude:p.lat,longitude:p.lon,hourly:'precipitation',models:'ecmwf_ifs025_ensemble',forecast_days:7,timeformat:'unixtime',timezone:'Asia/Bangkok',precipitation_unit:'mm'}))u.searchParams.set(k,String(v));
+  return u.toString();
+ }
+ function precipitation(v){return typeof v==='number'&&!Number.isNaN(v)&&Number.isFinite(v)&&v>=0&&v<=1000?v:null;}
+ function validate(data, values, now){
+  if(!data||data.error||data.timezone!=='Asia/Bangkok'||data.hourly_units?.precipitation!=='mm'||!Array.isArray(data.hourly?.time)||!Array.isArray(values)||values.length!==data.hourly.time.length)throw new Error('Invalid units or hourly data');
+  const times=data.hourly.time;
+  let previous=-Infinity;
+  for(const t of times){if(!Number.isSafeInteger(t)||t<=previous)throw new Error('Invalid hourly timestamps');previous=t;}
+  const next=Math.ceil(now/3600000)*STEP;
+  const index=times.indexOf(next);
+  // Model data must cover precisely the next 120 completed hourly intervals.
+  if(index<0)return null;
+  const rows=[];
+  for(let i=0;i<120;i++){
+   const x=index+i;
+   if(times[x]!==next+i*STEP)return null;
+   rows.push(precipitation(values[x]));
+  }
+  return {start:next*1000,rows,grid:typeof data.latitude==='number'&&typeof data.longitude==='number'?{lat:data.latitude,lon:data.longitude}:null};
+ }
+ function totals(rows){
+  const result={};
+  for(const n of WINDOWS){
+   const values=rows.slice(0,n);
+   result[n]=values.length===n&&values.every(v=>v!==null)?
+      Math.round(values.reduce((a,b)=>a+b,0)*10)/10:null;
+  }
+  return result;
+ }
+ function parseModel(data,now){
+  const series=validate(data,data?.hourly?.precipitation,Number.isFinite(now)?now:Date.now());
+  return series?{...series,totals:totals(series.rows)}:null;
+ }
+ function quantile(sorted,p){const v=(sorted.length-1)*p,lo=Math.floor(v),hi=Math.ceil(v);return sorted[lo]+(sorted[hi]-sorted[lo])*(v-lo);}
+ function parseEnsemble(data,now){
+  if(!data||data.error||data.timezone!=='Asia/Bangkok'||!data.hourly||!data.hourly_units)return null;
+  const keys=Object.keys(data.hourly).filter(k=>/^precipitation_member\d+$/.test(k)&&data.hourly_units[k]==='mm').sort();
+  const amounts=[];
+  for(const key of keys){
+   let r;
+   try{r=validate({...data,hourly_units:{precipitation:'mm'}},data.hourly[key],Number.isFinite(now)?now:Date.now());}catch(_){continue;}
+   if(r&&r.rows.every(v=>v!==null))amounts.push(totals(r.rows)[120]);
+  }
+  if(amounts.length<10)return null; // never assert ensemble confidence on a tiny/unverified subset
+  amounts.sort((a,b)=>a-b);
+  return {members:amounts.length,p10:Math.round(quantile(amounts,.1)*10)/10,median:Math.round(quantile(amounts,.5)*10)/10,p90:Math.round(quantile(amounts,.9)*10)/10};
+ }
+ function interpretation(models){
+  const available=MODELS.map(m=>models[m.id]).filter(m=>m&&m.totals[120]!==null);
+  if(available.length<2)return 'ยังมีข้อมูลจากแบบจำลองไม่เพียงพอสำหรับเปรียบเทียบ โปรดตรวจประกาศทางการ';
+  const values=available.map(m=>m.totals[120]);
+  const min=Math.min(...values),max=Math.max(...values);
+  return 'แบบจำลอง '+available.length+' ชุดให้ฝนสะสม 120 ชั่วโมงระหว่าง '+min.toFixed(1)+'–'+max.toFixed(1)+' มม. ค่าต่างกัน '+(max-min).toFixed(1)+' มม. เป็นข้อมูลพยากรณ์ ไม่ใช่ระดับน้ำหรือการยืนยันน้ำท่วม';
+ }
+ return {MODELS,WINDOWS,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation};
+});
