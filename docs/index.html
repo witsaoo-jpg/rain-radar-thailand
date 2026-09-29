@@ -7,10 +7,13 @@
   <meta name="description" content="Rain Radar Thailand: ดูเรดาร์ฝนจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา" />
   <title>Rain Radar | ติดตามกลุ่มฝน</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./assets/styles.css" />
   <link rel="stylesheet" href="./assets/near-me.css" />
   <script src="./assets/app.js" defer></script>
   <script src="./assets/near-me.js" defer></script>
+  <script src="./assets/animation.js" defer></script>
+  <script src="./assets/pwa.js" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -58,13 +61,15 @@
             <div id="gps-map-wrap" class="gps-map-wrap" hidden><iframe id="gps-map-frame" title="ตำแหน่งอุปกรณ์บน OpenStreetMap" loading="lazy" referrerpolicy="no-referrer"></iframe><p class="gps-disclaimer">แผนที่ตำแหน่งแยกจากภาพเรดาร์ TMD ยังไม่ได้ซ้อนพิกัดบนภาพเรดาร์ เพราะไม่มีค่าพิกัดอ้างอิงของภาพที่ยืนยันได้</p></div>
             <a id="gps-map-link" class="gps-link" hidden target="_blank" rel="noopener noreferrer">เปิดตำแหน่งบน OpenStreetMap ↗ (ส่งพิกัดให้ OSM เมื่อกด)</a>
             <p class="gps-privacy">การกดแสดงแผนที่หรือเปิดลิงก์จะส่งพิกัดให้ OpenStreetMap เพื่อแสดงตำแหน่ง และไม่ใช่การคำนวณว่าฝนตก ณ จุดนี้</p></section>
+          <section class="side-card alerts-card"><div class="side-heading"><span class="side-symbol">⚠</span><span>ประกาศเตือนภัยทางการ</span></div><p>อ่านประกาศและเวลาเผยแพร่จากกรมอุตุนิยมวิทยาโดยตรง เว็บไซต์นี้ไม่ดัดแปลงประกาศเป็นการแจ้งเตือนอัตโนมัติ</p><a href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">เปิดประกาศเตือนภัย TMD ↗</a><p class="warning-caution">การไม่เห็นประกาศบนหน้านี้ ไม่ได้หมายความว่าไม่มีความเสี่ยงในพื้นที่</p></section>
           <section class="side-card forecast-card"><div class="side-heading"><span class="side-symbol">◷</span><span>พยากรณ์อากาศชลบุรี</span></div><p>ดูผลตรวจวัดจริงและพยากรณ์อากาศ 7 วันจากหน้าเว็บไซต์ทางการ (แยกจากภาพเรดาร์)</p><a href="https://tmd.go.th/weather/province/chonburi" target="_blank" rel="noopener noreferrer">เปิดพยากรณ์จังหวัดชลบุรี ↗</a></section>
+          <section class="side-card pwa-card"><div class="side-heading"><span class="side-symbol">▣</span><span>ติดตั้งไว้บนมือถือ</span></div><p id="install-hint">Android: ใช้เมนูติดตั้งแอป / iPhone: Safari → แชร์ → เพิ่มไปยังหน้าจอโฮม (ต้องมีอินเทอร์เน็ตเพื่อดูเรดาร์ล่าสุด)</p><button id="install-app" class="gps-button" type="button" hidden>ติดตั้ง Rain Radar</button></section>
           <section class="side-card note-card"><div class="side-heading"><span class="side-symbol">☂</span><span>ก่อนออกไปวิ่ง</span></div><p>ดูภาพย้อนหลังร่วมกับทิศทางการเคลื่อนตัวของกลุ่มฝน และเช็กประกาศเตือนภัยก่อนออกกำลังกายกลางแจ้ง</p><a href="https://www.tmd.go.th/" target="_blank" rel="noopener noreferrer">ตรวจสอบพยากรณ์และประกาศเตือนภัย ↗</a></section>
         </aside>
       </div>
-      <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจากต้นทาง (เมื่อมีข้อมูล)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div></section>
+      <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.2 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.3 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
