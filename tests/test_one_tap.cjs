@@ -5,7 +5,7 @@ const core=require('../docs/assets/forecast-core.js');
 const script=fs.readFileSync('docs/assets/forecast.js','utf8');
 function harness(){
  const ids=['weather-banner','weather-headline','weather-summary','weather-detail','weather-banner-action','weather-hourly-link','forecast-request','forecast-clear','forecast-consent','forecast-status','forecast-result','forecast-hours','forecast-probability','forecast-amount','forecast-advice','forecast-updated','forecast-grid','near-me-title'];
- const nodes=Object.fromEntries(ids.map(id=>[id,{id,hidden:false,disabled:false,textContent:'',listeners:{},children:[],addEventListener(type,fn){this.listeners[type]=fn;},click(){this.listeners.click?.();},replaceChildren(...children){this.children=children;},scrollIntoView(){this.scrolled=true;}}]));
+ const nodes=Object.fromEntries(ids.map(id=>[id,{id,hidden:false,disabled:false,textContent:'',listeners:{},children:[],addEventListener(type,fn){this.listeners[type]=fn;},click(){this.listeners.click?.();},replaceChildren(...children){this.children=children;},append(...children){this.children.push(...children);},scrollIntoView(){this.scrolled=true;}}]));
  const callbacks={};let calls=[];
  const win={RainForecastCore:core,addEventListener(type,fn){callbacks[type]=fn;},dispatchEvent(e){callbacks[e.type]?.(e);}};
  const doc={getElementById:id=>nodes[id],createElement:tag=>({tag,children:[],append(...x){this.children.push(...x);},textContent:''})};
