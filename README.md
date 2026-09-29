@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.10 Easy Public Weather
+# Rain Radar Thailand · Phase 1.10.1 Quick Favorite Weather
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -153,3 +153,9 @@ The opt-in GPS/forecast flow, local-only favorite places, PWA, third-party visit
 - Large text and touch targets are used at the top and on mobile. The detailed forecast tiles and advisory are folded into a voluntary “ดูรายละเอียด...” section so the radar can be found without scrolling through numerous empty dashboard cards. Personal forecasts still require first choosing GPS/favorite place and explicitly consenting to send rounded coordinates to Open-Meteo.
 - The big refresh requests the newest **published** public overview and radar snapshot, plus a fresh personal forecast only after the user has selected a place and clicks. It does not trigger GitHub Actions instantly. TMD official warning link remains prominent; all prior radar controls, visitors counter and Credit: witsaoya stay unchanged.
 - Build: GitHub Pages Actions generates `docs/data/public-overview.json` at each deployment. Any upstream failure writes `status=unavailable, cities=[]`. Tests include `pytest tests/test_public_overview.py` and `node --test tests/test_public_overview.cjs`.
+
+## Phase 1.10.1 — integrated favorite places and local weather
+
+The saved-place list is now directly within the large top Local Weather banner, not buried in a separate side card. Pressing **ดูอากาศ** next to a named favorite is a single deliberate consent action to send approximate coordinates (rounded to two decimal places) to Open-Meteo and immediately render the existing forecast in that same banner. The disclosure is visible directly above the buttons. Merely visiting the site or loading saved favorites still does not contact the provider with private coordinates.
+
+Add/remove forms and exact locally saved coordinates remain in a separate collapsible place-management section. No saved data is migrated, deleted, or submitted automatically. The default public six-city forecast remains independent of location permission. The original radar, public warnings, PWA, visitor counter, and Credit: witsaoya remain unchanged.
