@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071426" />
+  <meta name="description" content="Rain Radar Thailand: ดูเรดาร์ฝนจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา" />
+  <title>Rain Radar | ติดตามกลุ่มฝน</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <script src="./assets/app.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" aria-label="เมนูเลือกเรดาร์">
+    <div class="brand"><div class="brand-mark" aria-hidden="true"><span></span></div><div><strong>RAIN<span>RADAR</span></strong><small>THAILAND • WEATHER VIEWER</small></div></div>
+    <div class="sidebar-section"><div class="section-kicker">RADAR STATIONS</div>
+      <nav id="station-nav" class="station-nav" aria-label="สถานีเรดาร์">
+        <button type="button" class="station-link selected" data-station="thailand"><span class="station-icon">◉</span><span>เรดาร์ทั่วประเทศ<small>Thailand composite</small></span><span class="nav-indicator"></span></button>
+        <button type="button" class="station-link" data-station="sattahip"><span class="station-icon">⌁</span><span>สัตหีบ · ชลบุรี<small>Sattahip radar</small></span><span class="nav-indicator"></span></button>
+        <button type="button" class="station-link" data-station="rayong"><span class="station-icon">⌁</span><span>ระยอง<small>Rayong radar</small></span><span class="nav-indicator"></span></button>
+        <button type="button" class="station-link" data-station="suvarnabhumi"><span class="station-icon">⌁</span><span>สุวรรณภูมิ<small>Bangkok & vicinity</small></span><span class="nav-indicator"></span></button>
+        <button type="button" class="station-link" data-station="thailand-loop"><span class="station-icon">▷</span><span>ภาพเคลื่อนไหว<small>National radar loop</small></span><span class="nav-indicator"></span></button>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="source-block"><span class="source-dot"></span><div><b>DATA SOURCE</b><div>Thai Meteorological Department</div><small>แอปทดลอง • ไม่ใช่แอปทางการ</small></div></div>
+      <a class="sidebar-official" href="https://weather.tmd.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์เรดาร์ TMD <span aria-hidden="true">↗</span></a>
+    </div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="crumb">WEATHER INTELLIGENCE <span>/</span> <b>LIVE RADAR</b></div><div class="header-right"><div class="timezone-chip"><span class="pulse-dot"></span><span id="clock">เวลาไทย • --:--</span></div><span class="avatar">TH</span></div></header>
+    <main class="content">
+      <div class="intro"><div><p class="eyebrow"><span class="green-line"></span> THAILAND PRECIPITATION MONITOR</p><h1>ติดตามฝน <span>แบบใกล้เวลาจริง</span></h1><p class="subtitle">ภาพตรวจวัดจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา ดูการเคลื่อนตัวของกลุ่มฝนก่อนออกเดินทางหรือออกกำลังกาย</p></div><div class="intro-actions"><span class="soft-badge"><i></i> ตรวจสอบภาพใหม่ทุก 5 นาที · เผยแพร่ snapshot ตาม GitHub Actions</span></div></div>
+      <div class="dashboard">
+        <section class="radar-card" aria-labelledby="radar-title">
+          <div class="radar-head"><div class="radar-heading"><div class="radar-icon" aria-hidden="true">◎</div><div><div class="mini-label">WEATHER RADAR FEED</div><h2 id="radar-title">เรดาร์ทั่วประเทศ</h2><p id="radar-subtitle">ภาพรวมประเทศไทย</p></div></div><div class="head-actions"><span id="status-pill" class="status-pill waiting"><i></i><span>กำลังเชื่อมต่อ</span></span><button type="button" class="icon-btn" id="refresh-button" title="โหลดข้อมูลใหม่" aria-label="โหลดข้อมูลใหม่">↻</button><button type="button" class="icon-btn" id="fullscreen-button" title="ขยายภาพ" aria-label="ขยายภาพ">⛶</button></div></div>
+          <div class="radar-canvas" id="radar-canvas">
+            <div class="grid-overlay" aria-hidden="true"></div><div class="scan-sweep" aria-hidden="true"></div>
+            <div class="image-layer" id="image-layer" hidden><img id="radar-image" alt="ภาพเรดาร์ตรวจอากาศจากกรมอุตุนิยมวิทยา" /></div>
+            <div class="radar-empty" id="radar-empty"><div class="radar-art" aria-hidden="true"><div class="radar-ring r1"></div><div class="radar-ring r2"></div><div class="radar-ring r3"></div><div class="radar-ring r4"></div><div class="sweep"></div><div class="center-dot"></div><div class="art-cross c1">+</div><div class="art-cross c2">+</div></div><div class="empty-text"><h3 id="empty-title">กำลังเรียกข้อมูลเรดาร์…</h3><p id="empty-desc">กำลังตรวจสอบข้อมูลที่ GitHub Pages เผยแพร่</p><a id="fallback-link" href="https://weather.tmd.go.th/THA_Z.php" target="_blank" rel="noopener noreferrer">เปิดภาพจากกรมอุตุนิยมวิทยา ↗</a></div></div>
+            <div class="canvas-chip" id="canvas-chip">● SOURCE: TMD</div><div class="canvas-coordinate">THAILAND · GMT+7</div>
+            <div class="zoom-tools"><button type="button" id="zoom-in" aria-label="ขยายภาพ">+</button><span id="zoom-percent">100%</span><button type="button" id="zoom-out" aria-label="ย่อภาพ">−</button><button type="button" id="zoom-reset" aria-label="ขนาดปกติ" title="รีเซ็ตซูม">⌂</button></div>
+          </div>
+          <div class="radar-footer"><div class="meta-item"><span class="meta-icon">◷</span><div><small>เวลาที่สร้าง Snapshot</small><strong id="fetched-time">กำลังโหลด…</strong></div></div><div class="meta-item"><span class="meta-icon">▣</span><div><small>เวลาที่เรดาร์ตรวจวัด</small><strong id="observed-time">ดูเวลา UTC บนภาพต้นฉบับ</strong></div></div><a id="official-link" class="open-source-btn" href="https://weather.tmd.go.th/THA_Z.php" target="_blank" rel="noopener noreferrer">เปิดเว็บต้นทาง ↗</a></div>
+        </section>
+        <aside class="insights" aria-label="รายละเอียดข้อมูลเรดาร์">
+          <section class="side-card status-card"><div class="side-heading"><span class="side-symbol">◈</span><span>สถานะข้อมูล</span></div><div class="status-content"><div class="status-main"><span class="status-orb" id="status-orb"></span><span id="status-heading">กำลังตรวจสอบแหล่งข้อมูล</span></div><p id="status-description">กำลังอ่านไฟล์ข้อมูลจากการเผยแพร่ GitHub Pages</p></div><div class="hairline"></div><div class="stat-line"><span>สถานีที่เลือก</span><strong id="station-display">ทั่วประเทศ</strong></div><div class="stat-line"><span>ความถี่การตรวจสอบ</span><strong>หน้าเว็บ 5 นาที / Snapshot ตาม Workflow</strong></div><div class="stat-line"><span>แหล่งข้อมูล</span><strong>TMD public radar</strong></div></section>
+          <section class="side-card legend-card"><div class="side-heading"><span class="side-symbol">◉</span><span>ระดับความเข้มของสัญญาณ</span></div><p class="legend-caption">ตัวอย่างการอ่านสีเรดาร์ (dBZ) สีจริงขึ้นอยู่กับสเกลในภาพต้นฉบับ</p><div class="rain-legend"><span style="--level:#2f92e5">อ่อน</span><span style="--level:#24c792">ปานกลาง</span><span style="--level:#f5c54e">ค่อนข้างแรง</span><span style="--level:#ed783f">แรง</span><span style="--level:#de4561">แรงมาก</span></div><p class="legend-foot">dBZ เป็นค่าการสะท้อนของเรดาร์ ไม่ใช่ปริมาณฝนหน่วยมิลลิเมตรโดยตรง</p></section>
+          <section class="side-card gps-card"><div class="side-heading"><span class="side-symbol">⌖</span><span>ตำแหน่งของฉัน</span></div><p id="gps-status">แสดงพิกัด GPS เพื่อเปิดแผนที่ประกอบ (ไม่ได้คำนวณฝน ณ ตำแหน่งของคุณ)</p><button id="gps-button" class="gps-button" type="button">อนุญาตใช้ตำแหน่ง</button><a id="gps-map-link" class="gps-link" hidden target="_blank" rel="noopener noreferrer">เปิดตำแหน่งบน OpenStreetMap ↗</a></section>
+          <section class="side-card forecast-card"><div class="side-heading"><span class="side-symbol">◷</span><span>พยากรณ์อากาศชลบุรี</span></div><p>ดูผลตรวจวัดจริงและพยากรณ์อากาศ 7 วันจากหน้าเว็บไซต์ทางการ (แยกจากภาพเรดาร์)</p><a href="https://tmd.go.th/weather/province/chonburi" target="_blank" rel="noopener noreferrer">เปิดพยากรณ์จังหวัดชลบุรี ↗</a></section>
+          <section class="side-card note-card"><div class="side-heading"><span class="side-symbol">☂</span><span>ก่อนออกไปวิ่ง</span></div><p>ดูภาพย้อนหลังร่วมกับทิศทางการเคลื่อนตัวของกลุ่มฝน และเช็กประกาศเตือนภัยก่อนออกกำลังกายกลางแจ้ง</p><a href="https://www.tmd.go.th/" target="_blank" rel="noopener noreferrer">ตรวจสอบพยากรณ์และประกาศเตือนภัย ↗</a></section>
+        </aside>
+      </div>
+      <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจากต้นทาง (เมื่อมีข้อมูล)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div></section>
+      <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.1 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span></footer>
+    </main>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="ขยายภาพเรดาร์"><div class="lightbox-top"><strong id="lightbox-title">ภาพเรดาร์</strong><button id="close-lightbox" aria-label="ปิดภาพขยาย">✕ ปิด</button></div><div class="lightbox-content"><img id="lightbox-image" alt="ภาพเรดาร์ขยาย" /></div></div>
+</body>
+</html>

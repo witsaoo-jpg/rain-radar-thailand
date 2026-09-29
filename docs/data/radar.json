@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "generated_at": null,
+  "stations": {
+    "thailand": {"available": false, "notice": "ยังไม่ได้รัน Workflow ดึงภาพจาก TMD"},
+    "sattahip": {"available": false, "notice": "ยังไม่ได้รัน Workflow ดึงภาพจาก TMD"},
+    "rayong": {"available": false, "notice": "ยังไม่ได้รัน Workflow ดึงภาพจาก TMD"},
+    "suvarnabhumi": {"available": false, "notice": "ยังไม่ได้รัน Workflow ดึงภาพจาก TMD"},
+    "thailand-loop": {"available": false, "notice": "ยังไม่ได้รัน Workflow ดึงภาพจาก TMD"}
+  }
+}
