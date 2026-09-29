@@ -101,4 +101,8 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'Credit: <strong>witsaoya</strong>' in text
     assert 'rain-radar-shell-v14' in Path('docs/sw.js').read_text()
     assert 'forecast-core.js' in Path('docs/sw.js').read_text()
+    assert 'id="weather-banner"' in text
+    assert 'id="weather-headline"' in text
+    assert 'id="weather-banner-action"' in text
+    assert "rain-radar-shell-v15" in Path('docs/sw.js').read_text()
     assert '© original data providers' not in text
