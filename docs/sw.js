@@ -1,5 +1,5 @@
 /* Cache UI shell only; radar/forecast/warning data must use the network. */
-const CACHE='rain-radar-shell-v14';
+const CACHE='rain-radar-shell-v15';
 const SHELL=['./','./index.html','./assets/styles.css','./assets/near-me.css','./assets/favicon.svg','./assets/app.js','./assets/near-me.js','./assets/forecast-core.js','./assets/forecast.js','./assets/animation.js','./assets/pwa.js','./manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

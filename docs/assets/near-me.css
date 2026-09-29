@@ -51,3 +51,16 @@
 .forecast-hour{padding:8px 6px;border-radius:7px;border:1px solid #315165;background:#0a2535;display:flex;flex-direction:column;gap:5px;font-size:9px;color:#a1c1cc}
 .forecast-hour strong{color:#d7f0ea;font-size:10px}
 @media(max-width:390px){.forecast-hours{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Location-aware weather summary above the radar. No unsolicited GPS or API calls. */
+.weather-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 19px;padding:18px 20px;border:1px solid #35695f;border-radius:12px;background:linear-gradient(115deg,#123c40 0%,#112b3b 65%,#102637 100%);color:#dff8f0}
+.weather-banner-main{display:flex;align-items:center;gap:15px;min-width:0}
+.weather-banner-symbol{display:grid;place-items:center;width:47px;height:47px;flex-shrink:0;border:1px solid #418d78;border-radius:12px;background:#1b514b;color:#8df3d6;font-size:28px}
+.weather-banner-copy{min-width:0}
+.weather-banner-kicker{display:block;color:#84dcca;font-size:9px;font-weight:750;letter-spacing:1.3px;margin-bottom:5px}
+.weather-banner h2{font-size:17px;font-weight:760;line-height:1.35;margin:0 0 5px;color:#ecfff6}
+.weather-banner p{font-size:12px;line-height:1.65;margin:0;color:#c5e5df}
+.weather-banner small{display:block;font-size:10px;color:#93b7bf;margin-top:7px;line-height:1.55}
+.weather-banner-action{flex-shrink:0;background:#1d6253;border:1px solid #439780;border-radius:8px;color:#e2fff5;padding:11px 14px;font-size:11px;font-weight:700;cursor:pointer}
+.weather-banner-action:hover{background:#28735f}
+@media(max-width:740px){.weather-banner{display:block;padding:14px;margin-bottom:13px}.weather-banner-main{align-items:flex-start;gap:11px}.weather-banner-symbol{width:36px;height:36px;font-size:22px}.weather-banner h2{font-size:15px}.weather-banner p{font-size:11px}.weather-banner-action{margin:12px 0 0 47px;padding:9px 12px}}

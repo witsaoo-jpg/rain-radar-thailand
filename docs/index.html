@@ -39,6 +39,10 @@
     <header class="topbar"><div class="crumb">WEATHER INTELLIGENCE <span>/</span> <b>LIVE RADAR</b></div><div class="header-right"><div class="timezone-chip"><span class="pulse-dot"></span><span id="clock">เวลาไทย • --:--</span></div><span class="avatar">TH</span></div></header>
     <main class="content">
       <div class="intro"><div><p class="eyebrow"><span class="green-line"></span> THAILAND PRECIPITATION MONITOR</p><h1>ติดตามฝน <span>แบบใกล้เวลาจริง</span></h1><p class="subtitle">ภาพตรวจวัดจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา ดูการเคลื่อนตัวของกลุ่มฝนก่อนออกเดินทางหรือออกกำลังกาย</p></div><div class="intro-actions"><span class="soft-badge"><i></i> ตรวจสอบภาพใหม่ทุก 5 นาที · เผยแพร่ snapshot ตาม GitHub Actions</span></div></div>
+      <section class="weather-banner" id="weather-banner" aria-labelledby="weather-headline">
+        <div class="weather-banner-main"><span class="weather-banner-symbol" aria-hidden="true">☁</span><div class="weather-banner-copy"><span class="weather-banner-kicker">LOCAL WEATHER · MODEL FORECAST</span><h2 id="weather-headline">สภาพอากาศใกล้คุณ</h2><p id="weather-summary" role="status" aria-live="polite">เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่</p><small id="weather-detail">ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ</small></div></div>
+        <button id="weather-banner-action" type="button" class="weather-banner-action">ไปที่ฝนใกล้ฉัน</button>
+      </section>
       <div class="dashboard">
         <section class="radar-card" aria-labelledby="radar-title">
           <div class="radar-head"><div class="radar-heading"><div class="radar-icon" aria-hidden="true">◎</div><div><div class="mini-label">WEATHER RADAR FEED</div><h2 id="radar-title">เรดาร์ทั่วประเทศ</h2><p id="radar-subtitle">ภาพรวมประเทศไทย</p></div></div><div class="head-actions"><span id="status-pill" class="status-pill waiting"><i></i><span>กำลังเชื่อมต่อ</span></span><button type="button" class="icon-btn" id="refresh-button" title="โหลดข้อมูลใหม่" aria-label="โหลดข้อมูลใหม่">↻</button><button type="button" class="icon-btn" id="fullscreen-button" title="ขยายภาพ" aria-label="ขยายภาพ">⛶</button></div></div>

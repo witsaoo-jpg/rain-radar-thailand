@@ -37,3 +37,22 @@ test('missing hourly values and out-of-range probabilities are null',()=>{
  const x=core.parseForecast(f,now);assert.equal(x.rows[0].probability,null);assert.equal(x.rows[0].precipitation,null);
  assert.equal(core.advisory(null).includes('ไม่มีข้อมูล'),true);
 });
+
+test('model current conditions require correct units and a recent timestamp',()=>{
+ const base={current_units:{temperature_2m:'°C',apparent_temperature:'°C',relative_humidity_2m:'%',wind_speed_10m:'km/h'},
+ current:{time:Math.floor(now/1000),temperature_2m:30.4,apparent_temperature:35,relative_humidity_2m:70,wind_speed_10m:9,weather_code:61}};
+ const got=core.parseCurrent(base,now);
+ assert.equal(got.temperature,30.4);
+ assert.equal(got.description,'มีฝน');
+ assert.equal(got.humidity,70);
+ base.current.time=Math.floor((now-3*H)/1000);
+ assert.equal(core.parseCurrent(base,now),null);
+ base.current.time=Math.floor(now/1000);base.current_units.temperature_2m='°F';
+ assert.equal(core.parseCurrent(base,now),null);
+});
+test('unknown current fields do not masquerade as measured zero and model wording is explicit',()=>{
+ const data={current_units:{temperature_2m:'°C',apparent_temperature:'°C',relative_humidity_2m:'%',wind_speed_10m:'km/h'},current:{time:Math.floor(now/1000),temperature_2m:null,apparent_temperature:null,relative_humidity_2m:null,wind_speed_10m:null,weather_code:null}};
+ assert.equal(core.parseCurrent(data,now),null);
+ assert.equal(core.weatherDescription(95),'มีพายุฝนฟ้าคะนองตามแบบจำลอง');
+ assert.match(core.buildUrl(13.3,100.9),/current=/);
+});
