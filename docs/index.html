@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="./assets/near-me.css" />
   <script src="./assets/app.js" defer></script>
   <script src="./assets/near-me.js" defer></script>
+  <script src="./assets/forecast-core.js" defer></script>
+  <script src="./assets/forecast.js" defer></script>
   <script src="./assets/animation.js" defer></script>
   <script src="./assets/pwa.js" defer></script>
 </head>
@@ -61,6 +63,19 @@
             <div id="gps-map-wrap" class="gps-map-wrap" hidden><iframe id="gps-map-frame" title="ตำแหน่งอุปกรณ์บน OpenStreetMap" loading="lazy" referrerpolicy="no-referrer"></iframe><p class="gps-disclaimer">แผนที่ตำแหน่งแยกจากภาพเรดาร์ TMD ยังไม่ได้ซ้อนพิกัดบนภาพเรดาร์ เพราะไม่มีค่าพิกัดอ้างอิงของภาพที่ยืนยันได้</p></div>
             <a id="gps-map-link" class="gps-link" hidden target="_blank" rel="noopener noreferrer">เปิดตำแหน่งบน OpenStreetMap ↗ (ส่งพิกัดให้ OSM เมื่อกด)</a>
             <p class="gps-privacy">การกดแสดงแผนที่หรือเปิดลิงก์จะส่งพิกัดให้ OpenStreetMap เพื่อแสดงตำแหน่ง และไม่ใช่การคำนวณว่าฝนตก ณ จุดนี้</p></section>
+          <section class="side-card local-forecast-card" aria-labelledby="local-forecast-title">
+            <div class="side-heading"><span class="side-symbol">☂</span><span id="local-forecast-title">พยากรณ์ฝนใกล้ฉัน</span></div>
+            <p id="forecast-status" role="status" aria-live="polite">กดอนุญาต GPS ด้านบนก่อน จากนั้นเลือกส่งพิกัดโดยประมาณเพื่อขอพยากรณ์</p>
+            <p id="forecast-consent" class="forecast-privacy" hidden>เมื่อกดดึงพยากรณ์ เว็บไซต์จะส่งพิกัด GPS ที่ปัดเศษเหลือ 2 ตำแหน่ง (ประมาณระดับกิโลเมตร) ไปยัง Open-Meteo ไม่ส่งพิกัดโดยอัตโนมัติ และไม่เก็บไว้ในฐานข้อมูลของเว็บไซต์ ผู้ให้บริการอาจได้รับข้อมูลการเชื่อมต่อของคุณ</p>
+            <div class="gps-actions"><button id="forecast-request" class="gps-button" type="button" disabled>ดึงพยากรณ์พื้นที่ของฉัน</button><button id="forecast-clear" class="gps-secondary" type="button" hidden>ล้างพยากรณ์</button></div>
+            <div id="forecast-result" hidden>
+              <div class="forecast-overview"><div><small>โอกาสเกิดฝนสูงสุดใน 3 ชั่วโมงที่แสดง (แบบจำลอง)</small><strong id="forecast-probability">—</strong></div><div><small>ผลรวมปริมาณฝนพยากรณ์ 3 ชั่วโมง (เมื่อครบข้อมูล)</small><strong id="forecast-amount">—</strong></div></div>
+              <p id="forecast-advice" class="forecast-advice"></p><div id="forecast-hours" class="forecast-hours" aria-label="พยากรณ์รายชั่วโมง"></div>
+              <p id="forecast-updated" class="forecast-privacy"></p><p id="forecast-grid" class="forecast-privacy"></p>
+            </div>
+            <p class="forecast-privacy">แหล่งข้อมูล: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> • พยากรณ์อากาศไม่ใช่ภาพเรดาร์ TMD • ไม่ใช่ประกาศเตือนภัย</p>
+          </section>
+          <section class="side-card radar-location-card"><div class="side-heading"><span class="side-symbol">⌖</span><span>ระยะห่างจากกลุ่มฝน</span></div><p>ยังไม่เปิดการคำนวณระยะห่างหรือเวลาเข้าถึงของฝน เพราะภาพ PNG ที่ได้รับยังไม่มีพิกัดภูมิศาสตร์ของแต่ละพิกเซลที่ตรวจสอบได้ โปรดใช้ภาพเรดาร์และประกาศทางการประกอบ</p></section>
           <section class="side-card alerts-card"><div class="side-heading"><span class="side-symbol">⚠</span><span>ประกาศเตือนภัยทางการ</span></div><p>อ่านประกาศและเวลาเผยแพร่จากกรมอุตุนิยมวิทยาโดยตรง เว็บไซต์นี้ไม่ดัดแปลงประกาศเป็นการแจ้งเตือนอัตโนมัติ</p><a href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">เปิดประกาศเตือนภัย TMD ↗</a><p class="warning-caution">การไม่เห็นประกาศบนหน้านี้ ไม่ได้หมายความว่าไม่มีความเสี่ยงในพื้นที่</p></section>
           <section class="side-card forecast-card"><div class="side-heading"><span class="side-symbol">◷</span><span>พยากรณ์อากาศชลบุรี</span></div><p>ดูผลตรวจวัดจริงและพยากรณ์อากาศ 7 วันจากหน้าเว็บไซต์ทางการ (แยกจากภาพเรดาร์)</p><a href="https://tmd.go.th/weather/province/chonburi" target="_blank" rel="noopener noreferrer">เปิดพยากรณ์จังหวัดชลบุรี ↗</a></section>
           <section class="side-card pwa-card"><div class="side-heading"><span class="side-symbol">▣</span><span>ติดตั้งไว้บนมือถือ</span></div><p id="install-hint">Android: ใช้เมนูติดตั้งแอป / iPhone: Safari → แชร์ → เพิ่มไปยังหน้าจอโฮม (ต้องมีอินเทอร์เน็ตเพื่อดูเรดาร์ล่าสุด)</p><button id="install-app" class="gps-button" type="button" hidden>ติดตั้ง Rain Radar</button></section>
@@ -69,7 +84,7 @@
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.3 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.4 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
