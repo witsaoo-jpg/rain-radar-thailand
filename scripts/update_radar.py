@@ -17,7 +17,10 @@ from urllib.parse import urljoin, urlsplit
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image, UnidentifiedImageError
-from scripts.build_history import attach_history
+if __package__:
+    from .build_history import attach_history
+else:
+    from build_history import attach_history
 
 STATIONS = {
     'thailand': {'source': 'https://weather.tmd.go.th/THA_Z.php', 'fallback': 'https://satda.tmd.go.th/wp-content/uploads/data/radar_composite/radar_composite.php'},
