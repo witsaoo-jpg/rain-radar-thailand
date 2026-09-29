@@ -65,3 +65,13 @@ node --check docs/assets/app.js # if Node.js is available
 - [GitHub Pages documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
 
 Radar echoes can include non-precipitation objects. Source pages may report UTC. The project gives no rain probability, nowcast, or safety guarantee. TMD, not this project, is the source of radar imagery.
+
+## Phase 1.2 — Rain Near Me (GPS only)
+
+- Permission-based browser Geolocation API, HTTPS/localhost only. No auto-request, local storage, API submission or server-side GPS tracking.
+- Coordinates, reported accuracy and location timestamp are shown only in the current page. Clear invalidates pending callbacks and empties the iframe.
+- Optional OpenStreetMap map and external link: **location is sent to OpenStreetMap only when the user explicitly chooses the map/link**. The default app does not contact OpenStreetMap.
+- The TMD image is **not georeferenced** in the current integration, so GPS is displayed on a separate map, never falsely superimposed on radar pixels. No rainfall-distance or arrival-time claims.
+- To run frontend tests: `node --test tests/test_near_me.cjs`; test-before-deploy runs in GitHub Actions.
+
+The public TMD radar disclaimer describes its imagery as near-real-time and subject to non-precipitation echoes: https://weather.tmd.go.th/disclaimer.html
