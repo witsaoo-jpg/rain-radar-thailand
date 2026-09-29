@@ -17,6 +17,9 @@
   <script src="./assets/forecast.js" defer></script>
   <script src="./assets/places-core.js" defer></script>
   <script src="./assets/places.js" defer></script>
+  <script src="./assets/advisory-core.js" defer></script>
+  <script src="./assets/advisory.js" defer></script>
+  <script src="./assets/selected-map.js" defer></script>
   <script src="./assets/animation.js" defer></script>
   <script src="./assets/pwa.js" defer></script>
 </head>
@@ -45,6 +48,13 @@
       <section class="weather-banner" id="weather-banner" aria-labelledby="weather-headline">
         <div class="weather-banner-main"><span class="weather-banner-symbol" aria-hidden="true">☁</span><div class="weather-banner-copy"><span class="weather-banner-kicker">LOCAL WEATHER · MODEL FORECAST</span><h2 id="weather-headline">สภาพอากาศใกล้คุณ</h2><p id="weather-summary" role="status" aria-live="polite">เปิด GPS และกดดึงพยากรณ์เพื่อดูสภาพอากาศในพื้นที่</p><small id="weather-detail">ไม่ส่งพิกัดไปยังบริการพยากรณ์โดยอัตโนมัติ</small></div></div>
         <button id="weather-banner-action" type="button" class="weather-banner-action">ไปที่ฝนใกล้ฉัน</button>
+      </section>
+      <section class="public-advisory" aria-labelledby="advisory-heading">
+        <div class="advisory-title">WEATHER ADVISORY · MODEL FORECAST</div>
+        <h2 id="advisory-heading">คำแนะนำสภาพอากาศตามพื้นที่</h2>
+        <p id="advisory-message">เลือกตำแหน่งและกดดึงพยากรณ์เพื่อดูคำแนะนำ</p>
+        <small id="advisory-meta">ผลจากแบบจำลอง Open-Meteo ไม่ใช่ประกาศเตือนภัยทางการ</small>
+        <div class="advisory-actions"><button id="notify-enable" type="button">สมัครรับแจ้งเตือนในหน้านี้</button><button id="notify-disable" type="button" hidden>ปิดการแจ้งเตือน</button><span id="notify-status" role="status" aria-live="polite">ไม่มีการติดตามหรือส่งแจ้งเตือนขณะปิดเว็บไซต์</span></div>
       </section>
       <div class="dashboard">
         <section class="radar-card" aria-labelledby="radar-title">
@@ -92,6 +102,12 @@
             </div>
             <p class="forecast-privacy">แหล่งข้อมูล: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> • พยากรณ์อากาศไม่ใช่ภาพเรดาร์ TMD • ไม่ใช่ประกาศเตือนภัย</p>
           </section>
+          <section class="side-card selected-map-card"><div class="side-heading"><span class="side-symbol">⌖</span><span>แผนที่ตำแหน่งที่เลือก</span></div>
+            <p id="selected-map-location">ยังไม่ได้เลือกพิกัด</p>
+            <button id="selected-map-open" type="button" disabled>เลือกตำแหน่งเพื่อเปิดแผนที่</button>
+            <div id="selected-map-panel" hidden><iframe id="selected-map-iframe" title="แผนที่ตำแหน่งผู้ใช้จาก OpenStreetMap" loading="lazy" referrerpolicy="no-referrer"></iframe><button id="selected-map-close" type="button">ปิดแผนที่</button></div>
+            <p class="map-disclaimer">พิกัดจะถูกส่งไป OpenStreetMap เฉพาะเมื่อกดเปิดแผนที่ ไม่ใช่การวิเคราะห์ฝนจากเรดาร์ TMD</p>
+          </section>
           <section class="side-card radar-location-card"><div class="side-heading"><span class="side-symbol">⌖</span><span>ระยะห่างจากกลุ่มฝน</span></div><p>ยังไม่เปิดการคำนวณระยะห่างหรือเวลาเข้าถึงของฝน เพราะภาพ PNG ที่ได้รับยังไม่มีพิกัดภูมิศาสตร์ของแต่ละพิกเซลที่ตรวจสอบได้ โปรดใช้ภาพเรดาร์และประกาศทางการประกอบ</p></section>
           <section class="side-card alerts-card"><div class="side-heading"><span class="side-symbol">⚠</span><span>ประกาศเตือนภัยทางการ</span></div><p>อ่านประกาศและเวลาเผยแพร่จากกรมอุตุนิยมวิทยาโดยตรง เว็บไซต์นี้ไม่ดัดแปลงประกาศเป็นการแจ้งเตือนอัตโนมัติ</p><a href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">เปิดประกาศเตือนภัย TMD ↗</a><p class="warning-caution">การไม่เห็นประกาศบนหน้านี้ ไม่ได้หมายความว่าไม่มีความเสี่ยงในพื้นที่</p></section>
           <section class="side-card forecast-card"><div class="side-heading"><span class="side-symbol">◷</span><span>พยากรณ์อากาศชลบุรี</span></div><p>ดูผลตรวจวัดจริงและพยากรณ์อากาศ 7 วันจากหน้าเว็บไซต์ทางการ (แยกจากภาพเรดาร์)</p><a href="https://tmd.go.th/weather/province/chonburi" target="_blank" rel="noopener noreferrer">เปิดพยากรณ์จังหวัดชลบุรี ↗</a></section>
@@ -101,7 +117,7 @@
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.6 · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.7–2.0 beta · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
