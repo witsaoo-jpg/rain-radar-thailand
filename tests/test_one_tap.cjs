@@ -50,3 +50,22 @@ test('empty results are not exposed as weather cards',()=>{
  assert.match(intel,/\$\('intel-grid'\)\.hidden=false/);
  assert.match(css,/#intel-grid\[hidden\]/);
 });
+
+test('saved place shortcut requires a click and then fetches its model forecast once',async()=>{
+ const h=harness();
+ assert.equal(h.calls.length,0);
+ h.emit('rainradar:favorite-forecast',{name:'บ้าน',source:'favorite',coords:{latitude:13.3300,longitude:100.9609}});
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(h.calls.length,1);
+ assert.match(h.calls[0],/latitude=13\.33/);
+ assert.match(h.nodes['weather-headline'].textContent,/บ้าน/);
+});
+test('top favorites and management are separated without deleting the saved place',()=>{
+ const html=fs.readFileSync('docs/index.html','utf8');
+ const js=fs.readFileSync('docs/assets/places.js','utf8');
+ assert.match(html,/id="places-list"/);
+ assert.match(html,/id="places-manage-list"/);
+ assert.match(html,/id="places-manage-open"/);
+ assert.match(js,/rainradar:favorite-forecast/);
+ assert.match(js,/manageList\.append\(removeRow\)/);
+});
