@@ -281,3 +281,30 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
 .outlook-technical summary{cursor:pointer;min-height:42px;padding:9px 0;font-size:15px;font-weight:700;color:#a9e9d7}
 .outlook-public[hidden]{display:none!important}
 @media(max-width:740px){.outlook-public{padding:12px}.outlook-public p{font-size:15px}.outlook-public-periods{grid-template-columns:1fr}.outlook-period{padding:10px;gap:4px}.outlook-period-value{font-size:19px}}
+
+/* v1.13 Radar Explorer: regional station catalogue. Only published snapshots get a local viewer button. */
+.sidebar-section.radar-explorer{min-height:0;display:flex;flex-direction:column;flex:1}
+.radar-search-label{font-size:12px;font-weight:750;color:#d0ede7;margin:3px 9px 7px}
+#radar-station-search{width:100%;min-height:46px;border-radius:9px;border:1px solid #417281;background:#122b3d;color:#f1fff9;font:inherit;font-size:14px;padding:10px 12px}
+#radar-search-status{font-size:11px;color:#9bbebd;line-height:1.6;margin:8px}
+.radar-explorer .station-nav{display:block;overflow-y:auto;overflow-x:hidden;min-height:0;padding:3px 3px 12px;scrollbar-width:thin}
+.radar-directory-region{border-top:1px solid #244457;padding:6px 0}
+.radar-directory-region summary{cursor:pointer;min-height:42px;padding:10px 7px;color:#a6ebd7;font-size:12px;font-weight:800;line-height:1.4}
+.radar-directory-region-items{display:grid;gap:4px;margin:5px 0 9px}
+.radar-directory-item{min-height:50px;padding:8px 7px;white-space:normal}
+.radar-directory-item>span:nth-child(2){font-size:13px;overflow-wrap:anywhere}
+.radar-directory-item small{font-size:10px;line-height:1.4}
+.radar-directory-item[data-radar-kind="external"] .station-icon{color:#bdd6df}
+.radar-directory-item[data-snapshot-state="published"] .nav-indicator{display:block;background:#69e1bf}
+.radar-directory-item[data-snapshot-state="unavailable"] .nav-indicator,.radar-directory-item[data-snapshot-state="stale"] .nav-indicator{display:block;background:#d99a84}
+.radar-directory-help{font-size:10px;line-height:1.6;color:#88aab7;padding:8px;margin:0}
+@media(max-width:740px){
+ body.tools-mode .sidebar{padding:13px}
+ body.tools-mode .sidebar-section.radar-explorer{max-height:390px}
+ .radar-explorer .station-nav{display:block;overflow-y:auto;overflow-x:hidden;max-height:285px}
+ .radar-directory-region-items{display:grid}
+ .radar-explorer .station-link{width:100%;min-height:48px;white-space:normal;padding:9px}
+ .radar-explorer .station-link>span:nth-child(2){font-size:13px}
+ .radar-explorer .station-link small,.radar-explorer .station-link .nav-indicator{display:block!important}
+ .radar-search-label{display:block}
+}
