@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.12.2 Public Rain Summary
+# Rain Radar Thailand · Phase 1.13 National Radar Explorer
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -188,3 +188,9 @@ BigDataCloud free service policy: https://www.bigdatacloud.com/docs/article/why-
 ## Phase 1.12.2 — Rain outlook explained in Thai for the public
 
 After an explicit model analysis, a prominent large-print summary explains the 24-hour, 72-hour and 120-hour accumulation ranges based only on complete valid ECMWF/GFS/ICON data. It states how many of three models actually have each complete accumulation period, describes their numerical difference, and gives ordinary preparedness guidance to consult daily forecasts, TMD warnings and radar. It never infers flooding, event probabilities or guaranteed safety from rainfall alone. If model results are missing it visibly reports insufficient evidence rather than replacing them with zero. The detailed numerical comparison remains accessible in an expandable section, with optional ECMWF Ensemble below. Changing or clearing the selected location clears the entire previous summary. Tests are included in the existing Rain Outlook suites. Original weather home, opt-in GPS, TMD radar, Counter and Credit: witsaoya remain unchanged.
+
+## Phase 1.13 — National Radar Explorer (regional station directory)
+
+The Radar tab now contains a searchable/collapsible sidebar catalogue of TMD-listed radar stations across the country, including separate Bangkok and Rainmaking groupings as shown on the TMD public radar directory. Station listings are **directory links, not proof that any station is operational or currently publishing data**. Only the five already tested local viewer sources (national composite, national loop, Sattahip, Rayong and Suvarnabhumi) use our GitHub Pages snapshot manifest; their dots denote the availability/freshness of a published snapshot, not radar instrument health or guaranteed observation timestamp. All other entries open the official [TMD radar directory](https://weather.tmd.go.th/THA_Z.php) in a separate tab when an exact station deep link was not independently verified. This avoids broken, guessed or unauthorized image URLs, and places the authoritative choice with the user. The existing failure fallback link remains visible for in-app stations where the TMD snapshot cannot be validated.
+
+The directory does not increase scraping frequency nor load images for every station. Before adding individual image snapshots, each station URL, actual image provenance, image licensing/terms, observation timestamp and technical handling must be verified separately. No invented observations. Search and accessible mobile regional menus are checked by tests. Existing Location First forecast, ECMWF outlook, counter and Credit: witsaoya remain unchanged.
