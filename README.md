@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.11 Location-first Home
+# Rain Radar Thailand · Phase 1.12 Rainfall Outlook
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -168,3 +168,13 @@ Add/remove forms and exact locally saved coordinates remain in a separate collap
 - Each home refresh explicitly requests the existing approximate-location forecast; location changes and forecast errors invalidate displayed personal details. The no-consent fallback offers the existing public six-city sample without a location request.
 - Weather information is Open-Meteo forecast model data, **not** direct GPS weather observation or geographic TMD radar nowcast. Daily values use Asia/Bangkok and are checked for structure/units; unavailable values remain unavailable.
 - The PWA shell cache has been refreshed to include the location-first UI while model forecasts and radar data remain network-only. Added Node regression tests for initial/return consent, denial, toggle, report display, and navigation.
+
+## Phase 1.12–2.0: ECMWF and comparison groundwork
+
+The Location First landing page now has an optional **Rainfall Outlook** card. Only after a location has been selected and the user clicks **วิเคราะห์ฝนสะสม 5 วัน** does the browser send approximate (2-decimal) coordinates to Open-Meteo. It requests three independent model outputs: ECMWF IFS 0.25°, NOAA GFS Global and DWD ICON Global. Each valid result is checked for timezone, millimetre units, sorted hourly Unix timestamps, and **120 consecutive upcoming hourly precipitation values** (values represent the preceding hour). Incomplete 24/72/120-hour totals remain unavailable; they are never treated as zero. Open-Meteo may interpolate a model's native temporal resolution, so interpolated hourly totals should not be mistaken for native hourly model steps. Retrieved-at time is displayed; original model run timestamp is not asserted unless separately validated.
+
+Multi-model comparisons show the numeric range of valid 120-hour accumulation forecasts and explicitly do not infer an event probability, issue a warning, or predict flooding. The user may separately request an ECMWF 0.25° ensemble distribution: P10, median and P90 are displayed only with at least ten complete validated ensemble member records. This is a *forecast spread*, not a flood probability, return period, or official severity grade. A failed/unavailable model never substitutes another model, fabricated data or a worst-case claim.
+
+Phase 2.0 **preparedness integration, not completed hydrological prediction**: Official [TMD severe weather warnings](https://www.tmd.go.th/warning-and-events/warning-storm) and [ThaiWater](https://www.thaiwater.net/) are linked from the rain outlook. No live hydrological data, drainage capacity, inundation model or verified georeferenced radar cells are yet integrated; the app does not publish evacuation instructions or the label "มหาอุทกภัย" derived from precipitation alone. Direct model API terms/attribution and quotas must be respected before scaling traffic or monetization.
+
+The original radar dashboard, six-city public view, opt-in GPS flow, saved places, visitor counter, and Credit: witsaoya remain intact. Front-end regression tests: `node --test tests/test_rain_outlook.cjs` plus all existing CI checks.
