@@ -11,6 +11,7 @@
  }
  function clear(){
    forecast=null;
+   $('intel-grid').hidden=true;
    $('intel-place').textContent='เลือกตำแหน่งและกดดึงพยากรณ์เพื่ออ่านรายงาน';
    $('intel-condition').textContent='ยังไม่มีข้อมูลสภาพอากาศเฉพาะพื้นที่';
    for(const id of ['intel-rain','intel-temperature','intel-fog','intel-cloud','intel-wind'])$(id).textContent='—';
@@ -21,6 +22,7 @@
  window.addEventListener('rainradar:forecast',event=>{
    const d=event.detail;if(!d?.result)return;
    forecast=d; const w=core.level(d.currentWeather,d.result);
+   $('intel-grid').hidden=false;
    $('intel-place').textContent='รายงานสำหรับ '+String(d.selectedPlace||'ตำแหน่งที่เลือก');
    $('intel-condition').textContent=w.title;
    $('intel-rain').textContent=w.rain;
