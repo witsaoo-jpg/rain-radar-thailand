@@ -26,6 +26,7 @@
   <script src="./assets/pwa.js" defer></script>
   <script src="./assets/easy-refresh.js" defer></script>
   <script src="./assets/public-overview.js" defer></script>
+  <script src="./assets/home.js" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -48,7 +49,30 @@
   <div class="workspace">
     <header class="topbar"><div class="crumb">WEATHER INTELLIGENCE <span>/</span> <b>LIVE RADAR</b></div><div class="header-right"><div class="timezone-chip"><span class="pulse-dot"></span><span id="clock">เวลาไทย • --:--</span></div><span class="avatar">TH</span></div></header>
     <main class="content">
-      <div class="intro"><div><p class="eyebrow"><span class="green-line"></span> THAILAND PRECIPITATION MONITOR</p><h1>ติดตามฝน <span>แบบใกล้เวลาจริง</span></h1><p class="subtitle">ภาพตรวจวัดจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา ดูการเคลื่อนตัวของกลุ่มฝนก่อนออกเดินทางหรือออกกำลังกาย</p></div><div class="intro-actions"><span class="soft-badge"><i></i> ตรวจสอบภาพใหม่ทุก 5 นาที · เผยแพร่ snapshot ตาม GitHub Actions</span></div></div>
+      <nav class="main-tabs" aria-label="เลือกหน้าหลัก">
+        <button type="button" id="tab-home" class="active" aria-current="page">⌂ หน้าแรก</button>
+        <button type="button" id="tab-radar">◎ เรดาร์ฝน</button>
+        <button type="button" id="tab-more">☷ เมนูอื่น ๆ</button>
+      </nav>
+      <section id="home-view" aria-label="พยากรณ์อากาศพื้นที่ของฉัน">
+        <section class="home-hero" aria-labelledby="home-place">
+          <div class="home-top"><span>RAIN RADAR · อากาศใกล้ตัว</span><button type="button" id="home-change" class="home-change">เปลี่ยนพื้นที่</button></div>
+          <h1 id="home-place">สภาพอากาศพื้นที่ของคุณ</h1>
+          <div class="home-current"><div id="home-icon" aria-hidden="true" class="home-weather-icon">☁</div><div><div id="home-temperature" class="home-temperature">—</div><div id="home-condition" class="home-condition" role="status" aria-live="polite">เลือกใช้ตำแหน่งเพื่อดูอากาศของพื้นที่คุณ</div><div id="home-feels" class="home-feels"></div></div></div>
+          <p id="home-rain" class="home-rain">ข้อมูลพยากรณ์เฉพาะพื้นที่ยังไม่พร้อม</p>
+          <p id="home-meta" class="home-meta">ข้อมูลจาก Open-Meteo (แบบจำลอง) • ไม่ใช่การตรวจวัดอากาศตรงจุด GPS</p>
+          <div id="home-consent" class="home-consent">
+            <p>กดปุ่มด้านล่างเพื่ออนุญาต GPS ส่งพิกัดที่ปัดเศษ 2 ตำแหน่งไป Open-Meteo และจดจำการเลือกให้แสดงอากาศอัตโนมัติเมื่อกลับมา คุณปิดได้ทุกเมื่อ โดยเว็บไม่เก็บพิกัดลงฐานข้อมูล</p>
+            <button id="home-location" type="button">📍 อนุญาต GPS และเปิดอากาศอัตโนมัติ</button>
+            <p id="home-location-status" role="status" aria-live="polite"></p>
+          </div>
+          <div id="home-actions" class="home-actions" hidden><button id="home-refresh" type="button">↻ อัปเดตสภาพอากาศ</button><label class="home-auto"><input type="checkbox" id="home-auto-toggle"/> แสดงอากาศตาม GPS อัตโนมัติครั้งต่อไป</label></div>
+        </section>
+        <section id="home-forecast" class="home-forecast" hidden>
+          <h2>พยากรณ์รายชั่วโมง</h2><div id="home-hours" class="home-hours"></div>
+          <h2>พยากรณ์ 7 วัน</h2><div id="home-days" class="home-days"></div>
+        </section>
+        <details id="home-national" class="home-national"><summary>ดูพยากรณ์ภาพรวม 6 เมืองตัวแทนของประเทศไทย</summary>
       <section class="public-overview" aria-labelledby="public-weather-headline">
         <div class="public-overview-top"><div><span class="public-overview-kicker">พยากรณ์อากาศประเทศไทย · ภาพรวม 6 เมืองตัวแทน</span>
           <h2 id="public-weather-headline" role="status" aria-live="polite">กำลังตรวจสอบสภาพอากาศ</h2>
@@ -58,6 +82,11 @@
         <div id="public-weather-cities" class="public-weather-cities" aria-label="พยากรณ์ตามเมืองตัวแทน"></div>
         <a class="public-warning-link" href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">ตรวจสอบประกาศเตือนภัยจากกรมอุตุนิยมวิทยา ↗</a>
       </section>
+      </details>
+      <section class="home-quick"><button type="button" id="home-open-radar">◎ ดูภาพเรดาร์ฝน</button><button type="button" id="home-open-places">⌂ สถานที่โปรดและเมนูอื่น</button></section>
+      </section>
+      <section id="tools-view" hidden>
+      <div class="intro"><div><p class="eyebrow"><span class="green-line"></span> THAILAND PRECIPITATION MONITOR</p><h1>ติดตามฝน <span>แบบใกล้เวลาจริง</span></h1><p class="subtitle">ภาพตรวจวัดจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา ดูการเคลื่อนตัวของกลุ่มฝนก่อนออกเดินทางหรือออกกำลังกาย</p></div><div class="intro-actions"><span class="soft-badge"><i></i> ตรวจสอบภาพใหม่ทุก 5 นาที · เผยแพร่ snapshot ตาม GitHub Actions</span></div></div>
       <section class="easy-refresh" aria-label="อัปเดตข้อมูลอากาศและเรดาร์">
         <button id="easy-refresh-button" type="button" aria-describedby="easy-refresh-help easy-refresh-status">↻ อัปเดตสภาพอากาศและเรดาร์</button>
         <div class="easy-refresh-copy"><strong>กดครั้งเดียวเพื่อดูข้อมูลล่าสุด</strong><span id="easy-refresh-help">หากเลือกพื้นที่แล้ว การกดปุ่มนี้จะส่งพิกัดโดยประมาณไป Open-Meteo เพื่อขอรายงานใหม่ และตรวจสอบ Snapshot เรดาร์ TMD โดยไม่ต้องเปิด GPS ซ้ำ</span><span id="easy-refresh-status" role="status" aria-live="polite">ยังไม่ได้กดอัปเดตข้อมูล</span></div>
@@ -156,7 +185,8 @@
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.10.1 Quick Places · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      </section>
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.11 Location First · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>

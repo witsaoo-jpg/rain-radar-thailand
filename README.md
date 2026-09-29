@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.10.1 Quick Favorite Weather
+# Rain Radar Thailand · Phase 1.11 Location-first Home
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -159,3 +159,12 @@ The opt-in GPS/forecast flow, local-only favorite places, PWA, third-party visit
 The saved-place list is now directly within the large top Local Weather banner, not buried in a separate side card. Pressing **ดูอากาศ** next to a named favorite is a single deliberate consent action to send approximate coordinates (rounded to two decimal places) to Open-Meteo and immediately render the existing forecast in that same banner. The disclosure is visible directly above the buttons. Merely visiting the site or loading saved favorites still does not contact the provider with private coordinates.
 
 Add/remove forms and exact locally saved coordinates remain in a separate collapsible place-management section. No saved data is migrated, deleted, or submitted automatically. The default public six-city forecast remains independent of location permission. The original radar, public warnings, PWA, visitor counter, and Credit: witsaoya remain unchanged.
+
+## Phase 1.11 — location-first accessible home, opt-in automatic return
+
+- First screen is a large-print local weather card followed by hourly and seven-day Open-Meteo model forecasts, with Home / Radar / Other tools navigation. The original radar stations, history, favorites, weather detail, TMD warnings, visitor counter and Credit: witsaoya remain accessible in Other tools or Radar.
+- First-time access: the site does **not** prompt for GPS or send private coordinates until the user presses the clearly labeled opt-in button. That button expressly authorizes a browser GPS request, an approximate (2-decimal) coordinate forecast request to Open-Meteo, and remembering that automatic location forecast is desired on future visits. It never stores exact GPS coordinates persistently.
+- Returning users who previously opted in: the page checks browser geolocation permission via Permissions API and only attempts to acquire GPS automatically when the existing permission is `granted`. It does not force a fresh prompt on return when the browser reports `prompt` or cannot be queried. Users can turn off automatic return access with the visible checkbox; a denied request clears the saved preference.
+- Each home refresh explicitly requests the existing approximate-location forecast; location changes and forecast errors invalidate displayed personal details. The no-consent fallback offers the existing public six-city sample without a location request.
+- Weather information is Open-Meteo forecast model data, **not** direct GPS weather observation or geographic TMD radar nowcast. Daily values use Asia/Bangkok and are checked for structure/units; unavailable values remain unavailable.
+- The PWA shell cache has been refreshed to include the location-first UI while model forecasts and radar data remain network-only. Added Node regression tests for initial/return consent, denial, toggle, report display, and navigation.

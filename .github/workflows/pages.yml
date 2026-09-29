@@ -50,6 +50,7 @@ jobs:
           node --check docs/assets/pwa.js
           node --check docs/assets/easy-refresh.js
           node --check docs/assets/public-overview.js
+          node --check docs/assets/home.js
           node --check docs/sw.js
           node --test tests/test_near_me.cjs
           node --test tests/test_forecast.cjs
@@ -57,6 +58,7 @@ jobs:
           node --test tests/test_one_tap.cjs
           node --test tests/test_easy_refresh.cjs
           node --test tests/test_public_overview.cjs
+          node --test tests/test_home.cjs
           node --test tests/test_places_history.cjs
           node --test tests/test_advisory.cjs
       - name: Run backend and snapshot tests

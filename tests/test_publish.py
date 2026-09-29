@@ -99,12 +99,12 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'forecast-consent' in text and 'forecast-request' in text
     assert 'ระยะห่างจากกลุ่มฝน' in text and 'ยังไม่เปิดการคำนวณ' in text
     assert 'Credit: <strong>witsaoya</strong>' in text
-    assert 'rain-radar-shell-v1101' in Path('docs/sw.js').read_text()
+    assert 'rain-radar-shell-v111' in Path('docs/sw.js').read_text()
     assert 'forecast-core.js' in Path('docs/sw.js').read_text()
     assert 'id="weather-banner"' in text
     assert 'id="weather-headline"' in text
     assert 'id="weather-banner-action"' in text
-    assert "rain-radar-shell-v1101" in Path('docs/sw.js').read_text()
+    assert "rain-radar-shell-v111" in Path('docs/sw.js').read_text()
     assert './assets/radar-utils.js' in text and './assets/places-core.js' in text and './assets/places.js' in text
     assert 'places-form' in text and 'places-list' in text
     assert 'RainPlacesCore' in Path('docs/assets/places.js').read_text()
@@ -127,4 +127,9 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'id="places-manage-open"' in text and 'id="places-manage-list"' in text
     assert 'id="places-list"' in text and 'id="places-count"' in text
     assert 'rainradar:favorite-forecast' in Path('docs/assets/forecast.js').read_text()
+    assert 'id="home-view"' in text and 'id="tools-view"' in text
+    assert 'id="home-location"' in text and 'id="home-auto-toggle"' in text
+    assert 'id="tab-home"' in text and 'id="tab-radar"' in text and 'id="tab-more"' in text
+    assert './assets/home.js' in text and "'./assets/home.js'" in Path('docs/sw.js').read_text()
+    assert 'rainradar:auto-location:v1' in Path('docs/assets/home.js').read_text()
     assert '© original data providers' not in text

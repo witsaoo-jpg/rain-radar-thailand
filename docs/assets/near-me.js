@@ -59,6 +59,7 @@
     const { latitude, longitude, accuracy: meters } = result.coords || {};
     if (![latitude, longitude].every(Number.isFinite) || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
       setMessage('ตำแหน่งที่ได้รับไม่ถูกต้อง กรุณาลองใหม่');
+      window.dispatchEvent?.(new CustomEvent('rainradar:gps-error', {detail:{message:status.textContent}}));
       return;
     }
     position = { latitude, longitude };
@@ -82,6 +83,7 @@
   locate.addEventListener('click', () => {
     if (!window.isSecureContext || !navigator.geolocation) {
       setMessage('GPS ต้องใช้ HTTPS หรือ localhost และเบราว์เซอร์ที่รองรับ');
+      window.dispatchEvent?.(new CustomEvent('rainradar:gps-error', {detail:{message:'อุปกรณ์หรือเบราว์เซอร์ไม่รองรับ GPS'}}));
       return;
     }
     const current = ++requestId;
@@ -100,6 +102,7 @@
         3: 'ค้นหาตำแหน่งไม่ทันเวลาที่กำหนด กรุณาลองอีกครั้ง'
       };
       setMessage(messages[error?.code] || 'เกิดข้อผิดพลาดขณะค้นหาพิกัด กรุณาลองใหม่');
+      window.dispatchEvent?.(new CustomEvent('rainradar:gps-error', {detail:{message:status.textContent}}));
     }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 });
   });
   clear.addEventListener('click', reset);
