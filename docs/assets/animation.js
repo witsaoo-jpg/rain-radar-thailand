@@ -4,7 +4,7 @@
  const el=id=>document.getElementById(id);
  const play=el('history-play'),slider=el('history-slider'),label=el('history-frame-label'),note=el('history-direction');
  let frames=[],index=0,timer=null,entry=null;
- const validPath=path=>typeof path==='string' && /^\.\/data\/images\/history\/(thailand|sattahip|rayong|suvarnabhumi)\/[a-f0-9]{20}\.(png|jpg|gif|webp)$/.test(path);
+ const validPath=(path,station)=>!!window.RadarUtils.safeImagePath(path,station,true);
  function stop(){if(timer!==null)clearInterval(timer);timer=null;play.textContent='▶ เล่นภาพย้อนหลัง';play.setAttribute('aria-pressed','false');}
  function show(i){
   if(!frames.length)return;
@@ -12,11 +12,11 @@
   const f=frames[i];
   label.textContent='บันทึกภาพ '+new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',day:'numeric',month:'short',hour12:false}).format(new Date(f.captured_at))+' น. • เวลาตรวจวัดจริงไม่ยืนยัน';
   el('fetched-time').textContent='บันทึก Snapshot: '+label.textContent.split(' • ')[0].replace('บันทึกภาพ ','');
-  showSnapshot(f.path,entry);
+  window.radarShowHistorySnapshot?.(f.path);
  }
  window.radarHistoryUpdate=(current,station)=>{
   stop();entry=current;index=0;
-  frames=(Array.isArray(current?.history)?current.history:[]).filter(f=>validPath(f.path)&&typeof f.captured_at==='string'&&!Number.isNaN(Date.parse(f.captured_at))).slice(-6);
+  frames=window.RadarUtils.historyFrames(current,station);
   if(station==='thailand-loop')frames=[];
   slider.max=String(Math.max(0,frames.length-1));slider.value=String(Math.max(0,frames.length-1));
   play.disabled=frames.length<2;slider.disabled=frames.length<2;
@@ -24,6 +24,7 @@
   label.textContent=frames.length?frames.length+' ภาพที่ตรวจสอบแล้ว (เวลาบันทึก Snapshot)':'ยังไม่มีภาพย้อนหลังที่ยืนยันได้';
   if(frames.length)index=frames.length-1;
  };
+ window.radarSelectHistoryFrame=(path)=>{const i=frames.findIndex(f=>f.path===path);if(i>=0){stop();show(i);}};
  play.addEventListener('click',()=>{
   if(frames.length<2)return;
   if(timer!==null){stop();return;}
