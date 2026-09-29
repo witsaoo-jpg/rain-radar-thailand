@@ -18,7 +18,7 @@ test('hourly values refer to preceding interval and omit current incomplete hour
  const x=core.parseForecast(fixture(),now);
  assert.equal(x.rows.length,6);assert.equal(x.rows[0].timestamp,Math.ceil(now/H)*H);
  assert.equal(x.maxProbability,65);
- assert.equal(x.sumPrecipitation,3.6);
+ assert.ok(Math.abs(x.sumPrecipitation-3.6)<1e-9);
  assert.equal(x.grid.latitude,13.375);
 });
 test('null probability and rain remain unknown rather than becoming 0',()=>{
