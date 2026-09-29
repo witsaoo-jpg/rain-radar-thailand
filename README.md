@@ -101,3 +101,9 @@ The weather source can be unavailable without this application being able to fix
 - Source and terms: [Open-Meteo API documentation](https://open-meteo.com/en/docs), [Open-Meteo terms](https://open-meteo.com/en/terms), [TMD official warnings](https://www.tmd.go.th/warning-and-events/warning-storm). Check whether the site's use qualifies for Open-Meteo's free non-commercial tier before changing traffic or monetizing.
 - Browser forecast API fetches always use network and are not stored by the PWA service worker. Site counter remains a separate optistats.ovh third party.
 - Automated checks include `node --test tests/test_forecast.cjs` and the existing GPS/radar/Python tests.
+
+## Phase 1.5 — opt-in weather summary at top
+- The location-aware summary appears **under the page heading and above the radar** on desktop/mobile. Until GPS and an additional explicit forecast request, it shows a neutral prompt. It never initiates geolocation or third-party forecast requests on page load.
+- The same consent-based Open-Meteo request already powering Phase 1.4 also requests current model estimates (temperature, apparent temperature, relative humidity, wind speed and WMO weather code). No extra remote request or site-side storage. Coordinates are rounded to two decimal places before transmission.
+- The banner summarizes weather code, temperature and maximum rain probability in the next three hourly forecast intervals. Model/current timestamp and retrieval time are labeled separately. Missing/stale values cannot be displayed as current, and a failed request or cleared GPS resets the banner safely.
+- It is **not an official TMD warning**, an onsite rain measurement, or a push notification. Always consult official TMD warnings when appropriate. The existing counter and Credit: witsaoya are unchanged.
