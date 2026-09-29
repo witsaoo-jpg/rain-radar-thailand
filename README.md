@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.9 One-tap Weather
+# Rain Radar Thailand · Phase 1.9.1 Easy Refresh
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -139,3 +139,9 @@ The opt-in GPS/forecast flow, local-only favorite places, PWA, third-party visit
 - Hide the six empty model-data cards until a successful response; leave the independent TMD radar availability notice visible. Clearing/changing location clears the previous report rather than presenting data for the wrong place. The PWA cache version is advanced to refresh the old interface.
 - This remains a **model forecast** and radar snapshot display, not location-specific radar nowcasting or a live severe-weather alert. GPS is never automatically transmitted or stored on our server.
 - New regression tests: `node --test tests/test_one_tap.cjs` plus all previous checks.
+
+## Phase 1.9.1 — senior-friendly single refresh
+- A large button immediately above the weather banner checks the current radar snapshot and, only if a place has already been selected and a forecast request can be made, explicitly requests the latest model forecast with the already-disclosed rounded coordinates. It never reacquires GPS, reloads the page, saves locations, or creates a background geolocation/forecast watch.
+- Before selecting a place, it updates the public radar only and explains how to select GPS or a favorite place. After selecting a place, clicking is consent to contact Open-Meteo for a fresh model report. Loading and success/failure are announced in a live region, and the control is disabled while its own requests are pending.
+- "Refresh" checks the newest **published** TMD snapshot; it does not make GitHub Actions run immediately nor assert that the radar observation time has changed. The forecast and radar remain separate data sources.
+- Uses a bumped PWA shell cache version; backend, original radar dashboard, Counter and Credit: witsaoya remain unchanged. `node --test tests/test_easy_refresh.cjs` checks the opt-in and no-reload behavior.
