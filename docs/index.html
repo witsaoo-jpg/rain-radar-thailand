@@ -101,6 +101,18 @@
             <p id="outlook-public-lead"></p>
             <p id="outlook-rain-pattern" class="outlook-rain-pattern"></p>
             <p id="outlook-rain-chance" class="outlook-rain-chance"></p>
+            <div class="outlook-rain-criteria" aria-labelledby="outlook-rain-criteria-title">
+              <strong id="outlook-rain-criteria-title">เกณฑ์ปริมาณฝน 24 ชั่วโมง (มม.)</strong>
+              <div class="outlook-rain-criteria-grid">
+                <span>&lt; 0.1 มม. <b>ฝนวัดจำนวนไม่ได้</b></span>
+                <span>0.1–10.0 มม. <b>ฝนเล็กน้อย</b></span>
+                <span>10.1–35.0 มม. <b>ฝนปานกลาง</b></span>
+                <span>35.1–90.0 มม. <b>ฝนหนัก</b></span>
+                <span>≥ 90.1 มม. <b>ฝนหนักมาก</b></span>
+              </div>
+              <p id="outlook-rain-criterion" class="outlook-rain-criterion" role="status"></p>
+              <small>ใช้เทียบกับยอดฝนพยากรณ์สะสม 24 ชั่วโมงเท่านั้น • เป็นการช่วยแปลผลตามช่วงเกณฑ์ TMD ไม่ใช่ฝนตรวจวัดจริง และไม่ใช้กับยอดสะสม 3 หรือ 5 วันโดยตรง</small>
+            </div>
             <div id="outlook-public-periods" class="outlook-public-periods"></div>
             <p id="outlook-public-agreement"></p>
             <p id="outlook-public-advice"></p>
@@ -242,7 +254,7 @@
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.15 Easy Install · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.15 Easy Install + Rainfall Criteria (mm) · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
