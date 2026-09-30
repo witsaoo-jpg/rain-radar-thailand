@@ -12,7 +12,7 @@
  function abort(){
    sequence++;if(controller)controller.abort();controller=null;
    results={};lastRequest=0;grid.replaceChildren();table.replaceChildren();
-   $('outlook-rain-pattern').textContent='';$('outlook-rain-chance').textContent='';
+   $('outlook-rain-pattern').textContent='';$('outlook-rain-chance').textContent='';$('outlook-rain-criterion').textContent='';
    ensembleBox.hidden=true;$('outlook-ensemble').disabled=true;
    $('outlook-request').disabled=!coords;
    $('outlook-request').textContent='วิเคราะห์ฝนสะสม 5 วัน';
@@ -68,6 +68,7 @@
        cell(publicReport.labels?.[hours]||'ข้อมูลไม่พร้อม','outlook-period-value'));
      periods.append(item);
    }
+   $('outlook-rain-criterion').textContent=publicReport.criterion24||'ยังเทียบเกณฑ์ฝน 24 ชั่วโมงไม่ได้';
    $('outlook-public-agreement').textContent=publicReport.agreement;
    $('outlook-public-advice').textContent=publicReport.advice;
    for(const m of available){
