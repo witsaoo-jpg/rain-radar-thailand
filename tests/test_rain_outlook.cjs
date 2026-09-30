@@ -81,3 +81,23 @@ test('plain rain pattern uses validated next 24 hourly values, not an invented f
  incomplete.rows[6]=null;
  assert.match(core.rainPattern({ecmwf_ifs025:incomplete}),/ข้อมูลรายชั่วโมงครบ 24 ชั่วโมง/);
 });
+
+
+test('TMD-aligned 24-hour rainfall criteria use millimetre thresholds without applying them to 3-day or 5-day totals',()=>{
+ assert.equal(core.rain24Level(0).label,'ฝนวัดจำนวนไม่ได้');
+ assert.equal(core.rain24Level(0.1).label,'ฝนเล็กน้อย');
+ assert.equal(core.rain24Level(10).label,'ฝนเล็กน้อย');
+ assert.equal(core.rain24Level(10.1).label,'ฝนปานกลาง');
+ assert.equal(core.rain24Level(35).label,'ฝนปานกลาง');
+ assert.equal(core.rain24Level(35.1).label,'ฝนหนัก');
+ assert.equal(core.rain24Level(90).label,'ฝนหนัก');
+ assert.equal(core.rain24Level(90.1).label,'ฝนหนักมาก');
+ assert.equal(core.rain24Range(8,40).label,'ฝนเล็กน้อย ถึง ฝนหนัก');
+ assert.equal(core.rain24Level(null),null);
+ const a=core.parseModel(fixture(.2),now),b=core.parseModel(fixture(.5),now);
+ const report=core.publicSummary({ecmwf_ifs025:a,ncep_gfs_global:b});
+ assert.match(report.criterion24,/24 ชั่วโมง/);
+ assert.match(report.criterion24,/4\.8–12\.0 มม/);
+ assert.match(report.criterion24,/ฝนเล็กน้อย ถึง ฝนปานกลาง/);
+ assert.match(report.criterion24,/ไม่ใช่รายงานฝนตรวจวัด/);
+});
