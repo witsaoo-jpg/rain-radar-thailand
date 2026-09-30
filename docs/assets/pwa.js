@@ -60,10 +60,9 @@
     if(deferredPrompt){
       button.hidden=false;button.textContent='＋ ติดตั้งแอป';button.dataset.mode='prompt';return;
     }
-    if(android&&dismissedPrompt){
-      button.hidden=false;button.textContent='＋ วิธีติดตั้ง';button.dataset.mode='guide';return;
-    }
-    button.hidden=true;delete button.dataset.mode;
+    button.hidden=false;
+    button.textContent=android?'＋ วิธีติดตั้ง':'＋ ติดตั้งแอป';
+    button.dataset.mode='guide';
   }
 
   if('serviceWorker' in navigator&&window.isSecureContext){
