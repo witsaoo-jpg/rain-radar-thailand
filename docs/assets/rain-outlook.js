@@ -98,6 +98,20 @@
    if(id!==sequence||signal.aborted)return;
    for(const result of settled)if(result.status==='fulfilled'&&result.value.result)results[result.value.id]=result.value.result;
    render();
+   const verifiedModels={};
+   let verificationStart=null;
+   for(const model of core.MODELS){
+     const r=results[model.id],total24=r?.totals?.[24];
+     if(typeof total24==='number'&&Number.isFinite(total24)&&r?.start){
+       verifiedModels[model.id]={total24};
+       if(verificationStart===null)verificationStart=r.start;
+     }
+   }
+   if(verificationStart!==null&&Object.keys(verifiedModels).length){
+     window.dispatchEvent(new CustomEvent('rainradar:rain-outlook-snapshot',{detail:{
+       capturedAt:lastRequest,start:verificationStart,place:name||'พื้นที่ที่เลือก',models:verifiedModels
+     }}));
+   }
    const count=Object.keys(results).length;
    status.textContent=count?'ได้รับข้อมูล '+count+' จาก 3 แบบจำลอง บางชุดอาจยังไม่มีข้อมูลที่สมบูรณ์':'ข้อมูลแบบจำลองไม่พร้อม กรุณาลองใหม่ภายหลัง';
    $('outlook-request').disabled=false;$('outlook-request').textContent='↻ วิเคราะห์ใหม่';
