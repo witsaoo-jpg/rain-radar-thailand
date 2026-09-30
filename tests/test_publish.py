@@ -99,12 +99,12 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'forecast-consent' in text and 'forecast-request' in text
     assert 'ระยะห่างจากกลุ่มฝน' in text and 'ยังไม่เปิดการคำนวณ' in text
     assert 'Credit: <strong>witsaoya</strong>' in text
-    assert 'rain-radar-shell-v114' in Path('docs/sw.js').read_text()
+    assert 'rain-radar-shell-v115' in Path('docs/sw.js').read_text()
     assert 'forecast-core.js' in Path('docs/sw.js').read_text()
     assert 'id="weather-banner"' in text
     assert 'id="weather-headline"' in text
     assert 'id="weather-banner-action"' in text
-    assert "rain-radar-shell-v114" in Path('docs/sw.js').read_text()
+    assert "rain-radar-shell-v115" in Path('docs/sw.js').read_text()
     assert './assets/radar-utils.js' in text and './assets/places-core.js' in text and './assets/places.js' in text
     assert 'places-form' in text and 'places-list' in text
     assert 'RainPlacesCore' in Path('docs/assets/places.js').read_text()
@@ -153,4 +153,9 @@ def test_static_site_relative_assets_and_no_backend_dependency():
     assert 'id="outlook-rain-pattern"' in text and 'id="outlook-rain-chance"' in text
     assert 'region-radar-picker' in text
     assert 'rainPattern' in Path('docs/assets/rain-outlook-core.js').read_text()
+    assert 'id="install-app"' in text and 'id="install-guide"' in text
+    assert 'id="install-guide-body"' in text and 'id="install-hint"' in text
+    assert 'apple-mobile-web-app-capable' in text and 'apple-touch-icon' in text
+    assert 'beforeinstallprompt' in Path('docs/assets/pwa.js').read_text()
+    assert 'navigator.standalone' in Path('docs/assets/pwa.js').read_text()
     assert '© original data providers' not in text
