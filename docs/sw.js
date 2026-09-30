@@ -1,5 +1,5 @@
 /* Cache UI shell only; radar/forecast/warning data must use the network. */
-const CACHE='rain-radar-shell-v115';
+const CACHE='rain-radar-shell-v115-rain-mm';
 const SHELL=['./','./index.html','./assets/styles.css','./assets/near-me.css','./assets/favicon.svg','./assets/radar-utils.js','./assets/radar-directory.js','./assets/app.js','./assets/near-me.js','./assets/forecast-core.js','./assets/forecast.js','./assets/weather-intel-core.js','./assets/weather-intel.js','./assets/places-core.js','./assets/places.js','./assets/advisory-core.js','./assets/advisory.js','./assets/selected-map.js','./assets/animation.js','./assets/pwa.js','./assets/easy-refresh.js','./assets/public-overview.js','./assets/home.js','./assets/place-name-core.js','./assets/place-name.js','./assets/rain-outlook-core.js','./assets/rain-outlook.js','./manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
