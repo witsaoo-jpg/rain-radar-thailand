@@ -5,7 +5,7 @@ const source=fs.readFileSync('docs/assets/rain-outlook.js','utf8');
 const now=Date.UTC(2026,8,29,8,12);
 const start=Math.ceil(now/3600000)*3600;
 function harness({error=false}={}){
- const ids=['outlook-request','outlook-status','outlook-summary','outlook-models','outlook-compare','outlook-ensemble','outlook-ensemble-result','outlook-source','outlook-public','outlook-public-title','outlook-public-lead','outlook-public-periods','outlook-public-agreement','outlook-public-advice','outlook-rain-pattern','outlook-rain-chance'];
+ const ids=['outlook-request','outlook-status','outlook-summary','outlook-models','outlook-compare','outlook-ensemble','outlook-ensemble-result','outlook-source','outlook-public','outlook-public-title','outlook-public-lead','outlook-public-periods','outlook-public-agreement','outlook-public-advice','outlook-rain-pattern','outlook-rain-chance','outlook-rain-criterion'];
  const nodes=Object.fromEntries(ids.map(id=>[id,{textContent:'',disabled:id==='outlook-request'||id==='outlook-ensemble',hidden:true,children:[],listeners:{},replaceChildren(...a){this.children=a;},append(...a){this.children.push(...a);},addEventListener(k,fn){this.listeners[k]=fn;},click(){return this.listeners.click?.();}}]));
  const listeners={},calls=[];
  const window={RainOutlookCore:core,addEventListener(k,fn){(listeners[k]??=[]).push(fn);},dispatchEvent(e){for(const fn of listeners[e.type]||[])fn(e);}};
@@ -76,4 +76,19 @@ test('public report labels short-term rain chance only from its separate forecas
  h.emit('rainradar:location',{coords:{latitude:15,longitude:101}});
  assert.equal(h.nodes['outlook-rain-pattern'].textContent,'');
  assert.equal(h.nodes['outlook-rain-chance'].textContent,'');
+});
+
+
+test('public rainfall card exposes 24-hour millimetre criterion interpretation',async()=>{
+ const h=harness();h.emit('rainradar:location',{coords:{latitude:13.33,longitude:100.96},name:'บ้าน'});
+ h.nodes['outlook-request'].click();await tick();await tick();
+ assert.match(h.nodes['outlook-rain-criterion'].textContent,/24 ชั่วโมง/);
+ assert.match(h.nodes['outlook-rain-criterion'].textContent,/มม/);
+ assert.match(h.nodes['outlook-rain-criterion'].textContent,/ฝนหนักมาก/);
+ const html=fs.readFileSync('docs/index.html','utf8');
+ assert.match(html,/0\.1–10\.0 มม/);
+ assert.match(html,/10\.1–35\.0 มม/);
+ assert.match(html,/35\.1–90\.0 มม/);
+ assert.match(html,/≥ 90\.1 มม/);
+ assert.match(html,/ไม่ใช้กับยอดสะสม 3 หรือ 5 วันโดยตรง/);
 });
