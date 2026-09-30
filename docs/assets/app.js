@@ -2,6 +2,9 @@
 // GitHub Pages edition. All paths are relative so project Pages (/owner/repo/) works.
 const stations={
  thailand:{title:'เรดาร์ทั่วประเทศ',subtitle:'ภาพรวมประเทศไทย',label:'ทั่วประเทศ',source:'https://weather.tmd.go.th/THA_Z.php'},
+ cri:{title:'เรดาร์เชียงราย · ภาคเหนือ',subtitle:'ตัวแทนภาคเหนือ • ครอบคลุมตามรัศมีของสถานี ไม่ใช่ทั้งภาค',label:'เชียงราย',source:'https://weather.tmd.go.th/cri.php'},
+ kkn:{title:'เรดาร์ขอนแก่น · ภาคอีสาน',subtitle:'ตัวแทนภาคตะวันออกเฉียงเหนือ • ไม่ครอบคลุมทั้งภาค',label:'ขอนแก่น',source:'https://weather.tmd.go.th/kkn.php'},
+ pkt:{title:'เรดาร์ภูเก็ต · ภาคใต้',subtitle:'ตัวแทนฝั่งอันดามัน • ไม่ครอบคลุมทั้งภาคใต้',label:'ภูเก็ต',source:'https://weather.tmd.go.th/pkt.php'},
  sattahip:{title:'สัตหีบ · ชลบุรี',subtitle:'ชลบุรีและพื้นที่ใกล้เคียง',label:'สัตหีบ',source:'https://weather.tmd.go.th/sattahip.php'},
  rayong:{title:'เรดาร์ระยอง',subtitle:'ชายฝั่งภาคตะวันออก',label:'ระยอง',source:'https://weather.tmd.go.th/ryg.php'},
  suvarnabhumi:{title:'เรดาร์สุวรรณภูมิ',subtitle:'กรุงเทพฯ และปริมณฑล',label:'สุวรรณภูมิ',source:'https://weather.tmd.go.th/svp120.php'},
@@ -13,7 +16,7 @@ const dt=v=>{if(!v)return 'ไม่ทราบเวลา';const d=new Date(v
 function updateClock(){$('clock').textContent='เวลาไทย • '+new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date())+' น.';}
 function status(kind,label,description){const pill=$('status-pill');pill.className='status-pill '+(kind==='available'?'':kind==='waiting'?'waiting':'error');pill.querySelector('span').textContent=kind==='available'?'พบข้อมูล':kind==='waiting'?'กำลังตรวจสอบ':'ไม่พร้อมใช้งาน';$('status-heading').textContent=label;$('status-description').textContent=description;$('status-orb').className='status-orb '+(kind==='available'?'live':kind==='unavailable'?'unavailable':'');}
 function showEmpty(title,desc){$('image-layer').hidden=true;$('radar-image').removeAttribute('src');$('radar-empty').hidden=false;$('empty-title').textContent=title;$('empty-desc').textContent=desc;}
-function setZoom(v){zoom=Math.max(70,Math.min(250,v));$('zoom-percent').textContent=zoom+'%';$('radar-image').style.width=zoom+'%';}
+function setZoom(v){const previous=zoom;zoom=Math.max(70,Math.min(250,v));const layer=$('image-layer');$('zoom-percent').textContent=zoom+'%';$('radar-image').style.width=zoom+'%';$('zoom-in').disabled=zoom===250;$('zoom-out').disabled=zoom===70;requestAnimationFrame(()=>{if(layer.hidden)return;if(zoom===100){layer.scrollLeft=0;layer.scrollTop=0;return;}if(zoom>previous){layer.scrollLeft=(layer.scrollLeft+layer.clientWidth/2)*zoom/previous-layer.clientWidth/2;layer.scrollTop=(layer.scrollTop+layer.clientHeight/2)*zoom/previous-layer.clientHeight/2;}});}
 function safeImagePath(v){return window.RadarUtils.safeImagePath(v,selected,false);}
 function radarEvidence(available,station,generatedAt){window.dispatchEvent(new CustomEvent('rainradar:radar',{detail:{available,station,generatedAt}}));}
 function displayHistory(entry){const root=$('history-frames');root.replaceChildren();const history=Array.isArray(entry?.history)?entry.history:[];const frames=window.RadarUtils.historyFrames(entry,selected);if(!frames.length){root.textContent='ต้นทางไม่มีภาพย้อนหลังที่ยืนยันได้สำหรับการเผยแพร่นี้';window.radarHistoryUpdate?.(entry,selected);return;}
@@ -23,6 +26,7 @@ async function loadRadar(force=false){const thisRequest=++requestNo, key=selecte
 window.radarShowHistorySnapshot=(path)=>{if(window.RadarUtils.safeImagePath(path,selected,true))showSnapshot(path,manifest?.stations?.[selected]);};
 function selectStation(key){if(!stations[key])return;selected=key;radarEvidence(false,stations[key].label,null);const s=stations[key];document.querySelectorAll('[data-station]').forEach(b=>{b.classList.toggle('selected',b.dataset.station===key);b.setAttribute('aria-current',b.dataset.station===key?'true':'false');});$('radar-title').textContent=s.title;$('radar-subtitle').textContent=s.subtitle;$('station-display').textContent=s.label;$('official-link').href=s.source;$('fallback-link').href=s.source;$('canvas-chip').textContent='● SOURCE: TMD / '+s.label.toUpperCase();loadRadar();}
 document.querySelectorAll('[data-station]').forEach(b=>b.addEventListener('click',()=>selectStation(b.dataset.station)));
+window.addEventListener('rainradar:select-region',e=>{if(stations[e.detail?.station]){selectStation(e.detail.station);$('radar-title').scrollIntoView({behavior:'smooth',block:'center'});}});
 $('refresh-button').addEventListener('click',()=>loadRadar(true));
 // Top-level accessible weather button can refresh the currently selected TMD snapshot too.
 window.addEventListener('rainradar:refresh-radar',()=>loadRadar(true));$('zoom-in').addEventListener('click',()=>setZoom(zoom+25));$('zoom-out').addEventListener('click',()=>setZoom(zoom-25));$('zoom-reset').addEventListener('click',()=>setZoom(100));
