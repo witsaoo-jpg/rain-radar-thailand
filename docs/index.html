@@ -36,6 +36,8 @@
   <script src="./assets/place-name.js" defer></script>
   <script src="./assets/rain-outlook-core.js" defer></script>
   <script src="./assets/rain-outlook.js" defer></script>
+  <script src="./assets/verification-core.js" defer></script>
+  <script src="./assets/verification.js" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -131,6 +133,22 @@
             <p>ฝนสะสมตามแบบจำลองไม่ใช่ระดับน้ำจริง แอปยังไม่ได้คำนวณน้ำท่วม ไม่ใช้ตัวเลขฝนสะสมเพียงอย่างเดียวสั่งอพยพ หรือออกประกาศระดับภัยพิบัติขึ้นเอง ข้อมูลเรดาร์ TMD เป็นภาพตรวจวัดแยกต่างหาก</p>
             <div class="outlook-links"><a href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">ประกาศเตือนภัย TMD ↗</a><a href="https://www.thaiwater.net/" target="_blank" rel="noopener noreferrer">ข้อมูลสถานการณ์น้ำ ThaiWater ↗</a></div>
           </aside>
+        </section>
+        <section id="forecast-verification" class="forecast-verification" aria-labelledby="verification-heading">
+          <div class="verification-heading">
+            <span>FORECAST VERIFICATION · v1.16</span>
+            <h2 id="verification-heading">ตรวจสอบว่าพยากรณ์ตรงกับฝนจริงแค่ไหน</h2>
+            <p>ทุกครั้งที่กดวิเคราะห์ฝน ระบบจะเก็บค่าพยากรณ์ฝนสะสม 24 ชั่วโมงไว้ในเบราว์เซอร์เครื่องนี้ หลังช่วงพยากรณ์ครบแล้วจึงกรอกค่าฝนตรวจวัดจริงจากแหล่งทางการเพื่อเปรียบเทียบ</p>
+          </div>
+          <div class="verification-note">
+            <strong>ไม่ใช้ภาพเรดาร์เป็นตัวเลขฝนจริง</strong>
+            <span>ภาพเรดาร์ที่แอปมีอยู่ยังไม่ใช่ QPE ที่ผูกพิกัดและปริมาณฝน จึงไม่ถูกนำมาคิดคะแนนอัตโนมัติ</span>
+          </div>
+          <div id="verification-summary" class="verification-summary"></div>
+          <p id="verification-status" class="verification-status" role="status" aria-live="polite"></p>
+          <div id="verification-list" class="verification-list"></div>
+          <button id="verification-clear" class="verification-clear" type="button">ล้างประวัติการตรวจสอบในเครื่อง</button>
+          <small class="verification-privacy">ข้อมูล v1.16 เก็บใน localStorage ของเบราว์เซอร์นี้เท่านั้น • ไม่อัปโหลดไป GitHub • การล้างข้อมูลเว็บไซต์/เบราว์เซอร์อาจลบประวัตินี้</small>
         </section>
         <details id="home-national" class="home-national"><summary>ดูพยากรณ์ภาพรวม 6 เมืองตัวแทนของประเทศไทย</summary>
       <section class="public-overview" aria-labelledby="public-weather-headline">
@@ -254,7 +272,7 @@
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.15 Easy Install + Rainfall Criteria (mm) · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.16 Forecast Verification · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>
