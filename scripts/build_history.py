@@ -16,7 +16,7 @@ MAX_FRAME_BYTES = 12 * 1024 * 1024
 MAX_MANIFEST_BYTES = 100_000
 MAX_FRAMES = 6
 WINDOW = timedelta(minutes=120)
-KEYS = {'thailand', 'sattahip', 'rayong', 'suvarnabhumi'}
+KEYS = {'thailand', 'sattahip', 'rayong', 'suvarnabhumi', 'cri', 'kkn', 'pkt'}
 HIST_RE = re.compile(r'^\./data/images/history/(thailand|sattahip|rayong|suvarnabhumi)/([a-f0-9]{20})\.(png|jpg|gif|webp)$')
 MAIN_RE = re.compile(r'^\./data/images/(thailand|sattahip|rayong|suvarnabhumi)\.(png|jpg|gif|webp)$')
 
