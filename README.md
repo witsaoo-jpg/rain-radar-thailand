@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.15 Easy Install / Add to Home Screen + Rainfall Criteria (mm)
+# Rain Radar Thailand · Phase 1.16 Forecast Verification
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -219,3 +219,18 @@ The website remains usable without installation. Installation does not make live
 The public Rainfall Outlook now also shows a **24-hour rainfall criteria** panel in millimetres: <0.1 mm (unmeasurable/trace), 0.1–10.0 mm (light), 10.1–35.0 mm (moderate), 35.1–90.0 mm (heavy), and ≥90.1 mm (very heavy). The app compares the validated next-24-hour ECMWF/GFS/ICON accumulation range with these TMD-style rainfall-amount bands and states the resulting label in plain Thai. This is a readability aid for forecast accumulation, **not** an assertion that forecast values are observed TMD 07:00–07:00 rainfall. The thresholds are not applied directly to 72-hour or 120-hour totals and are not used to infer flooding or issue warnings.
 
 The PWA shell cache is refreshed as `rain-radar-shell-v115-rain-mm` so installed users receive the new panel.
+
+
+## Phase 1.16 — Forecast Verification
+
+The Rainfall Outlook now creates a **local-only 24-hour forecast snapshot** whenever the user explicitly requests validated ECMWF/GFS/ICON rainfall guidance. The snapshot records the selected place label, the exact forecast verification window, retrieval time and each available model's 24-hour precipitation total. Up to 20 records are retained in that browser's `localStorage`; they are not uploaded to GitHub or a project server.
+
+A verification record cannot be scored until its full 24-hour window has ended. The user may then enter an observed 24-hour rainfall total in millimetres and identify the source (for example, an official rain gauge/AWS report) while confirming that the observation covers the **same displayed time window**. The app computes, separately for each model:
+
+- absolute rainfall error and running MAE in millimetres;
+- Hit, Miss, False alarm and Correct negative using 0.1 mm as the rain/no-rain threshold;
+- whether the forecast and observed 24-hour totals fall in the same rainfall-amount band.
+
+The application deliberately **does not convert the existing radar PNG/dBZ image into observed millimetres**. The current radar integration is not a verified georeferenced QPE product, so radar pixels are excluded from verification scoring. The app also does not rank or name a “best” model; it exposes the accumulated measurements so performance can be interpreted from evidence.
+
+Clearing browser site data removes these local verification records. A future phase may automate observations only after a documented, time-aligned official rainfall observation source is integrated and validated.
