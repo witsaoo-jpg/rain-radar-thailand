@@ -4,9 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#071426" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="RainRadar" />
   <meta name="description" content="Rain Radar Thailand: ดูเรดาร์ฝนจากหน้าเว็บสาธารณะกรมอุตุนิยมวิทยา" />
   <title>Rain Radar | ติดตามกลุ่มฝน</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./assets/styles.css" />
   <link rel="stylesheet" href="./assets/near-me.css" />
@@ -50,7 +54,16 @@
     </div>
   </aside>
   <div class="workspace">
-    <header class="topbar"><div class="crumb">WEATHER INTELLIGENCE <span>/</span> <b>LIVE RADAR</b></div><div class="header-right"><div class="timezone-chip"><span class="pulse-dot"></span><span id="clock">เวลาไทย • --:--</span></div><span class="avatar">TH</span></div></header>
+    <header class="topbar"><div class="crumb">WEATHER INTELLIGENCE <span>/</span> <b>LIVE RADAR</b></div><div class="header-right"><button id="install-app" class="top-install" type="button" hidden aria-haspopup="dialog">＋ ติดตั้งแอป</button><div class="timezone-chip"><span class="pulse-dot"></span><span id="clock">เวลาไทย • --:--</span></div><span class="avatar">TH</span></div></header>
+    <dialog id="install-guide" class="install-guide" aria-labelledby="install-title">
+      <div class="install-guide-card">
+        <button id="install-guide-close" class="install-guide-close" type="button" aria-label="ปิดคำแนะนำ">×</button>
+        <span class="install-kicker">RAIN RADAR · เพิ่มไว้หน้าจอโฮม</span>
+        <h2 id="install-title">ติดตั้ง Rain Radar Thailand</h2>
+        <div id="install-guide-body" class="install-guide-body"></div>
+        <p id="install-hint" class="install-hint" role="status" aria-live="polite">ติดตั้งฟรี • ไม่ต้องสมัครสมาชิก • ข้อมูลอากาศล่าสุดยังต้องใช้อินเทอร์เน็ต</p>
+      </div>
+    </dialog>
     <main class="content">
       <nav class="main-tabs" aria-label="เลือกหน้าหลัก">
         <button type="button" id="tab-home" class="active" aria-current="page">⌂ หน้าแรก</button>
@@ -223,14 +236,13 @@
           <section class="side-card radar-location-card"><div class="side-heading"><span class="side-symbol">⌖</span><span>ระยะห่างจากกลุ่มฝน</span></div><p>ยังไม่เปิดการคำนวณระยะห่างหรือเวลาเข้าถึงของฝน เพราะภาพ PNG ที่ได้รับยังไม่มีพิกัดภูมิศาสตร์ของแต่ละพิกเซลที่ตรวจสอบได้ โปรดใช้ภาพเรดาร์และประกาศทางการประกอบ</p></section>
           <section class="side-card alerts-card"><div class="side-heading"><span class="side-symbol">⚠</span><span>ประกาศเตือนภัยทางการ</span></div><p>อ่านประกาศและเวลาเผยแพร่จากกรมอุตุนิยมวิทยาโดยตรง เว็บไซต์นี้ไม่ดัดแปลงประกาศเป็นการแจ้งเตือนอัตโนมัติ</p><a href="https://www.tmd.go.th/warning-and-events/warning-storm" target="_blank" rel="noopener noreferrer">เปิดประกาศเตือนภัย TMD ↗</a><p class="warning-caution">การไม่เห็นประกาศบนหน้านี้ ไม่ได้หมายความว่าไม่มีความเสี่ยงในพื้นที่</p></section>
           <section class="side-card forecast-card"><div class="side-heading"><span class="side-symbol">◷</span><span>พยากรณ์อากาศชลบุรี</span></div><p>ดูผลตรวจวัดจริงและพยากรณ์อากาศ 7 วันจากหน้าเว็บไซต์ทางการ (แยกจากภาพเรดาร์)</p><a href="https://tmd.go.th/weather/province/chonburi" target="_blank" rel="noopener noreferrer">เปิดพยากรณ์จังหวัดชลบุรี ↗</a></section>
-          <section class="side-card pwa-card"><div class="side-heading"><span class="side-symbol">▣</span><span>ติดตั้งไว้บนมือถือ</span></div><p id="install-hint">Android: ใช้เมนูติดตั้งแอป / iPhone: Safari → แชร์ → เพิ่มไปยังหน้าจอโฮม (ต้องมีอินเทอร์เน็ตเพื่อดูเรดาร์ล่าสุด)</p><button id="install-app" class="gps-button" type="button" hidden>ติดตั้ง Rain Radar</button></section>
           <section class="side-card note-card"><div class="side-heading"><span class="side-symbol">☂</span><span>ก่อนออกไปวิ่ง</span></div><p>ดูภาพย้อนหลังร่วมกับทิศทางการเคลื่อนตัวของกลุ่มฝน และเช็กประกาศเตือนภัยก่อนออกกำลังกายกลางแจ้ง</p><a href="https://www.tmd.go.th/" target="_blank" rel="noopener noreferrer">ตรวจสอบพยากรณ์และประกาศเตือนภัย ↗</a></section>
         </aside>
       </div>
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.14 Regional Radar & Rain Explanation · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.15 Easy Install · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>

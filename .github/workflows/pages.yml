@@ -69,6 +69,7 @@ jobs:
           node --test tests/test_rain_outlook_ui.cjs
           node --test tests/test_radar_directory.cjs
           node --test tests/test_region_zoom.cjs
+          node --test tests/test_pwa_install.cjs
           node --test tests/test_places_history.cjs
           node --test tests/test_advisory.cjs
       - name: Run backend and snapshot tests
