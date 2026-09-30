@@ -84,7 +84,7 @@ test('public rainfall card exposes 24-hour millimetre criterion interpretation',
  h.nodes['outlook-request'].click();await tick();await tick();
  assert.match(h.nodes['outlook-rain-criterion'].textContent,/24 ชั่วโมง/);
  assert.match(h.nodes['outlook-rain-criterion'].textContent,/มม/);
- assert.match(h.nodes['outlook-rain-criterion'].textContent,/ฝนหนักมาก/);
+ assert.match(h.nodes['outlook-rain-criterion'].textContent,/ฝนหนัก/);
  const html=fs.readFileSync('docs/index.html','utf8');
  assert.match(html,/0\.1–10\.0 มม/);
  assert.match(html,/10\.1–35\.0 มม/);
