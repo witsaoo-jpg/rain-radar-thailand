@@ -48,9 +48,11 @@ test('iPhone browser shows Add to Home Screen guidance without fake native insta
  assert.match(combined,/Safari|Share|หน้าจอโฮม/);
 });
 
-test('Android installable event enables real browser prompt and accepted choice hides button',async()=>{
+test('Android always shows an install route and upgrades to real browser prompt when available',async()=>{
  const h=harness({ua:'Mozilla/5.0 (Linux; Android 15) Chrome/140',userChoice:'accepted'});await tick();
- assert.equal(h.nodes['install-app'].hidden,true);
+ assert.equal(h.nodes['install-app'].hidden,false);
+ assert.equal(h.nodes['install-app'].dataset.mode,'guide');
+ assert.match(h.nodes['install-app'].textContent,/วิธีติดตั้ง/);
  const prompt=h.makePrompt();h.emit('beforeinstallprompt',prompt);
  assert.equal(prompt.preventDefaultCalled,true);
  assert.equal(h.nodes['install-app'].hidden,false);
@@ -83,4 +85,22 @@ test('appinstalled hides action and closes instructions',async()=>{
 test('service worker registers only in secure context',async()=>{
  const secure=harness({secure:true});await tick();assert.deepEqual(secure.swCalls,['./sw.js']);
  const insecure=harness({secure:false});await tick();assert.deepEqual(insecure.swCalls,[]);
+});
+
+
+test('Android without beforeinstallprompt still shows manual installation instructions',async()=>{
+ const h=harness({ua:'Mozilla/5.0 (Linux; Android 15) Chrome/140'});await tick();
+ assert.equal(h.nodes['install-app'].hidden,false);
+ assert.equal(h.nodes['install-app'].dataset.mode,'guide');
+ h.nodes['install-app'].dispatch('click');
+ assert.equal(h.nodes['install-guide'].open,true);
+ const combined=h.nodes['install-guide-body'].children.flatMap(x=>[x.textContent,...(x.children||[]).map(y=>y.textContent)]).join(' ');
+ assert.match(combined,/Chrome|ติดตั้งแอป|หน้าจอหลัก/);
+});
+
+test('generic browser also keeps an installation help action visible',async()=>{
+ const h=harness({ua:'Mozilla/5.0 Chrome/140'});await tick();
+ assert.equal(h.nodes['install-app'].hidden,false);
+ assert.equal(h.nodes['install-app'].dataset.mode,'guide');
+ assert.match(h.nodes['install-app'].textContent,/ติดตั้งแอป/);
 });
