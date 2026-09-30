@@ -308,3 +308,16 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
  .radar-explorer .station-link small,.radar-explorer .station-link .nav-indicator{display:block!important}
  .radar-search-label{display:block}
 }
+
+/* v1.14 real raster zoom: image grows in scrollable viewport; buttons remain above it. */
+.radar-canvas .image-layer{position:absolute;inset:0;overflow:auto;display:block;overscroll-behavior:contain;scrollbar-width:thin;z-index:2}
+.radar-canvas .image-layer img{display:block;max-width:none!important;min-width:0!important;width:100%;height:auto;object-fit:contain;transform:none!important;transform-origin:top left;margin:0}
+.radar-canvas .canvas-chip,.radar-canvas .canvas-coordinate{z-index:4}
+.radar-canvas .zoom-tools{z-index:5;pointer-events:auto}
+.radar-canvas .zoom-tools button{pointer-events:auto;min-height:38px;min-width:38px;font-size:22px}
+.radar-canvas .zoom-tools button:disabled{opacity:.4}
+.region-radar-picker{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;background:#10283b;border-top:1px solid #2c5260}
+.region-radar-picker button{border:1px solid #447a79;color:#d1f8e8;background:#1b4548;min-height:45px;padding:8px 13px;border-radius:9px;font-size:14px;font-weight:750}
+.region-radar-picker button[aria-pressed="true"]{background:#267963;border-color:#76d4ba;color:white}
+.region-radar-picker p{width:100%;margin:0;font-size:11px;line-height:1.6;color:#accbd0}
+@media(max-width:740px){.region-radar-picker{gap:6px}.region-radar-picker button{flex:1 1 30%;padding:8px 5px;font-size:13px}.radar-canvas .zoom-tools button{min-width:44px;min-height:44px}.radar-canvas .zoom-tools span{font-size:13px}}
