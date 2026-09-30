@@ -8,6 +8,26 @@
   {id:'icon_global',label:'DWD ICON Global'}
  ];
  const WINDOWS=[24,72,120],STEP=3600;
+ const RAIN_24_CRITERIA=[
+  {key:'trace',label:'ฝนวัดจำนวนไม่ได้',display:'< 0.1 มม.'},
+  {key:'light',label:'ฝนเล็กน้อย',display:'0.1–10.0 มม.'},
+  {key:'moderate',label:'ฝนปานกลาง',display:'10.1–35.0 มม.'},
+  {key:'heavy',label:'ฝนหนัก',display:'35.1–90.0 มม.'},
+  {key:'very-heavy',label:'ฝนหนักมาก',display:'≥ 90.1 มม.'}
+ ];
+ function rain24Level(amount){
+  if(typeof amount!=='number'||!Number.isFinite(amount)||amount<0)return null;
+  if(amount<0.1)return RAIN_24_CRITERIA[0];
+  if(amount<=10.0)return RAIN_24_CRITERIA[1];
+  if(amount<=35.0)return RAIN_24_CRITERIA[2];
+  if(amount<=90.0)return RAIN_24_CRITERIA[3];
+  return RAIN_24_CRITERIA[4];
+ }
+ function rain24Range(min,max){
+  if(typeof min!=='number'||typeof max!=='number'||!Number.isFinite(min)||!Number.isFinite(max)||min<0||max<min)return null;
+  const low=rain24Level(min),high=rain24Level(max);
+  return {low,high,label:low.key===high.key?low.label:low.label+' ถึง '+high.label};
+ }
  function location(lat,lon){
   if(typeof lat!=='number'||typeof lon!=='number'||!Number.isFinite(lat)||!Number.isFinite(lon)||lat < -90||lat > 90||lon < -180||lon > 180)throw new Error('Invalid location');
   return {lat:Number(lat.toFixed(2)),lon:Number(lon.toFixed(2))};
@@ -91,7 +111,9 @@
      const spread=five.max-five.min;
      agreement='ผลพยากรณ์ 5 วันแตกต่างกัน '+spread.toFixed(1)+' มม. ควรตรวจดูข้อมูลรอบใหม่ เพราะแนวโน้มยังมีความไม่แน่นอน';
    }
-   return {available:true,title,lead,windows:byWindow,labels:{24:range(one),72:range(three),120:range(five)},agreement,advice:'ตรวจพยากรณ์รายวันและภาพเรดาร์ก่อนเดินทาง หากพื้นที่มีประกาศเตือนภัยให้ปฏิบัติตามหน่วยงานทางการ'};
+   const level24=one.count?rain24Range(one.min,one.max):null;
+   const criterion24=level24?'ฝน 24 ชั่วโมง '+range(one)+' • เมื่อเทียบช่วงเกณฑ์ปริมาณฝน 24 ชม. ของ TMD อยู่ในช่วง “'+level24.label+'” (ใช้ช่วยอ่านค่าพยากรณ์ ไม่ใช่รายงานฝนตรวจวัด)':'ยังเทียบเกณฑ์ฝน 24 ชั่วโมงไม่ได้ เพราะข้อมูลไม่ครบ';
+   return {available:true,title,lead,windows:byWindow,labels:{24:range(one),72:range(three),120:range(five)},criterion24,agreement,advice:'ตรวจพยากรณ์รายวันและภาพเรดาร์ก่อนเดินทาง หากพื้นที่มีประกาศเตือนภัยให้ปฏิบัติตามหน่วยงานทางการ'};
  }
  function rainPattern(models){
    const complete=MODELS.map(m=>models[m.id]).filter(r=>r&&Array.isArray(r.rows)&&r.rows.slice(0,24).length===24&&r.rows.slice(0,24).every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0));
@@ -105,5 +127,5 @@
    const max=Math.max(...complete.map(r=>Math.max(...r.rows.slice(0,24))));
    return label+' • ปริมาณฝนสูงสุดในหนึ่งชั่วโมงจากชุดที่มีข้อมูล '+max.toFixed(1)+' มม. เป็นค่าพยากรณ์ ไม่ใช่ปริมาณฝนตรวจวัดจริง';
  }
- return {MODELS,WINDOWS,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation,publicSummary,rainPattern};
+ return {MODELS,WINDOWS,RAIN_24_CRITERIA,rain24Level,rain24Range,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation,publicSummary,rainPattern};
 });
