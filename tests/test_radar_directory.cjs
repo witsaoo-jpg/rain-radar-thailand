@@ -18,7 +18,7 @@ test('all entries have unique IDs, regional grouping and supported official URL 
  const h=harness();assert.ok(h.items.length>=25);
  assert.equal(new Set(h.items.map(x=>x.id)).size,h.items.length);
  const native=h.items.filter(x=>x.kind==='snapshot').map(x=>x.id).sort();
- assert.deepEqual(Array.from(native),['rayong','sattahip','suvarnabhumi','thailand','thailand-loop']);
+ assert.deepEqual(Array.from(native),['cri','kkn','pkt','rayong','sattahip','suvarnabhumi','thailand','thailand-loop']);
  assert.ok(h.items.every(x=>new URL(x.url).origin==='https://weather.tmd.go.th'));
  assert.ok(h.items.filter(x=>x.kind==='official'&&!x.direct).every(x=>x.url==='https://weather.tmd.go.th/'));
  assert.ok(h.items.every(x=>x.kind==='snapshot'||x.url!=='https://weather.tmd.go.th/THA_Z.php'));
@@ -30,7 +30,7 @@ test('only known published-snapshot keys become in-app buttons, others stay exte
  assert.equal(regions.length,h.groups.length);
  const entries=h.nav.querySelectorAll('.radar-directory-item');
  assert.equal(entries.length,h.items.length);
- assert.equal(entries.filter(x=>x.tag==='button').length,5);
+ assert.equal(entries.filter(x=>x.tag==='button').length,8);
  for(const entry of entries.filter(x=>x.tag==='a')){
    assert.equal(entry.target,'_blank');assert.equal(entry.rel,'noopener noreferrer');
    assert.equal(entry.dataset.station,undefined);
