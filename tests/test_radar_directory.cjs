@@ -20,6 +20,8 @@ test('all entries have unique IDs, regional grouping and supported official URL 
  const native=h.items.filter(x=>x.kind==='snapshot').map(x=>x.id).sort();
  assert.deepEqual(Array.from(native),['rayong','sattahip','suvarnabhumi','thailand','thailand-loop']);
  assert.ok(h.items.every(x=>new URL(x.url).origin==='https://weather.tmd.go.th'));
+ assert.ok(h.items.filter(x=>x.kind==='official'&&!x.direct).every(x=>x.url==='https://weather.tmd.go.th/'));
+ assert.ok(h.items.every(x=>x.kind==='snapshot'||x.url!=='https://weather.tmd.go.th/THA_Z.php'));
  assert.ok(h.items.every(x=>h.groups.some(([group])=>group===x.group)));
 });
 test('only known published-snapshot keys become in-app buttons, others stay external links',()=>{
