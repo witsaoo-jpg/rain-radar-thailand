@@ -321,3 +321,6 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
 .region-radar-picker button[aria-pressed="true"]{background:#267963;border-color:#76d4ba;color:white}
 .region-radar-picker p{width:100%;margin:0;font-size:11px;line-height:1.6;color:#accbd0}
 @media(max-width:740px){.region-radar-picker{gap:6px}.region-radar-picker button{flex:1 1 30%;padding:8px 5px;font-size:13px}.radar-canvas .zoom-tools button{min-width:44px;min-height:44px}.radar-canvas .zoom-tools span{font-size:13px}}
+
+.outlook-rain-pattern{background:#184e50;border:1px solid #519e8c;border-radius:9px;padding:13px;font-size:17px!important;font-weight:750;color:#e6fff3!important}
+.outlook-rain-chance{font-size:15px!important;line-height:1.65;color:#a9e9db!important}
