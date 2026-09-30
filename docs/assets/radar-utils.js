@@ -10,7 +10,7 @@
    if(typeof value!=='string'||!STATIONS.has(station))return null;
    if(history){
      if(station==='thailand-loop')return null;
-     const m=/^\.\/data\/images\/history\/(thailand|sattahip|rayong|suvarnabhumi)\/[a-f0-9]{20}\.(png|jpg|gif|webp)$/.exec(value);
+     const m=/^\.\/data\/images\/history\/(thailand|sattahip|rayong|suvarnabhumi|cri|kkn|pkt)\/[a-f0-9]{20}\.(png|jpg|gif|webp)$/.exec(value);
      return m&&m[1]===station?value:null;
    }
    const m=/^\.\/data\/images\/(thailand|sattahip|rayong|suvarnabhumi|thailand-loop|cri|kkn|pkt)\.(png|jpg|gif|webp)$/.exec(value);
@@ -33,5 +33,14 @@
      unique.add(f.path);return true;
    }).sort((a,b)=>parsedUTC(a.captured_at)-parsedUTC(b.captured_at)).slice(-6);
  }
- return {safeImagePath,parsedUTC,freshManifest,historyFrames};
+ function latestVerifiedFrame(entry,station,now=Date.now(),maxAgeMs=120*60000){
+   if(!Number.isFinite(now)||!Number.isFinite(maxAgeMs)||maxAgeMs<0)return null;
+   const frames=historyFrames(entry,station);
+   for(let i=frames.length-1;i>=0;i--){
+     const captured=parsedUTC(frames[i].captured_at);
+     if(captured!==null&&now-captured>=0&&now-captured<=maxAgeMs)return frames[i];
+   }
+   return null;
+ }
+ return {safeImagePath,parsedUTC,freshManifest,historyFrames,latestVerifiedFrame};
 });
