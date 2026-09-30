@@ -5,7 +5,7 @@
  else root.RadarUtils=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
- const STATIONS=new Set(['thailand','sattahip','rayong','suvarnabhumi','thailand-loop']);
+ const STATIONS=new Set(['thailand','sattahip','rayong','suvarnabhumi','thailand-loop','cri','kkn','pkt']);
  function safeImagePath(value, station, history=false){
    if(typeof value!=='string'||!STATIONS.has(station))return null;
    if(history){
@@ -13,7 +13,7 @@
      const m=/^\.\/data\/images\/history\/(thailand|sattahip|rayong|suvarnabhumi)\/[a-f0-9]{20}\.(png|jpg|gif|webp)$/.exec(value);
      return m&&m[1]===station?value:null;
    }
-   const m=/^\.\/data\/images\/(thailand|sattahip|rayong|suvarnabhumi|thailand-loop)\.(png|jpg|gif|webp)$/.exec(value);
+   const m=/^\.\/data\/images\/(thailand|sattahip|rayong|suvarnabhumi|thailand-loop|cri|kkn|pkt)\.(png|jpg|gif|webp)$/.exec(value);
    return m&&m[1]===station?value:null;
  }
  function parsedUTC(value){
