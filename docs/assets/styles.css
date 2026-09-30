@@ -4,3 +4,14 @@
 .history-bar{margin-top:16px;border:1px solid #254354;background:#102739;border-radius:10px;padding:16px;color:#b5d7df}.history-heading{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}.history-heading span{font-size:10px;color:#7ea0aa}.history-frames{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:11px;color:#85a9b7}.history-frames button,.gps-button{padding:9px 13px;background:#164b48;border:1px solid #347b6a;border-radius:7px;color:#c4f8e5;font-size:11px}.history-frames button:hover,.gps-button:hover{background:#20695c}.gps-card p{color:#90b1be;font-size:11px;line-height:1.7;margin:12px 0}.gps-link{font-size:11px;color:#77ead1;display:block;margin-top:12px;overflow-wrap:anywhere}.status-card{min-height:0}.radar-canvas{isolation:isolate}.image-layer img{min-width:0}.intro-actions{max-width:260px}.soft-badge{line-height:1.5} @media(max-width:740px){.history-bar{padding:12px}.history-heading{font-size:11px}}
 
 .forecast-card{background:#102b37}.forecast-card p{font-size:11px;line-height:1.85;color:#98b6c5;margin:13px 0}.forecast-card a{color:#76e9cc;font-size:11px;font-weight:700}.forecast-card a:hover{text-decoration:underline}
+
+/* v1.15 rainfall criteria (24-hour accumulation, TMD-aligned labels) */
+.outlook-rain-criteria{margin:14px 0;padding:14px;border:1px solid #3a665f;border-radius:11px;background:#102f35}
+.outlook-rain-criteria>strong{display:block;color:#dffcf3;font-size:14px;margin-bottom:10px}
+.outlook-rain-criteria-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.outlook-rain-criteria-grid span{display:flex;flex-direction:column;gap:4px;padding:9px;border:1px solid #315464;border-radius:8px;background:#122a3b;color:#b8d2da;font-size:11px;line-height:1.45}
+.outlook-rain-criteria-grid b{color:#e8fff8;font-size:12px}
+.outlook-rain-criterion{margin:12px 0 6px;padding:10px 12px;border-radius:8px;background:#184e50;color:#e6fff3;font-weight:750;font-size:14px;line-height:1.65}
+.outlook-rain-criteria small{display:block;color:#92b8bd;font-size:10px;line-height:1.65}
+@media(max-width:900px){.outlook-rain-criteria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.outlook-rain-criteria-grid{grid-template-columns:1fr}.outlook-rain-criterion{font-size:13px}}
