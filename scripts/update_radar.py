@@ -27,6 +27,9 @@ STATIONS = {
     'sattahip': {'source': 'https://weather.tmd.go.th/sattahip.php'},
     'rayong': {'source': 'https://weather.tmd.go.th/ryg.php'},
     'suvarnabhumi': {'source': 'https://weather.tmd.go.th/svp120.php'},
+    'cri': {'source': 'https://weather.tmd.go.th/cri.php'},
+    'kkn': {'source': 'https://weather.tmd.go.th/kkn.php'},
+    'pkt': {'source': 'https://weather.tmd.go.th/pkt.php'},
     'thailand-loop': {'source': 'https://weather.tmd.go.th/THA_loop.php', 'animated_only': True},
 }
 HOSTS = frozenset({'weather.tmd.go.th', 'satda.tmd.go.th'})
