@@ -324,3 +324,28 @@ body:not(.tools-mode) .topbar .crumb{font-size:12px}
 
 .outlook-rain-pattern{background:#184e50;border:1px solid #519e8c;border-radius:9px;padding:13px;font-size:17px!important;font-weight:750;color:#e6fff3!important}
 .outlook-rain-chance{font-size:15px!important;line-height:1.65;color:#a9e9db!important}
+
+/* v1.15 Easy Install / Add to Home Screen */
+.top-install{min-height:40px;padding:8px 13px;border:1px solid #438477;border-radius:9px;background:#16493f;color:#e8fff7;font:inherit;font-size:12px;font-weight:800;white-space:nowrap}
+.top-install:hover{background:#1d6656}.top-install:disabled{opacity:.65}
+.install-guide{width:min(560px,calc(100vw - 28px));max-height:min(720px,calc(100vh - 28px));padding:0;border:1px solid #47766f;border-radius:16px;background:#102a3a;color:#effff9;box-shadow:0 28px 90px rgba(0,0,0,.45)}
+.install-guide::backdrop{background:rgba(3,12,21,.76);backdrop-filter:blur(3px)}
+.install-guide-card{position:relative;padding:25px}
+.install-guide-close{position:absolute;right:14px;top:12px;width:42px;height:42px;border-radius:50%;border:1px solid #486c75;background:#183649;color:#e9fff7;font-size:25px;line-height:1}
+.install-kicker{display:block;padding-right:46px;color:#87e3ce;font-size:11px;letter-spacing:1px;font-weight:800}
+.install-guide h2{margin:9px 48px 16px 0;font-size:26px;line-height:1.3}
+.install-guide-body{display:grid;gap:10px}
+.install-guide-lead{margin:0 0 3px;color:#c5dfdf;font-size:15px;line-height:1.7}
+.install-step{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid #34596a;border-radius:11px;background:#122f42}
+.install-step-number{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:#27745f;color:white;font-weight:800}
+.install-step div{display:flex;flex-direction:column;gap:4px}.install-step strong{font-size:15px}.install-step span{color:#a9c8ce;font-size:12px;line-height:1.55}
+.install-hint{margin:15px 0 0;color:#9ddfce;font-size:12px;line-height:1.65}
+@media(max-width:740px){
+ .topbar .header-right{gap:6px}.top-install{min-height:38px;padding:7px 9px;font-size:10px}
+ .timezone-chip{white-space:nowrap}.install-guide-card{padding:20px 15px}
+ .install-guide h2{font-size:22px}.install-step{padding:10px}.install-step strong{font-size:14px}
+}
+@media(max-width:430px){
+ .topbar .crumb{display:none}.topbar{justify-content:flex-end}
+ .top-install{font-size:11px}.install-guide{width:calc(100vw - 18px)}
+}
