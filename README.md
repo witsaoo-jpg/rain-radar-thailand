@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.15 Easy Install / Add to Home Screen
+# Rain Radar Thailand · Phase 1.15 Easy Install / Add to Home Screen + Rainfall Criteria (mm)
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -213,3 +213,9 @@ A compact install action now lives in the top bar beside Thai time. The interfac
 - Automated Node tests cover iPhone guidance, Android native prompt, prompt dismissal/manual fallback, installed-state hiding, and secure-context service-worker registration.
 
 The website remains usable without installation. Installation does not make live radar or forecast data offline.
+
+### Rainfall criteria in millimetres
+
+The public Rainfall Outlook now also shows a **24-hour rainfall criteria** panel in millimetres: <0.1 mm (unmeasurable/trace), 0.1–10.0 mm (light), 10.1–35.0 mm (moderate), 35.1–90.0 mm (heavy), and ≥90.1 mm (very heavy). The app compares the validated next-24-hour ECMWF/GFS/ICON accumulation range with these TMD-style rainfall-amount bands and states the resulting label in plain Thai. This is a readability aid for forecast accumulation, **not** an assertion that forecast values are observed TMD 07:00–07:00 rainfall. The thresholds are not applied directly to 72-hour or 120-hour totals and are not used to infer flooding or issue warnings.
+
+The PWA shell cache is refreshed as `rain-radar-shell-v115-rain-mm` so installed users receive the new panel.
