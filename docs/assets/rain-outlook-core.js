@@ -93,5 +93,17 @@
    }
    return {available:true,title,lead,windows:byWindow,labels:{24:range(one),72:range(three),120:range(five)},agreement,advice:'ตรวจพยากรณ์รายวันและภาพเรดาร์ก่อนเดินทาง หากพื้นที่มีประกาศเตือนภัยให้ปฏิบัติตามหน่วยงานทางการ'};
  }
- return {MODELS,WINDOWS,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation,publicSummary};
+ function rainPattern(models){
+   const complete=MODELS.map(m=>models[m.id]).filter(r=>r&&Array.isArray(r.rows)&&r.rows.slice(0,24).length===24&&r.rows.slice(0,24).every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0));
+   if(!complete.length)return 'ยังไม่มีข้อมูลรายชั่วโมงครบ 24 ชั่วโมง จึงยังบอกลักษณะช่วงที่อาจมีฝนไม่ได้';
+   const wet=complete.filter(r=>r.rows.slice(0,24).some(v=>v>=0.1));
+   const label=wet.length===0?
+    'แบบจำลองที่มีข้อมูลครบ '+complete.length+' ชุดยังไม่แสดงฝนที่วัดเป็นจำนวนได้ใน 24 ชั่วโมงข้างหน้า แต่ไม่ได้รับประกันว่าฝนจะไม่ตก':
+    wet.length===complete.length&&complete.length>=2?
+    'แบบจำลองที่มีข้อมูลครบทั้ง '+complete.length+' ชุดคาดว่ามีฝนอย่างน้อยบางชั่วโมงใน 24 ชั่วโมงข้างหน้า ไม่ได้หมายความว่าฝนจะตกตลอดวัน':
+    wet.length+' จาก '+complete.length+' แบบจำลองคาดว่ามีฝนอย่างน้อยบางชั่วโมงใน 24 ชั่วโมงข้างหน้า ผลแบบจำลองยังแตกต่างกัน';
+   const max=Math.max(...complete.map(r=>Math.max(...r.rows.slice(0,24))));
+   return label+' • ปริมาณฝนสูงสุดในหนึ่งชั่วโมงจากชุดที่มีข้อมูล '+max.toFixed(1)+' มม. เป็นค่าพยากรณ์ ไม่ใช่ปริมาณฝนตรวจวัดจริง';
+ }
+ return {MODELS,WINDOWS,location,url,ensembleUrl,parseModel,parseEnsemble,interpretation,publicSummary,rainPattern};
 });

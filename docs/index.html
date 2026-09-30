@@ -86,6 +86,8 @@
             <span class="outlook-public-kicker">สรุปพยากรณ์สำหรับประชาชน · ผลแบบจำลอง</span>
             <h3 id="outlook-public-title">แนวโน้มฝนสะสมในพื้นที่ของคุณ</h3>
             <p id="outlook-public-lead"></p>
+            <p id="outlook-rain-pattern" class="outlook-rain-pattern"></p>
+            <p id="outlook-rain-chance" class="outlook-rain-chance"></p>
             <div id="outlook-public-periods" class="outlook-public-periods"></div>
             <p id="outlook-public-agreement"></p>
             <p id="outlook-public-advice"></p>
@@ -158,6 +160,15 @@
       <div class="dashboard">
         <section class="radar-card" aria-labelledby="radar-title">
           <div class="radar-head"><div class="radar-heading"><div class="radar-icon" aria-hidden="true">◎</div><div><div class="mini-label">WEATHER RADAR FEED</div><h2 id="radar-title">เรดาร์ทั่วประเทศ</h2><p id="radar-subtitle">ภาพรวมประเทศไทย</p></div></div><div class="head-actions"><span id="status-pill" class="status-pill waiting"><i></i><span>กำลังเชื่อมต่อ</span></span><button type="button" class="icon-btn" id="refresh-button" title="โหลดข้อมูลใหม่" aria-label="โหลดข้อมูลใหม่">↻</button><button type="button" class="icon-btn" id="fullscreen-button" title="ขยายภาพ" aria-label="ขยายภาพ">⛶</button></div></div>
+          <div class="region-radar-picker" id="region-radar-picker" aria-label="เลือกเรดาร์ตัวแทนภูมิภาค">
+            <button type="button" data-region-station="thailand" aria-pressed="true">ทั่วประเทศ</button>
+            <button type="button" data-region-station="cri" aria-pressed="false">ภาคเหนือ</button>
+            <button type="button" data-region-station="kkn" aria-pressed="false">ภาคอีสาน</button>
+            <button type="button" data-region-station="suvarnabhumi" aria-pressed="false">ภาคกลาง</button>
+            <button type="button" data-region-station="rayong" aria-pressed="false">ภาคตะวันออก</button>
+            <button type="button" data-region-station="pkt" aria-pressed="false">ภาคใต้</button>
+            <p>แสดงภาพจากสถานีตัวแทน ไม่ครอบคลุมทุกจังหวัดในภูมิภาค • เมื่อ Snapshot ไม่พร้อม จะมีลิงก์เปิดข้อมูลต้นทาง</p>
+          </div>
           <div class="radar-canvas" id="radar-canvas">
             <div class="grid-overlay" aria-hidden="true"></div><div class="scan-sweep" aria-hidden="true"></div>
             <div class="image-layer" id="image-layer" hidden><img id="radar-image" alt="ภาพเรดาร์ตรวจอากาศจากกรมอุตุนิยมวิทยา" /></div>
@@ -219,7 +230,7 @@
       <section class="history-bar" aria-label="ภาพเรดาร์ย้อนหลัง"><div class="history-heading"><strong>ภาพย้อนหลังจริง (เวลาบันทึก Snapshot)</strong><span id="history-note">ไม่ใช้ภาพจำลอง</span></div><div id="history-frames" class="history-frames"><span>กำลังตรวจสอบภาพย้อนหลัง…</span></div><div class="history-player"><button id="history-play" type="button" disabled aria-pressed="false">▶ เล่นภาพย้อนหลัง</button><input id="history-slider" aria-label="เลือกภาพย้อนหลัง" type="range" min="0" max="0" value="0" disabled /><span id="history-frame-label" aria-live="polite">ยังไม่มีภาพย้อนหลังที่ยืนยันได้</span></div><p class="history-caution" id="history-direction">ทิศทางและความเร็วของกลุ่มฝนยังไม่ได้คำนวณจากภาพที่ไม่มีพิกัดอ้างอิง</p></section>
       <div class="bottom-note"><span>ⓘ</span><p>เวลา Snapshot คือเวลาที่ระบบดึงภาพ ไม่ใช่เวลาที่เรดาร์ตรวจวัด • ถ้าเว็บต้นทางเปลี่ยนโครงสร้างหรือปิดการเข้าถึงภาพ ให้ใช้ปุ่ม “เปิดเว็บต้นทาง” • แอปนี้ไม่ได้คำนวณการพยากรณ์ฝนล่วงหน้าเอง</p></div>
       </section>
-      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.13 National Radar Explorer · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
+      <footer class="site-footer"><span>RAINRADAR THAILAND <b>v1.14 Regional Radar & Rain Explanation · GitHub Pages</b></span><span>Unofficial viewer · Source: TMD / original data providers · Unofficial project</span><div class="footer-meta">
           <span class="footer-credit">Credit: <strong>witsaoya</strong></span>
           <div class="footer-counter">
             <span>Visitor counter</span>

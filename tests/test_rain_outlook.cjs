@@ -67,3 +67,17 @@ test('public explanation reports only validated forecast windows and never decla
  const one=core.publicSummary({ecmwf_ifs025:a,ncep_gfs_global:partial});
  assert.equal(one.windows[120].count,1);assert.match(one.agreement,/เพียงแบบจำลองเดียว/);
 });
+
+test('plain rain pattern uses validated next 24 hourly values, not an invented five-day chance',()=>{
+ const wet=core.parseModel(fixture(.2),now),dry=core.parseModel(fixture(0),now);
+ const all=core.rainPattern({ecmwf_ifs025:wet,ncep_gfs_global:wet});
+ assert.match(all,/ทั้ง 2 ชุดคาดว่ามีฝน/);
+ assert.match(all,/ไม่.*ฝนจะตกตลอดวัน/);
+ assert.match(all,/0\.2 มม/);
+ const different=core.rainPattern({ecmwf_ifs025:wet,ncep_gfs_global:dry});
+ assert.match(different,/1 จาก 2 แบบจำลอง/);
+ assert.match(core.rainPattern({}),/ข้อมูลรายชั่วโมงครบ 24 ชั่วโมง/);
+ const incomplete=core.parseModel(fixture(.2),now);
+ incomplete.rows[6]=null;
+ assert.match(core.rainPattern({ecmwf_ifs025:incomplete}),/ข้อมูลรายชั่วโมงครบ 24 ชั่วโมง/);
+});

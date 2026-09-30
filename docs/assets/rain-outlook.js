@@ -6,29 +6,38 @@
  if(!core||!$('outlook-request'))return;
  const status=$('outlook-status'),summary=$('outlook-summary'),grid=$('outlook-models');
  const table=$('outlook-compare'),ensembleBox=$('outlook-ensemble-result');
- let coords=null,name='',sequence=0,controller=null,results={},lastRequest=0;
+ let coords=null,name='',sequence=0,controller=null,results={},lastRequest=0,latestChance=null;
  const fmt=ms=>new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(ms)+' น.';
  const value=n=>n===null||n===undefined||!Number.isFinite(n)?'ไม่มีข้อมูล':n.toFixed(1)+' มม.';
  function abort(){
    sequence++;if(controller)controller.abort();controller=null;
    results={};lastRequest=0;grid.replaceChildren();table.replaceChildren();
+   $('outlook-rain-pattern').textContent='';$('outlook-rain-chance').textContent='';
    ensembleBox.hidden=true;$('outlook-ensemble').disabled=true;
    $('outlook-request').disabled=!coords;
    $('outlook-request').textContent='วิเคราะห์ฝนสะสม 5 วัน';
    summary.textContent='ยังไม่ได้ขอข้อมูลแบบจำลอง';
    $('outlook-public').hidden=true;$('outlook-public-periods').replaceChildren();
  }
- function reset(message){coords=null;name='';abort();status.textContent=message||'เลือก GPS หรือสถานที่โปรดก่อน แล้วกดวิเคราะห์เพื่อขอข้อมูล';}
+ function reset(message){coords=null;name='';latestChance=null;abort();status.textContent=message||'เลือก GPS หรือสถานที่โปรดก่อน แล้วกดวิเคราะห์เพื่อขอข้อมูล';}
  window.addEventListener('rainradar:location',event=>{
    const next=event.detail?.coords;
    if(!next){reset('ล้างพื้นที่แล้ว ข้อมูลพยากรณ์ฝนเดิมถูกลบจากหน้านี้');return;}
    try{
      const p=core.location(next.latitude,next.longitude);
-     coords={latitude:p.lat,longitude:p.lon};name=String(event.detail?.name||'ตำแหน่งปัจจุบัน').slice(0,50);
+     coords={latitude:p.lat,longitude:p.lon};latestChance=null;name=String(event.detail?.name||'ตำแหน่งปัจจุบัน').slice(0,50);
      abort();status.textContent='พร้อมวิเคราะห์ฝนสะสมสำหรับ '+name+' • กดปุ่มเพื่อส่งพิกัดโดยประมาณไป Open-Meteo';
    }catch(_){reset('พิกัดพื้นที่ไม่ถูกต้อง');}
  });
- window.addEventListener('rainradar:forecast-cleared',()=>{if(coords){abort();status.textContent='เปลี่ยนหรืออัปเดตพยากรณ์แล้ว กดวิเคราะห์ฝนสะสมใหม่ได้';}});
+ window.addEventListener('rainradar:forecast',event=>{
+   const d=event.detail;if(!coords||!d?.coordinates)return;
+   try{const p=core.location(d.coordinates.latitude,d.coordinates.longitude);
+     if(p.lat!==coords.latitude||p.lon!==coords.longitude)return;
+     const n=d.result?.maxProbability;
+     latestChance=typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100?{percent:n,time:Date.now()}:null;
+   }catch(_){}
+ });
+ window.addEventListener('rainradar:forecast-cleared',()=>{latestChance=null;if(coords){abort();status.textContent='เปลี่ยนหรืออัปเดตพยากรณ์แล้ว กดวิเคราะห์ฝนสะสมใหม่ได้';}});
  function cell(text,klass=''){
    const el=document.createElement('span');el.textContent=text;if(klass)el.className=klass;return el;
  }
@@ -48,6 +57,10 @@
    publicBox.hidden=false;
    $('outlook-public-title').textContent=publicReport.title;
    $('outlook-public-lead').textContent=publicReport.lead;
+   $('outlook-rain-pattern').textContent=core.rainPattern(results);
+   $('outlook-rain-chance').textContent=latestChance&&Date.now()-latestChance.time<45*60000?
+     'โอกาสเกิดฝนสูงสุดใน 3 ชั่วโมงที่แสดงจากพยากรณ์พื้นที่ (Open-Meteo แยกจากการเปรียบเทียบ ECMWF/GFS/ICON): '+Math.round(latestChance.percent)+'% • ไม่ใช่โอกาสฝนตลอด 5 วัน':
+     'ยังไม่มีเปอร์เซ็นต์โอกาสฝนที่ตรวจสอบได้สำหรับช่วงสั้น • ตัวเลข มม. ด้านล่างคือปริมาณฝน ไม่ใช่เปอร์เซ็นต์โอกาสเกิดฝน';
    const periods=$('outlook-public-periods');periods.replaceChildren();
    for(const hours of core.WINDOWS){
      const item=document.createElement('div');item.className='outlook-period';
