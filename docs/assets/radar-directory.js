@@ -5,7 +5,7 @@
  */
 (() => {
  'use strict';
- const HUB='https://weather.tmd.go.th/THA_Z.php';
+ const HUB='https://weather.tmd.go.th/'; // Official navigation landing page; THA_Z.php is a composite image page, not a reliable station directory.
  const items=[
   ['thailand','ภาพรวมทั่วประเทศ','ภาพคอมโพสิต','main','snapshot','https://weather.tmd.go.th/THA_Z.php'],
   ['thailand-loop','ภาพเคลื่อนไหวทั่วประเทศ','ภาพย้อนหลังเมื่อมีข้อมูล','main','snapshot','https://weather.tmd.go.th/THA_loop.php'],
