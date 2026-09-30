@@ -1,5 +1,5 @@
 /* TMD public radar directory. A directory listing is NOT a claim of a working live feed.
- * Only five validated snapshot sources are displayed inside our viewer.
+ * Eight allowlisted snapshot sources are checked per publishing run; unavailable sources display an honest fallback.
  * Other station names link to the verified official TMD directory when a station URL
  * has not been independently verified. Separate Bangkok and Rainmaking operators.
  */
@@ -10,12 +10,12 @@
   ['thailand','ภาพรวมทั่วประเทศ','ภาพคอมโพสิต','main','snapshot','https://weather.tmd.go.th/THA_Z.php'],
   ['thailand-loop','ภาพเคลื่อนไหวทั่วประเทศ','ภาพย้อนหลังเมื่อมีข้อมูล','main','snapshot','https://weather.tmd.go.th/THA_loop.php'],
   ['mhs','แม่ฮ่องสอน','ภาคเหนือ','north','official',HUB],
-  ['cri','เชียงราย','ภาคเหนือ','north','official',HUB],
+  ['cri','เชียงราย','ภาคเหนือ','north','snapshot',HUB],
   ['lpn','ลำพูน','ภาคเหนือ','north','official',HUB],
   ['tak','ดอยมูเซอ · ตาก','ภาคเหนือ','north','official',HUB],
   ['plk','พิษณุโลก','ภาคเหนือ','north','official',HUB],
   ['pnb','เพชรบูรณ์','ภาคเหนือ','north','official',HUB],
-  ['kkn','ขอนแก่น','ภาคตะวันออกเฉียงเหนือ','northeast','official',HUB],
+  ['kkn','ขอนแก่น','ภาคตะวันออกเฉียงเหนือ','northeast','snapshot',HUB],
   ['skn','สกลนคร','ภาคตะวันออกเฉียงเหนือ','northeast','official',HUB],
   ['ubn','อุบลราชธานี','ภาคตะวันออกเฉียงเหนือ','northeast','official',HUB],
   ['srn','สุรินทร์','ภาคตะวันออกเฉียงเหนือ','northeast','official',HUB],
@@ -27,7 +27,7 @@
   ['chp','ชุมพร','ภาคใต้','south','official',HUB],
   ['rng','ระนอง','ภาคใต้','south','official',HUB],
   ['srt','สุราษฎร์ธานี','ภาคใต้','south','official',HUB],
-  ['pkt','ภูเก็ต','ภาคใต้','south','official',HUB],
+  ['pkt','ภูเก็ต','ภาคใต้','south','snapshot',HUB],
   ['trg','ตรัง','ภาคใต้','south','official','https://weather.tmd.go.th/trg.php'],
   ['hy','หาดใหญ่','ภาคใต้','south','official',HUB],
   ['stp','สทิงพระ','ภาคใต้','south','official',HUB],
