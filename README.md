@@ -1,4 +1,4 @@
-# Rain Radar Thailand · Phase 1.14 Regional Radar & Rain Explanation
+# Rain Radar Thailand · Phase 1.15 Easy Install / Add to Home Screen
 
 Unofficial, Thai-language weather-radar viewer for **GitHub Pages**. Frontend is HTML/CSS/vanilla JS. Radar images originate from TMD's public pages. This is **not** a TMD API, an official TMD product, or a guaranteed live weather service.
 
@@ -200,3 +200,16 @@ The directory does not increase scraping frequency nor load images for every sta
 The image viewport now permits raster zoom up to 250% with true scrollbars, keeping its controls above the image. Zoom is disabled when a real published image is unavailable. Five one-tap region buttons show representative TMD station snapshots in the **same WEATHER RADAR FEED**: Chiang Rai (North), Khon Kaen (Northeast), Suvarnabhumi (Central), Rayong (East), and Phuket (South); national composite is also offered. These represent each station's radar coverage, not every province in the region. Chiang Rai, Khon Kaen and Phuket are newly added to the bounded GitHub Actions capture allowlist using verified TMD public source pages. If upstream content fails image validation, the viewer reports "unavailable" and provides a source-page link, not fabricated imagery. New stations do not yet have retained image history, and snapshot capture time is not radar observation time.
 
 After users explicitly request the multi-model rainfall forecast, a Thai-language sentence uses **complete 24-hour model precipitation series** to say how many of ECMWF/GFS/ICON predict at least 0.1 mm in any hourly interval, whether models disagree, and the largest predicted one-hour amount. This is not a claim that rain persists all day, a calibrated probability, or flood risk. A separately obtained Open-Meteo location forecast's maximum probability for the displayed next three hours may be shown **with its separate attribution and timeframe**, only when present and fresh. Five-day precipitation totals are millimetres, never a percent chance of rainfall. Incomplete or unavailable series lead to a plain no-data explanation.
+
+## Phase 1.15 — Easy Install / Add to Home Screen
+
+A compact install action now lives in the top bar beside Thai time. The interface distinguishes platform capabilities instead of showing a fake universal install button:
+
+- **Android / Chromium installable browsers:** the button appears only after the browser emits the standard `beforeinstallprompt` event. A click invokes the browser's native PWA installation prompt. If the user dismisses it, the UI falls back to honest manual browser-menu instructions.
+- **iPhone / iPad:** because browsers do not expose the same programmatic install prompt, the visible action opens a large Thai guide: open in Safari, tap Share, choose **Add to Home Screen / เพิ่มไปยังหน้าจอโฮม**, then Add.
+- **Already installed / standalone:** the install action is hidden using `display-mode: standalone` / iOS standalone detection. The `appinstalled` event also closes the guide and hides the action.
+- The existing service worker continues to cache only the application shell; radar, forecast, warning and other `/data/` responses remain network-driven. The cache version is `rain-radar-shell-v115`.
+- Added Apple web-app metadata and an Apple touch icon reference. No account, notification permission or GPS permission is requested by installation.
+- Automated Node tests cover iPhone guidance, Android native prompt, prompt dismissal/manual fallback, installed-state hiding, and secure-context service-worker registration.
+
+The website remains usable without installation. Installation does not make live radar or forecast data offline.
